@@ -1,0 +1,141 @@
+<div id="dddd" class="wp-header ng-scope" >
+  <div class="header-brand ng-binding ng-hide" ng-click="go('/');" ng-hide="branch"></div>
+  <div id="wepos_store_name" class="header-brand ng-binding" onclick="change_active_menu('home');" ng-show="branch"></div>
+  <div class="header-main">
+    <div class="header-action" onclick="back()" title="后退"><i class="fa fa-arrow-left"></i></div>
+    <div class="header-action" onclick="reload()" title="刷新"><i class="fa fa-refresh"></i></div>
+    <div id="open_shift" class="wp-btn-block wp-btn-sm" onselectstart="return false" onclick="open_shift()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+      开班
+    </span></div></div></div>
+    <div id="close_shift" class="wp-btn-block wp-btn-sm" onselectstart="return false" onclick="close_shift()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+      交班
+    </span></div></div></div>
+    <div class="account-name ng-binding"><i class="fa fa-user"></i> xiaoniao</div>
+    <div id="showtime" class="system-time ng-binding">2016/03/10 09:16:51</div>
+  </div>
+  <div class="header-right">
+    <div id="keyboard-open" class="action" onclick="toggle_jvk();" ng-class="{active: enable_jvk}" title="虚拟键盘"><i class="fa fa-keyboard-o"></i></div>
+    <div class="action" onclick="sign_out()"><i class="fa fa-sign-out"></i></div>
+  </div>
+  <div class="alert-messages">
+  </div>
+  
+  
+  
+</div>
+<div id="open-shift-div" class="wp-modal ng-scope ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="open_shift_modal.show"><div class="wp-modal-mask" 
+onclick="header_click_mask()"></div><div class="wp-modal-body" ng-transclude="">
+  <div class="wp-modal-header ng-scope">开班</div>
+  <div class="wp-modal-content ng-scope">
+    <div class="wp-form-group">
+      <div class="wp-form-label">放入现金</div>
+      <div input-type="number" input-size="normal" input-restrict="^[0-9]{0,6}(\.[0-9]{0,2})?$" class="ng-isolate-scope">
+      <div class="wp-form-input-keypad wp-form-input-normal ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="number" ng-keypad-restrict="^[0-9]{0,6}(\.[0-9]{0,2})?$"><span class="ng-binding"></span></div><div class="wp-form-input-keypad wp-form-input-normal ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict="^[0-9]{0,6}(\.[0-9]{0,2})?$"><span class="ng-binding"></span></div><div class="wp-form-input wp-form-input-normal" ng-show="!enable_jvk">
+      <input id="start_cash_amount" type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+    </div>
+    <div class="wp-form-group">
+      <div class="wp-form-label"></div>
+      <div class="wp-form-action">
+        <div class="wp-btn-block wp-btn" onselectstart="return false" onclick="open_shift_submit()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">开班</span></div></div></div>
+        <div class="wp-btn-block wp-btn" onselectstart="return false" onclick="header_click_mask()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">取消</span></div></div></div>
+      </div>
+    </div>
+  </div>
+  
+</div>
+</div>
+
+<div id="shift-info-div" class="wp-modal ng-scope ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="close_shift_modal.show">
+<div class="wp-modal-mask" onclick="header_click_mask()"></div>
+<div id="shift-info-zone">
+</div>
+</div>
+
+<script language="javascript" type="text/javascript">
+<!--
+//获得当前时间,刻度为一千分一秒
+var initializationTime=(new Date()).getTime();
+function showLeftTime()
+{
+var now=new Date();
+var year=now.getFullYear();
+var month=now.getMonth()+1;
+var day=now.getDate();
+var hours=now.getHours();
+if(hours<10){
+	hours = '0'+hours;
+}
+var minutes=now.getMinutes();
+if(minutes<10){
+	minutes = '0'+minutes;
+}
+var seconds=now.getSeconds();
+if(seconds<10){
+	seconds = '0'+seconds;
+}
+
+document.all.showtime.innerHTML=""+year+"年"+month+"月"+day+"日 "+hours+":"+minutes+":"+seconds+"";
+//一秒刷新一次显示时间
+var timeID=setTimeout(showLeftTime,1000);
+}
+showLeftTime();
+//-->
+</script>
+
+
+<script type="text/html" id="store_shift_info">
+<div class="wp-modal-body" ng-transclude="">
+  <div class="wp-form-group ng-scope">
+    <div class="wp-form-label">当班人:</div>
+    <div class="wp-form-input ng-binding"><%=shiftinfo.staff_name%></div>
+    <div class="wp-form-label">当班时间:</div>
+    <div class="wp-form-input ng-binding"><%=shiftinfo.start_time%> ~ <%=shiftinfo.end_time%></div>
+  </div>
+
+
+  <div class="wp-table center ng-scope">
+    <div class="wp-table-row" ng-transclude="">
+      <div class="wp-table-col col-3 ng-scope">科目代码</div>
+      <div class="wp-table-col col-3 ng-scope">支付方式</div>
+      <div class="wp-table-col col-3 ng-scope">支付金额</div>
+    </div>
+    <div class="wp-table-row" ng-transclude="">
+      <div class="wp-table-col col-3 ng-scope">&nbsp;</div>
+      <div class="wp-table-col col-3 ng-scope">放入现金</div>
+      <div class="wp-table-col col-3 ng-binding ng-scope"><%=shiftinfo.start_cash_amount%></div>
+    </div>
+    <div class="wp-table-row" ng-transclude="">
+      <div class="wp-table-col col-3 ng-scope">&nbsp;</div>
+      <div class="wp-table-col col-3 ng-scope">收入现金</div>
+      <div class="wp-table-col col-3 ng-binding ng-scope"><%=shiftinfo.cash_amount%></div>
+    </div>
+    <div class="wp-table-row" ng-transclude="">
+      <div class="wp-table-col col-3 ng-scope">&nbsp;</div>
+      <div class="wp-table-col col-3 ng-scope">微信刷卡金额</div>
+      <div class="wp-table-col col-3 ng-binding ng-scope"><%=shiftinfo.wx_card_amount%></div>
+    </div>
+    <div class="wp-table-row" ng-transclude="">
+      <div class="wp-table-col col-3 ng-scope">&nbsp;</div>
+      <div class="wp-table-col col-3 ng-scope">微信扫码金额</div>
+      <div class="wp-table-col col-3 ng-binding ng-scope"><%=shiftinfo.wx_code_amount%></div>
+    </div>
+    <div class="wp-table-row" ng-transclude="">
+      <div class="wp-table-col col-3 ng-scope">&nbsp;</div>
+      <div class="wp-table-col col-3 ng-scope">银行卡金额</div>
+      <div class="wp-table-col col-3 ng-binding ng-scope"><%=shiftinfo.bank_amount%></div>
+    </div>
+	<div class="wp-table-row" ng-transclude="">
+      <div class="wp-table-col col-3 ng-scope">&nbsp;</div>
+      <div class="wp-table-col col-3 ng-scope">交班现金</div>
+      <div class="wp-table-col col-3 ng-binding ng-scope">(<%=shiftinfo.start_cash_amount%>+<%=shiftinfo.cash_amount%>)</div>
+    </div>    
+  </div>
+  <div class="wp-form-group ng-scope">
+    <div class="wp-form-label"></div>
+    <div class="wp-form-action">
+      <div class="wp-btn-block wp-btn" onselectstart="return false" onclick="close_shift_submit()" ><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">确定交班</span></div></div></div>
+      <div class="wp-btn-block wp-btn" onselectstart="return false" onclick="header_click_mask()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">取消</span></div></div></div>
+    </div>
+  </div>
+</script>
+

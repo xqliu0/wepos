@@ -1,0 +1,605 @@
+function setCookie(name,value)
+{
+  var Days = 30; //此 cookie 将被保存 30 天
+  var exp  = new Date();    //new Date("December 31, 9998");
+  exp.setTime(exp.getTime() + Days*24*60*60*1000);
+  document.cookie = name + "="+ escape(value) +";expires="+ exp.toGMTString();
+}
+function getCookie(name)
+{
+  var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
+  if(arr != null) return unescape(arr[2]); return null;
+}
+function delCookie(name)
+{
+  var exp = new Date();
+  exp.setTime(exp.getTime() - 1);
+  var cval=getCookie(name);
+  if(cval!=null) document.cookie=name +"="+cval+";expires="+exp.toGMTString();
+}
+
+
+
+function get_seller_name(){
+	//落单
+	$.ajax({
+        type: "POST",
+        url:"http://m.xiaoweicanting.com/ttmr/shop/index.php?act=store_dish_wepos&op=getSellerName",
+        dataType: "json",
+        success: function(e) {
+            if (e) {
+            	
+            	if(e.error==''){
+            		$('#wepos_store_name').text(e.data.store_name);
+            		$('.account-name').html('<i class="fa fa-user"></i> '+ e.data.seller_name);
+            	}else{
+            		
+            		Zepto.sDialog({
+    	                skin:"red",
+    	                content: "获取用户信息失败，请重新登录",
+    	                okBtn:false,
+    	                cancelBtn:false
+    	              });
+            	}
+            	
+            }
+        },
+        
+        error: function() {
+        	
+        	Zepto.sDialog({
+                skin:"red",
+                content: "获取用户信息失败，请重新登录",
+                okBtn:false,
+                cancelBtn:false
+              });
+        	
+    		window.location.href= "http://m.xiaoweicanting.com/ttmr/shop/index.php?act=seller_wepos_login&op=show_login";
+    		
+        }
+    })
+}
+function refresh_store_setting(){
+	
+	var shift_state = storeWeposSettingArray['shift_state'];
+	var is_on_shift = storeWeposSettingArray['is_on_shift'];
+	
+	if(is_on_shift == 1){
+		
+		$("#open_shift").addClass("disabled");
+		$("#close_shift").removeClass("disabled");
+
+		$("#active-menu-id-dashboard").removeClass("ng-hide");
+		
+		if(storeWeposSettingArray['store_tangdian_open']=='1'){
+			$("#tangdian-open").addClass("active");
+			$("#tangdian-close").removeClass("active");
+			
+			$("#active-menu-id-tangdian").removeClass("ng-hide");
+
+			
+		}else{
+			$("#tangdian-open").removeClass("active");
+			$("#tangdian-close").addClass("active");
+			
+			$("#active-menu-id-tangdian").addClass("ng-hide");
+		}
+		
+		if(storeWeposSettingArray['store_deliver_open']=='1'){
+			$("#deliver-open").addClass("active");
+			$("#deliver-close").removeClass("active");
+			
+			$("#active-menu-id-deliver").removeClass("ng-hide");
+			
+		}else{
+			$("#deliver-open").removeClass("active");
+			$("#deliver-close").addClass("active");
+			
+			$("#active-menu-id-deliver").addClass("ng-hide");
+			
+		}	
+		if(storeWeposSettingArray['store_preorder_open']=='1'){
+			$("#preoder-open").addClass("active");
+			$("#preoder-close").removeClass("active");
+			
+			$("#active-menu-id-preorder").removeClass("ng-hide");
+			
+		}else{
+			$("#preoder-open").removeClass("active");
+			$("#preoder-close").addClass("active");
+			
+			$("#active-menu-id-preorder").addClass("ng-hide");
+			
+		}
+		
+		if(storeWeposSettingArray['store_fastfood_open']=='1'){
+			$("#fastfood-open").addClass("active");
+			$("#fastfood-close").removeClass("active");
+			
+			$("#active-menu-id-fastfood").removeClass("ng-hide");
+			
+		}else{
+			$("#fastfood-open").removeClass("active");
+			$("#fastfood-close").addClass("active");
+			
+			$("#active-menu-id-fastfood").addClass("ng-hide");
+			
+		}
+	    
+		if(storeWeposSettingArray['store_buyorder_open']=='1'){
+			$("#buyorder-open").addClass("active");
+			$("#buyorder-close").removeClass("active");
+			
+			$("#active-menu-id-buyorder").removeClass("ng-hide");
+			
+		}else{
+			$("#buyorder-open").removeClass("active");
+			$("#buyorder-close").addClass("active");
+			
+			$("#active-menu-id-buyorder").addClass("ng-hide");
+		}
+		    
+		if(storeWeposSettingArray['store_ordermanage_open']=='1'){
+			$("#ordermng-open").addClass("active");
+			$("#ordermng-close").removeClass("active");
+			
+			$("#active-menu-id-orders").removeClass("ng-hide");
+			
+		}else{
+			$("#ordermng-open").removeClass("active");
+			$("#ordermng-close").addClass("active");
+			
+			$("#active-menu-id-orders").addClass("ng-hide");
+		}
+		
+		if(storeWeposSettingArray['store_wx_order_open']=='1'){
+			$("#wxorder-open").addClass("active");
+			$("#wxorder-close").removeClass("active");
+			
+			$("#active-menu-id-wx-pre-orders").removeClass("ng-hide");
+			
+		}else{
+			$("#wxorder-open").removeClass("active");
+			$("#wxorder-close").addClass("active");
+			
+			$("#active-menu-id-wx-pre-orders").addClass("ng-hide");
+		}
+		
+		if(storeWeposSettingArray['store_soldout_open']=='1'){
+			$("#soldout-open").addClass("active");
+			$("#soldout-close").removeClass("active");
+			
+			$("#active-menu-id-soldout").removeClass("ng-hide");
+			
+		}else{
+			$("#soldout-open").removeClass("active");
+			$("#soldout-close").addClass("active");
+			
+			$("#active-menu-id-soldout").addClass("ng-hide");
+		}
+		
+		if(storeWeposSettingArray['store_queue_open']=='1'){
+			$("#queue-open").addClass("active");
+			$("#queue-close").removeClass("active");
+			
+			$("#active-menu-id-queue").removeClass("ng-hide");
+			
+		}else{
+			$("#queue-open").removeClass("active");
+			$("#queue-close").addClass("active");
+			
+			$("#active-menu-id-queue").addClass("ng-hide");
+		}
+	}else{
+		
+		$("#open_shift").removeClass("disabled");
+		$("#close_shift").addClass("disabled");
+		
+		//未开班
+		$("#active-menu-id-dashboard").addClass("ng-hide");
+		$("#active-menu-id-tangdian").addClass("ng-hide");
+		$("#active-menu-id-deliver").addClass("ng-hide");
+		$("#active-menu-id-preorder").addClass("ng-hide");
+		$("#active-menu-id-fastfood").addClass("ng-hide");
+		$("#active-menu-id-buyorder").addClass("ng-hide");
+		$("#active-menu-id-orders").addClass("ng-hide");
+		$("#active-menu-id-wx-pre-orders").addClass("ng-hide");
+		$("#active-menu-id-soldout").addClass("ng-hide");
+		$("#active-menu-id-queue").addClass("ng-hide");
+	}
+	
+	
+	
+}
+
+
+function open_shift(){
+	if($("#open_shift").hasClass('disabled')){
+		return;
+	}
+	var shift_state = storeWeposSettingArray['shift_state'];
+	var is_on_shift = storeWeposSettingArray['is_on_shift'];
+	if(shift_state==0 && is_on_shift ==0){
+		$("#open-shift-div").removeClass("ng-hide");
+	}
+	$("#open-shift-div").removeClass("ng-hide");
+}
+
+function close_shift(){
+	var shift_state = storeWeposSettingArray['shift_state'];
+	var is_on_shift = storeWeposSettingArray['is_on_shift'];
+	if(shift_state==0 && is_on_shift ==0){
+		return;
+	}
+	get_shiftinfo_4_close();
+}
+
+
+var storeWeposSettingArray = [];
+function get_store_setting(){
+	//落单
+	$.ajax({
+        type: "POST",
+        url:"http://m.xiaoweicanting.com/ttmr/shop/index.php?act=store_dish_wepos&op=getStoreSetting",
+        dataType: "json",
+        success: function(e) {
+            if (e) {
+            	
+            	if(e.error==''){
+            		
+            		
+            		//$('#wepos_store_name').text(e.data.store_name);
+            		//$('.account-name').html('<i class="fa fa-user"></i> '+ e.data.seller_name);
+            		storeWeposSettingArray = e.data.wepossetting;
+            		refresh_store_setting();
+            	
+            	}else{
+            		
+            		Zepto.sDialog({
+    	                skin:"red",
+    	                content: "获取用户信息失败，请重新登录",
+    	                okBtn:false,
+    	                cancelBtn:false
+    	              });
+            	}
+            	
+            }
+        },
+        
+        error: function() {
+        	
+        	Zepto.sDialog({
+                skin:"red",
+                content: "获取用户信息失败，请重新登录",
+                okBtn:false,
+                cancelBtn:false
+              });
+        	
+    		window.location.href= "http://m.xiaoweicanting.com/ttmr/shop/index.php?act=seller_wepos_login&op=show_login";
+    		
+        }
+    })
+}
+
+get_store_setting();
+
+
+function get_jvk_state(){
+	var jvk_state = getCookie('jvk_state');
+	
+	if(jvk_state == "" || jvk_state == null){
+		$("#keyboard-open").removeClass("active");
+		keyboard_panel_open = 0;
+	}else{
+		$("#keyboard-open").addClass("active");
+		keyboard_panel_open = 1;
+	}
+}
+
+var keyboard_input_id = "";
+var keyboard_panel_open = 0;
+
+get_seller_name();
+get_jvk_state();
+
+function change_active_menu(menu) {
+	if(menu == "home" || menu == "tangdian" ){
+		window.location.href= "http://m.xiaoweicanting.com/ttmr/shop/wepos/dish/index.html";
+	}else if(menu == "dashboard"){
+		window.location.href= "http://m.xiaoweicanting.com/ttmr/shop/wepos/dish/setting.html";
+	}else if(menu == "orders"){
+		window.location.href= "http://m.xiaoweicanting.com/ttmr/shop/wepos/dish/order_manage.html";
+	}else if(menu == "wx-pre-orders"){
+		window.location.href= "http://m.xiaoweicanting.com/ttmr/shop/wepos/dish/wx_pre_order_manage.html";
+	}else if(menu == "queue"){
+		window.location.href= "http://m.xiaoweicanting.com/ttmr/shop/wepos/dish/store_queue.html";
+	}else if(menu == "vip"){
+		window.location.href= "http://m.xiaoweicanting.com/ttmr/shop/wepos/dish/vip.html";
+	}else if(menu == "deliver"){
+		window.location.href= "http://m.xiaoweicanting.com/ttmr/shop/wepos/dish/delivery.html";
+	}else if(menu == "buyorder"){
+		window.location.href= "http://m.xiaoweicanting.com/ttmr/shop/wepos/dish/buyorder.html";
+	}else if(menu == "preoder"){
+		window.location.href= "http://m.xiaoweicanting.com/ttmr/shop/wepos/dish/reservation.html";
+	}else if(menu == "soldout"){
+		window.location.href= "http://m.xiaoweicanting.com/ttmr/shop/wepos/dish/soldout.html";
+	}else if(menu == "fastfood"){
+		window.location.href= "http://m.xiaoweicanting.com/ttmr/shop/wepos/dish/fastfood.html";
+	}
+	
+}
+
+function reload(){
+	window.location.reload();
+}
+
+function back(){
+	window.history.go(-1);
+}
+
+function header_click_mask(){
+	$("#open-shift-div").addClass("ng-hide");
+	$("#shift-info-div").addClass("ng-hide");
+}
+
+function open_shift_submit(){
+	var start_cash_amount = $("#start_cash_amount").val();
+	if(start_cash_amount == "") start_cash_amount = 0;
+		
+	//落单
+	$.ajax({
+        type: "POST",
+        url:"http://m.xiaoweicanting.com/ttmr/shop/index.php?act=store_dish_wepos&op=openShiftSubmit",
+        dataType: "json",
+        data: {"start_cash_amount":start_cash_amount},
+        success: function(e) {
+            if (e) {
+            	
+            	if(e.error==''){
+            		//$('#wepos_store_name').text(e.data.store_name);
+            		//$('.account-name').html('<i class="fa fa-user"></i> '+ e.data.seller_name);
+            		header_click_mask();
+            		get_store_setting();
+            	
+            	}else{
+            		
+            		Zepto.sDialog({
+    	                skin:"red",
+    	                content: "获取用户信息失败，请重新登录",
+    	                okBtn:false,
+    	                cancelBtn:false
+    	              });
+            	}
+            	
+            }
+        },
+        
+        error: function() {
+        	
+        	Zepto.sDialog({
+                skin:"red",
+                content: "获取用户信息失败，请重新登录",
+                okBtn:false,
+                cancelBtn:false
+              });
+        	
+    		window.location.href= "http://m.xiaoweicanting.com/ttmr/shop/index.php?act=seller_wepos_login&op=show_login";
+    		
+        }
+    })
+}
+
+
+function close_shift_submit(){
+		
+	//落单
+	$.ajax({
+        type: "POST",
+        url:"http://m.xiaoweicanting.com/ttmr/shop/index.php?act=store_dish_wepos&op=closeShiftSubmit",
+        dataType: "json",
+        success: function(e) {
+            if (e) {
+            	
+            	if(e.error==''){
+            		//$('#wepos_store_name').text(e.data.store_name);
+            		//$('.account-name').html('<i class="fa fa-user"></i> '+ e.data.seller_name);
+            		header_click_mask();
+            		get_store_setting();
+            	
+            	}else{
+            		
+            		Zepto.sDialog({
+    	                skin:"red",
+    	                content: "获取用户信息失败，请重新登录",
+    	                okBtn:false,
+    	                cancelBtn:false
+    	              });
+            	}
+            	
+            }
+        },
+        
+        error: function() {
+        	
+        	Zepto.sDialog({
+                skin:"red",
+                content: "获取用户信息失败，请重新登录",
+                okBtn:false,
+                cancelBtn:false
+              });
+        	
+    		window.location.href= "http://m.xiaoweicanting.com/ttmr/shop/index.php?act=seller_wepos_login&op=show_login";
+    		
+        }
+    })
+}
+
+
+function get_shiftinfo_4_close(){
+	$shift_id = storeWeposSettingArray['shift_id'];
+	//落单
+	$.ajax({
+        type: "POST",
+        url:"http://m.xiaoweicanting.com/ttmr/shop/index.php?act=store_dish_wepos&op=getStoreShiftInfo",
+        dataType: "json",
+        data: {"shift_id":$shift_id},
+        success: function(e) {
+            if (e) {
+            	
+            	if(e.error==''){
+            		//$('#wepos_store_name').text(e.data.store_name);
+            		//$('.account-name').html('<i class="fa fa-user"></i> '+ e.data.seller_name);
+            		
+            		$("#shift-info-div").removeClass("ng-hide");
+
+            		var html = template.render('store_shift_info', e.data);
+    				$("#shift-info-zone").html(html);
+    				
+            	}else{
+            		
+            		Zepto.sDialog({
+    	                skin:"red",
+    	                content: "获取用户信息失败，请重新登录",
+    	                okBtn:false,
+    	                cancelBtn:false
+    	              });
+            	}
+            	
+            }
+        },
+        
+        error: function() {
+        	
+        	Zepto.sDialog({
+                skin:"red",
+                content: "获取用户信息失败，请重新登录",
+                okBtn:false,
+                cancelBtn:false
+              });
+        	
+    		window.location.href= "http://m.xiaoweicanting.com/ttmr/shop/index.php?act=seller_wepos_login&op=show_login";
+    		
+        }
+    })
+}
+
+
+function toggle_jvk(){
+	var jvk_state = getCookie('jvk_state');
+	if(keyboard_panel_open == 0 || jvk_state == "" || jvk_state == null){
+		$("#keyboard-open").addClass("active");
+		keyboard_panel_open = 1;
+		setCookie('jvk_state',1);
+	}else{
+		$("#keyboard-open").removeClass("active");
+		keyboard_panel_open = 0;
+		delCookie('jvk_state');
+	}
+}
+
+function trim(str){ //删除左右两端的空格 
+	return str.replace(/(^\s*)|(\s*$)/g, ""); 
+} 
+
+function jvb_input(value){
+
+if(value == 'symbol'){
+	$("#mode_symbol").removeClass("ng-hide");
+	$("#model_lower").addClass("ng-hide");
+}else if(value == 'symbol_upper'){
+	$("#mode_symbol").removeClass("ng-hide");
+	$("#model_upper").addClass("ng-hide");
+}else if(value == 'symbol_symbol'){
+	$("#model_lower").removeClass("ng-hide");
+	$("#mode_symbol").addClass("ng-hide");
+}else if(value == 'upper'){
+	$("#model_upper").removeClass("ng-hide");
+	$("#model_lower").addClass("ng-hide");
+}else if(value == 'symbol_lower'){
+	$("#model_lower").removeClass("ng-hide");
+	$("#mode_symbol").addClass("ng-hide");
+}else if(value == 'lower'){
+	$("#model_lower").removeClass("ng-hide");
+	$("#model_upper").addClass("ng-hide");
+}else if(value == '[CLEAR]'){
+	//清空
+	$("#"+keyboard_input_id).val("");
+	$("#"+keyboard_input_id).text("");
+}else if(value == '[BACKSPACE]'){
+	//后退
+	var old_val = trim($("#"+keyboard_input_id).val());
+	var length = old_val.length;
+	if(length > 0){
+		var new_val = old_val.substr(0,length-1);
+		$("#"+keyboard_input_id).val(new_val);
+		$("#"+keyboard_input_id).text(new_val);
+		trigger_filger(keyboard_input_id);
+	}
+}else{
+	var new_val = $("#"+keyboard_input_id).val() + value;
+	$("#"+keyboard_input_id).val(new_val);
+	$("#"+keyboard_input_id).text(new_val);
+	trigger_filger(keyboard_input_id);
+}
+}
+
+function trigger_filger(input_id){
+	if(input_id == "filter-var"){
+		filter_table();
+	}else if(input_id == "delivery-filter-var"){
+		filter_goods();
+	}else if(input_id == "reserv-name"){
+		input_reserv_info('reserv-name');
+	}else if(input_id == "reserv-phone"){
+		input_reserv_info('reserv-phone');
+	}else if(input_id == "reserv-note"){
+		input_reserv_info('reserv-note');
+	}else if(input_id == "buy-order-amount-input"){
+		input_buyorder_amount();
+	}else if(input_id == "vip-filter-input"){
+		query_vip();
+	}else if(input_id == "filter-var-soldout"){
+		filter_goods();
+	}else if(input_id == "filter-var-fastfood"){
+		filter_goods();
+	}else if(input_id == "fastfood-number-panel-input"){
+		input_fastfood_number();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+}
+
+
+function close_keyboard(){
+	$("#keyboard-panel").addClass("closed");
+}
+
+function input_onfocus(input_id){
+	if(keyboard_panel_open == 1){
+		$("#keyboard-panel").removeClass("closed");
+	}else{
+		$("#keyboard-panel").addClass("closed");
+	}
+	keyboard_input_id = input_id;
+}
+
+
+function reset_keyboard(){
+//	alert("bbb");
+	//keyboard_input_id = "";
+}
+
+function sign_out(){
+	window.location.href= "http://m.xiaoweicanting.com/ttmr/shop/index.php?act=seller_wepos_logout&op=logout";
+}
+
+function go_notification(){
+	window.location.href= "http://m.xiaoweicanting.com/ttmr/shop/wepos/dish/notification.html";
+}
+	

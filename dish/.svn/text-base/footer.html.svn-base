@@ -1,0 +1,121 @@
+<div class="wp-footbar wp-page-footer ng-scope ng-isolate-scope"  wp-footbar="" >
+  <div ng-show="show_menus">
+    <div id="active-menu-id-dashboard" class="wp-menu ng-isolate-scope"  icon="dashboard" onclick="change_active_menu('dashboard')">
+    <i class="wp-menu-icon fa fa-dashboard fa-fw"></i><div class="wp-menu-text" ><span class="ng-scope">
+      控制面板
+    </span></div></div>
+
+    <div id="active-menu-id-tangdian" class="wp-menu ng-scope ng-isolate-scope"  icon="cutlery" onclick="change_active_menu('tangdian')"  ><i class="wp-menu-icon fa fa-cutlery fa-fw"></i><div class="wp-menu-text" ><span class="ng-binding ng-scope">
+        堂点
+    </span></div></div>
+    <div id="active-menu-id-deliver" class="wp-menu ng-scope ng-isolate-scope"  icon="truck" onclick="change_active_menu('deliver')"  ><i class="wp-menu-icon fa fa-truck fa-fw"></i><div class="wp-menu-text" ><span class="ng-binding ng-scope">
+        外卖
+    </span></div></div>
+    <div id="active-menu-id-preorder" class="wp-menu ng-scope ng-isolate-scope"  icon="calendar" onclick="change_active_menu('preoder')"  ><i class="wp-menu-icon fa fa-calendar fa-fw"></i><div class="wp-menu-text" ><span class="ng-binding ng-scope">
+        预订
+    </span></div></div>
+    <div id="active-menu-id-fastfood" class="wp-menu ng-scope ng-isolate-scope"  icon="delicious" onclick="change_active_menu('fastfood')"  ><i class="wp-menu-icon fa fa-delicious fa-fw"></i><div class="wp-menu-text" ><span class="ng-binding ng-scope">
+        快餐
+    </span></div></div>
+    <div id="active-menu-id-buyorder" class="wp-menu ng-scope ng-isolate-scope"  icon="rmb" onclick="change_active_menu('buyorder')"  ><i class="wp-menu-icon fa fa-rmb fa-fw"></i><div class="wp-menu-text" ><span class="ng-binding ng-scope">
+        买单
+    </span></div></div>
+    <div id="active-menu-id-orders" class="wp-menu ng-scope ng-isolate-scope"  icon="list" onclick="change_active_menu('orders')"  ><i class="wp-menu-icon fa fa-list fa-fw"></i><div class="wp-menu-text" ><span class="ng-binding ng-scope">
+        订单管理
+    </span></div></div>
+    <div id="active-menu-id-wx-pre-orders" class="wp-menu ng-scope ng-isolate-scope"  icon="list" onclick="change_active_menu('wx-pre-orders')"  ><i class="wp-menu-icon fa fa-list fa-fw"></i><div class="wp-menu-text" ><span class="ng-binding ng-scope">
+        微信预约
+    </span></div></div>
+    <div style="display:none" id="active-menu-id-vip" class="wp-menu ng-scope ng-isolate-scope ng-hide"  icon="user" onclick="change_active_menu('vip')"  ><i class="wp-menu-icon fa fa-user fa-fw"></i><div class="wp-menu-text" ><span class="ng-binding ng-scope">
+        会员管理
+    </span></div></div>
+	<div id="active-menu-id-soldout" class="wp-menu ng-scope ng-isolate-scope"  icon="minus-square-o" onclick="change_active_menu('soldout')"  ><i class="wp-menu-icon fa fa-minus-square-o fa-fw"></i><div class="wp-menu-text" ><span class="ng-binding ng-scope">
+        产品估清
+    </span></div></div>
+    <div id="active-menu-id-queue" class="wp-menu ng-scope ng-isolate-scope"  icon="pause" onclick="change_active_menu('queue')"  ><i class="wp-menu-icon fa fa-pause fa-fw"></i><div class="wp-menu-text" ><span class="ng-binding ng-scope">
+        排号
+    </span></div></div>
+    <div class="wp-menu" ng-click="toggle_folded_menus()">
+      <i class="wp-menu-icon fa fa-th-large fa-fw"></i>
+      <div class="wp-menu-text">其他</div>
+      <div class="wp-nest-menus ng-hide wp-nest-menus-count-5" ng-class="get_nest_menu_class()" ng-show="show_folded_menus">
+
+        <div class="wp-menu ng-scope ng-isolate-scope" icon="delicious" ng-click="change_active_menu(menu)" ><i class="wp-menu-icon fa fa-delicious fa-fw"></i><div class="wp-menu-text" ng-transclude=""><span class="ng-binding ng-scope">
+          快餐
+        </span></div></div>
+
+        <div class="wp-menu ng-scope ng-isolate-scope"  icon="cc" ng-click="change_active_menu(menu)" ><i class="wp-menu-icon fa fa-cc fa-fw"></i><div class="wp-menu-text" ng-transclude=""><span class="ng-binding ng-scope">
+          促销券核销
+        </span></div></div>
+        <div class="wp-menu ng-scope ng-isolate-scope" icon="minus-square-o" ng-click="change_active_menu(menu)" ><i class="wp-menu-icon fa fa-minus-square-o fa-fw"></i><div class="wp-menu-text" ng-transclude=""><span class="ng-binding ng-scope">
+          产品估清
+        </span></div></div>
+        <div class="wp-menu ng-scope ng-isolate-scope"  icon="bookmark-o fa-rotate-180" ng-click="change_active_menu(menu)" ><i class="wp-menu-icon fa fa-bookmark-o fa-rotate-180 fa-fw"></i><div class="wp-menu-text" ng-transclude=""><span class="ng-binding ng-scope">
+          厨师入口
+        </span></div></div>
+
+        <div class="wp-menu ng-isolate-scope" icon="cog" ng-click="menu_setting_modal.open()" ><i class="wp-menu-icon fa fa-cog fa-fw"></i><div class="wp-menu-text" ng-transclude=""><span class="ng-scope">
+          菜单设置
+        </span></div></div>
+      </div>
+    </div>
+    <div class="space"></div>
+  </div>
+  <div class="wp-modal ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="menu_setting_modal.show"><div class="wp-modal-mask" ng-click="click_mask()"></div><div class="wp-modal-body" ng-transclude="">
+    <div class="wp-modal-header ng-scope">菜单折叠设置</div>
+    <div class="wp-modal-content ng-scope">
+      <!-- ngRepeat: menu in menus -->
+      
+      <div class="wp-btn-block wp-btn ng-scope active"   ng-click="toggle_menu_fold(menu);" ng-class="{active: !menu.folded}"><div class="text"><div class="overflow-hidden-text" ng-transclude="">
+        <i class="fa fa-cutlery fa-fw"></i><span class="ng-binding ng-scope">
+        堂点
+      </span></div></div></div><div class="wp-btn-block wp-btn ng-scope active"   ng-click="toggle_menu_fold(menu);" ><div class="text"><div class="overflow-hidden-text" ng-transclude="">
+        <i class="fa fa-calendar fa-fw"></i><span class="ng-binding ng-scope">
+        预订
+      </span></div></div></div><div class="wp-btn-block wp-btn ng-scope active"   ng-click="toggle_menu_fold(menu);" ><div class="text"><div class="overflow-hidden-text" ng-transclude="">
+        <i class="fa fa-truck fa-fw"></i><span class="ng-binding ng-scope">
+        外卖
+      </span></div></div></div><div class="wp-btn-block wp-btn ng-scope"   ng-click="toggle_menu_fold(menu);" ><div class="text"><div class="overflow-hidden-text" ng-transclude="">
+        <i class="fa fa-delicious fa-fw"></i><span class="ng-binding ng-scope">
+        快餐
+      </span></div></div></div><div class="wp-btn-block wp-btn ng-scope active"   ng-click="toggle_menu_fold(menu);" ><div class="text"><div class="overflow-hidden-text" ng-transclude="">
+        <i class="fa fa-pause fa-fw"></i><span class="ng-binding ng-scope">
+        排号
+      </span></div></div></div><div class="wp-btn-block wp-btn ng-scope active"   ng-click="toggle_menu_fold(menu);" ><div class="text"><div class="overflow-hidden-text" ng-transclude="">
+        <i class="fa fa-list fa-fw"></i><span class="ng-binding ng-scope">
+        订单管理
+      </span></div></div></div><div class="wp-btn-block wp-btn ng-scope active"   ng-click="toggle_menu_fold(menu);" ><div class="text"><div class="overflow-hidden-text" ng-transclude="">
+        <i class="fa fa-rmb fa-fw"></i><span class="ng-binding ng-scope">
+        买单
+      </span></div></div></div><div class="wp-btn-block wp-btn ng-scope active"   ng-click="toggle_menu_fold(menu);" ><div class="text"><div class="overflow-hidden-text" ng-transclude="">
+        <i class="fa fa-user fa-fw"></i><span class="ng-binding ng-scope">
+        会员管理
+      </span></div></div></div><div class="wp-btn-block wp-btn ng-scope"   ng-click="toggle_menu_fold(menu);" ><div class="text"><div class="overflow-hidden-text" ng-transclude="">
+        <i class="fa fa-cc fa-fw"></i><span class="ng-binding ng-scope">
+        促销券核销
+      </span></div></div></div><div class="wp-btn-block wp-btn ng-scope"   ng-click="toggle_menu_fold(menu);" ><div class="text"><div class="overflow-hidden-text" ng-transclude="">
+        <i class="fa fa-minus-square-o fa-fw"></i><span class="ng-binding ng-scope">
+        产品估清
+      </span></div></div></div><div class="wp-btn-block wp-btn ng-scope"   ng-click="toggle_menu_fold(menu);" ><div class="text"><div class="overflow-hidden-text" ng-transclude="">
+        <i class="fa fa-bookmark-o fa-rotate-180 fa-fw"></i><span class="ng-binding ng-scope">
+        厨师入口
+      </span></div></div></div>
+      
+      
+      
+      <div class="clearfix"></div>
+      <div class="wp-modal-actions">
+        <div class="wp-btn-block wp-btn"  ng-click="menu_setting_modal.close()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">返回</span></div></div></div>
+      </div>
+    </div>
+  </div></div>
+  <div class="toggle-action-content">
+
+  </div>
+  <div class="toggle-action-shadow"></div>
+</div>
+<!-- 底部menu -->
+
+<!-- 底部提示 -->
+<div id="navigation-toolbar-note" class="navigation-toolbar ng-binding ng-scope" ></div>
+<!-- end 底部menu -->

@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html class="ng-scope">
+<head>
+<style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}</style>
+<meta charset="utf-8">
+<meta content="" name="keywords">
+<meta content="" name="description">
+<meta content="" name="author">
+<meta content="production" name="env">
+<meta content="" name="mobile_device">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" name="viewport">
+<meta content="IE=EmulateIE9" http-equiv="X-UA-Compatible">
+<link href="./css/webpos.css" media="all" rel="stylesheet">
+<link href="./css/main.css" media="all" rel="stylesheet">
+<title>云餐厅收银系统</title>
+</head>
+<body>
+
+<div ng-view="" style="height: 100%;" class="ng-scope">
+<!--#include file="header.html"-->
+<!--#include file="footer.html"-->
+<!--#include file="keyboard.html"-->
+
+<!-- 主视图区域 -->
+<div class="branch-show-page main-view ng-scope" >
+  <!-- 餐桌选择cell -->
+  <div id="tableChooseCell" class="master-part ng-scope" ng-controller="tableChooseCell">
+  <div class="menu-part scroll-wrapper" style="overflow:auto;overflow-x: hidden">
+    <div >
+    <div id="store_table_class_zone">      
+    </div>
+    </div>
+  </div>
+  <div class="master-part-with-menu scroll-wrapper" style="overflow:auto;overflow-x: hidden">
+    <div >
+    <div class="table-index">
+      <div class="wp-subject">
+        <span id="table_change_note"  class="ng-binding ng-hide">
+          当前操作的桌台是：
+          <span id="table_change_current_table" class="red ng-binding"></span>, 请选择要换到的目标桌台
+        </span>
+        <span id="table_merge_note"  class="ng-binding ng-hide">
+          当前操作的桌台是：
+          <span id="table_merge_current_table" class="red ng-binding"></span>, 请选择要并台的目标桌台
+        </span>
+        
+        <span id="table_choose_note" ng-hide="op_table">
+          <span ng-hide="show_filtered_tables">选择桌台</span>
+          <span id="table_choose_table_id_note"  class="ng-binding ng-hide">桌台</span>
+        </span>
+        <div  input-type="text" class="ng-isolate-scope">
+        <div class="wp-form-input-keypad wp-form-input-normal ng-hide"><span class="ng-binding"></span></div>
+        <div class="wp-form-input-keypad wp-form-input-normal ng-hide"><span class="ng-binding"></span></div>
+        <div class="wp-form-input wp-form-input-normal" >
+        <input id="filter-var" type="text" onfocus="input_onfocus('filter-var')" onblur="reset_keyboard()" 
+        oninput="filter_table()"  placeholder="" class="ng-pristine ng-untouched ng-valid"></div>
+        </div>
+        <div class="wp-input-label" onclick="clear_table_filter_key()">清空</div>
+      </div>
+	 <div id="table_list_zone"></div>
+    </div></div>
+  </div>
+  <div id="table_filter_oper_panel" class="wp-modal ng-isolate-scope ng-hide"  ><div class="wp-modal-mask" onclick="click_mask()"></div><div class="wp-modal-body" >
+    <div class="wp-form-group ng-scope">
+      <div class="wp-form-label">过滤方式</div>
+      <div class="wp-btn-block wp-btn"  onclick="get_filtered_tables('idle')"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">
+        空闲
+      </span></div></div></div>
+      <div class="wp-btn-block wp-btn"  onclick="get_filtered_tables('opened')"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">
+        已开台
+      </span></div></div></div>
+      <div class="wp-btn-block wp-btn"  onclick="get_filtered_tables('ordered')"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">
+        已下单
+      </span></div></div></div>
+      <div class="wp-btn-block wp-btn"  onclick="get_filtered_tables('paid')"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">
+        已支付
+      </span></div></div></div>
+      <div class="space"></div>
+    </div>
+    <div class="wp-form-group ng-scope">
+      <div class="wp-form-action">
+        <div class="wp-form-label"></div>
+        <div class="wp-btn-block wp-btn"  onclick="open_table_filter_panel(false)"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">取消</span></div></div></div>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+  <div id="productChooseCell" class="master-part product-choose-cell ng-scope ng-hide" ng-controller="productChooseCell" >
+  <div class="menu-part scroll-wrapper" style="overflow:auto;overflow-x: hidden">
+    <div style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); -webkit-transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; -webkit-transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);"><div>
+      <div class="menu ng-binding ng-scope active"  ng-click="change_active_choose_way(choose_way)" >
+        单点
+      </div>
+      <div class="menu ng-binding ng-scope ng-hide"  ng-click="change_active_choose_way(choose_way)" >
+        套餐
+      </div>
+    </div></div>
+  </div>
+  <div class="master-part-with-menu scroll-wrapper" style="overflow:auto;overflow-x: hidden">
+    <div style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); -webkit-transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; -webkit-transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);"><div ng-show="active_choose_way.value == 'variant'">
+      <div class="wp-search-input ng-isolate-scope" input-model="search_key">
+      <div class="keypad-input ng-pristine ng-untouched ng-valid ng-hide"   ><span class="ng-binding"></span></div><div class="normal-input" ><input type="text"  placeholder="" class="ng-pristine ng-untouched ng-valid"></div><i class="fa fa-search"></i></div>
+      <div class="clearfix"></div>
+      <div ng-hide="search_key">
+      <div id="store_goods_class_zone"></div> 
+        <div class="clearfix"></div>
+        <div>
+          <div class="fillet wp-btn-block wp-btn-sm active ng-hide"   ng-click="change_active_sub_category(null)" ><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">
+            默认
+          </span></div></div></div>
+        </div>
+        <div class="clearfix"></div>
+        <div id="goods_list_zone" class="products">
+          <div class="space"></div>
+        </div>
+      </div>
+      <div ng-show="search_key" class="ng-hide">
+        <div class="products">
+          <div class="space"></div>
+        </div>
+      </div>
+    </div><div  class="ng-hide">
+      <div class="combos-wapper">
+        <div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="combo-items-wapper">
+          <div class="combo-action">
+            <div class="wp-btn-block wp-btn-md disabled ng-hide"    ng-click="add_combo_package(active_combo)"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">添加套餐</span></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+    
+  </div>
+  <div class="wp-modal ng-isolate-scope ng-hide"  wp-show="active_product"><div class="wp-modal-mask" ng-click="click_mask()"></div><div class="wp-modal-body" >
+    <div class="wp-modal-header ng-binding ng-scope"> 规格选择</div>
+    <div class="wp-modal-content ng-scope">
+    </div>
+  </div></div>
+</div>
+   
+  <!-- 退菜cell -->
+  <div id="returnProductChooseCell" class="master-part product-choose-cell ng-scope scroll-wrapper ng-hide" ng-controller="deletableItemableChooseCell" style="overflow:auto;overflow-x: hidden">
+  <div class="menu-part scroll-wrapper" style="overflow:auto;overflow-x: hidden">
+    <div style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); -webkit-transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; -webkit-transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);"><div>
+      <div class="menu ng-binding ng-scope active"  ng-click="change_active_choose_way(choose_way)" >
+        已点菜品
+      </div>
+    </div></div>
+  </div>
+  <div class="master-part-with-menu scroll-wrapper" style="overflow:auto;overflow-x: hidden">
+  <div ><div class="wp-subject">可退菜品</div>
+  
+  
+   <input type="hidden" id="delete-item-selected-good-id" name="delete-item-selected-good-id" value="" />
+   <input type="hidden" id="delete-item-selected-good-index" name="delete-item-selected-good-index" value="" />
+  
+  
+  <div id="in_ordered_goods_list_zone">
+  </div>
+  </div>
+  </div>
+  
+</div>
+
+  <!-- 右边的区域  -->
+  <div class="op-part ng-scope scroll-wrapper" style="overflow:auto;overflow-x: hidden" ng-controller="tableCell" style="overflow:auto;overflow-x: hidden">
+  <div >
+  <!-- panel 操作区域  -->
+  <div id="oper-table" class="table-op-index ng-hide" ng-show="table">
+  
+    <input type="hidden" id="oper-table-oper-type" name="oper-table-oper-type" value="" />
+  
+  	<input type="hidden" id="oper-table-store-id" name="oper-table-store-id" value="" />
+  	<input type="hidden" id="oper-table-parent-table-id" name="oper-table-parent-table-id" value="" />
+  	
+  	
+  	<input type="hidden" id="oper-table-table-id" name="oper-table-table-id" value="" />
+  	<input type="hidden" id="oper-table-table-name" name="oper-table-table-name" value="" />
+  	<input type="hidden" id="oper-table-order-id" name="oper-table-order-id" value="" />
+  	
+  	<input type="hidden" id="oper-table-2nd-table-id" name="oper-table-2nd-table-id" value="" />
+  	<input type="hidden" id="oper-table-2nd-table-name" name="oper-table-2nd-table-name" value="" />  	
+  	
+  	<input type="hidden" id="oper-order-cancel-reason" name="oper-order-cancel-reason" value="" />
+  	
+  	
+    <div id="oper-table-open" class="wp-btn-block wp-btn ng-hide"   onclick="open_table_panel()">
+    <div class="text">
+    <div class="overflow-hidden-text" ><span class="ng-scope">开台</span></div>
+    </div>
+   </div>
+   
+    <div id="oper-table-order" class="ng-hide">
+      <div class="wp-btn-block wp-btn"  onclick="go_cart()">
+      <div class="text">
+      <div class="overflow-hidden-text" ><span class="ng-scope">点菜</span></div>
+      </div>
+      </div>
+    </div>
+    
+
+    <div id="ordered-table-action"  class="ng-hide">
+      <div id="ordered-table-action-confirm-order" class="active wp-btn-block wp-btn ng-hide"  ng-click="confirm_order()" ng-show="is_order_pending()">
+      <div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">确认</span></div></div></div>
+      <div id="ordered-table-action-append-item" class="wp-btn-block wp-btn"  onclick="toggle_action('append_itemable')" ng-class="{'active':action=='append_itemable'}"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">加菜</span></div></div></div>
+      <div id="ordered-table-action-delete-item" class="wp-btn-block wp-btn"  onclick="toggle_action('delete_itemable')" ng-class="{'active':action=='delete_itemable'}" ng-show="can('delete_itemables', 'eat_in_hall_order')"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">退菜</span></div></div></div>
+      <div id="ordered-table-action-change-table" class="wp-btn-block wp-btn toggle_change_table"  onclick="toggle_action('change_table')" ><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">换台</span></div></div></div>
+      <div id="ordered-table-action-merge-table" class="wp-btn-block wp-btn toggle_merge_table"  onclick="toggle_action('merge_table')" ><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">并台</span></div></div></div>
+    </div>
+
+    <div id="oper-table-clean" class="wp-btn-block wp-btn ng-hide"  ng-hide="is_idle()" onclick="toggle_action('clean_table')"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">清台</span></div></div></div>
+      
+    <div id="ordered-table-action-2"  class="ng-hide">
+      <div id="ordered-table-action-free-order" class="wp-btn-block wp-btn disabled"   onclick="change_order_good_price_free()" ng-class="{'active':action=='bind_reservation_order'}"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">赠菜</span></div></div></div>
+      <div id="ordered-table-action-cancle-order" class="wp-btn-block wp-btn ng-hide"  onclick="cancel_order()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">取消订单</span></div></div></div>
+      <div class="wp-btn-block wp-btn ng-hide"   ng-click="credits_deduction_modal.toggle_show()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">积分抵扣</span></div></div></div>
+      <div class="wp-btn-block wp-btn ng-hide"   ng-click="card_deduction_modal.toggle_show()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">余额抵扣</span></div></div></div>
+      <div class="wp-btn-block wp-btn ng-hide"  ng-click="toggle_action('apply_coupon')" ><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">使用优惠券</span></div></div></div>
+      <div id="ordered-table-action-change-price" disabled=true class="wp-btn-block wp-btn disabled"  onclick="change_order_good_price()" ng-class="{'disabled': action != 'init' || !current_line_item}" ng-show="can_change_price()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">单品改价</span></div></div></div>
+    </div>
+    
+    <div id="ordered-table-action-print" class="wp-btn-block wp-btn ng-hide"  onclick="choose_reprint_targets()" ng-show="can('reprint', 'printer') &amp;&amp; table.order"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">小票补打</span></div></div></div>
+    
+    <div id="ordered-table-action-print-paid" class="wp-btn-block wp-btn ng-hide"  onclick="print_order_detail()" ng-show="can('reprint', 'printer') &amp;&amp; table.order"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">打印结单</span></div></div></div>
+    
+    
+    <div class="clearfix"></div>
+    
+    <div id="check-out"  class="ng-hide">
+      <div class="primary wp-btn-block wp-btn"  id="settle-btn"   onclick="go_checkout()" ><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">结算</span></div></div></div>
+    </div>
+    
+    <div class="space"></div>
+    
+  </div>
+  <!-- end panel 操作区域  -->
+
+ <!-- 加减菜的菜品列表table -->
+ <div id="appended_goods_list_zone"></div>
+<input type="hidden" id="selected-appended-item-id" name="selected-appended-item-id" value="" />
+ 
+ <!-- end 加减菜的菜品列表table -->
+ 
+ <!-- 订单已经有的菜品列表table -->
+  <div id="table-item-zone" class="table-cart-line-item-index ng-hide" ng-show="table">
+    <input type="hidden" id="selected-store-id" name="selected-store-id" value="14" />
+    <input type="hidden" id="selected-parent-table-class-name" name="selected-parent-table-class-name" value="" />
+    
+    <input type="hidden" id="selected-table-id" name="selected-table-id" value="75" />
+    <input type="hidden" id="selected-selected-good-id" name="selected-selected-good-id" value="" />
+    <input type="hidden" id="selected-selected-good-name" name="selected-selected-good-name" value="" />
+    <input type="hidden" id="selected-selected-good-price" name="selected-selected-good-price" value="" />
+    <input type="hidden" id="selected-selected-good-num" name="selected-selected-good-num" value="" />
+     
+    <div id="table-item-zone-table-name" class="table-table-name ng-binding"></div>
+    <div id="store_table_order_info_zone"></div>
+    <div id="table-item-zone-ordered-item-list-zone"></div>
+    <div id="table-item-zone-ordered-item-total-price" class="table-order-total ng-binding ng-hide" ng-show="table.order">合计: </div>
+  </div>
+  <!-- end 订单已经有的菜品列表table -->
+</div>
+<!-- end 右边的区域  -->
+
+<!-- 积分抵扣确认浮层  --> 
+  <div class="wp-modal ng-isolate-scope ng-hide"  wp-show="credits_deduction_modal.show"><div class="wp-modal-mask" ng-click="click_mask()"></div><div class="wp-modal-body" >
+    <div class="wp-modal-header ng-scope">积分抵扣</div>
+    <div class="wp-modal-content ng-scope">
+      <div class="wp-form-group">
+        <div class="wp-form-label">当前用户</div>
+        <div class="wp-form-input ng-binding">-</div>
+      </div>
+      <div class="wp-form-group">
+        <div class="wp-form-label">当前积分</div>
+        <div class="wp-form-input ng-binding"><span class="webpos-hint">&nbsp;(100积分可兑换1块钱)</span></div>
+      </div>
+      <div class="wp-form-group">
+        <div class="wp-form-label">积分抵扣</div>
+        <div input-model="credits_deduction_modal.credits" input-type="number" input-size="small" class="ng-isolate-scope"><div class="wp-form-input-keypad wp-form-input-small ng-hide"   data-ng-keypad-input="number" ><span class="ng-binding">0</span></div><div class="wp-form-input-keypad wp-form-input-small ng-hide"    ><span class="ng-binding"></span></div><div class="wp-form-input wp-form-input-small" ><input type="text"  placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+      </div>
+      <div class="wp-form-group">
+        <div class="wp-form-label"></div>
+        <div class="wp-form-action">
+          <div class="wp-btn-block wp-btn disabled"  ng-click="credits_deduction_modal.submit()" ng-class="{'disabled': !credits_deduction_modal.can_submit()}"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">抵扣</span></div></div></div>
+          <div class="wp-btn-block wp-btn"  ng-click="credits_deduction_modal.toggle_show()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">取消</span></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+<!-- 余额抵扣确认浮层  -->  
+<div class="wp-modal ng-isolate-scope ng-hide"  wp-show="card_deduction_modal.show"><div class="wp-modal-mask" ng-click="click_mask()"></div><div class="wp-modal-body" >
+    <div class="wp-modal-header ng-scope">余额抵扣</div>
+    <div class="wp-modal-content ng-scope">
+      <div class="wp-form-group">
+        <div class="wp-form-label">当前用户</div>
+        <div class="wp-form-input ng-binding">-</div>
+      </div>
+      <div class="wp-form-group">
+        <div class="wp-form-label">当前余额</div>
+        <div class="wp-form-input ng-binding"></div>
+      </div>
+      <div class="wp-form-group">
+        <div class="wp-form-label">余额抵扣</div>
+        <div input-model="card_deduction_modal.amount" input-type="number" input-size="small" class="ng-isolate-scope"><div class="wp-form-input-keypad wp-form-input-small ng-hide"   data-ng-keypad-input="number" ><span class="ng-binding">0</span></div><div class="wp-form-input-keypad wp-form-input-small ng-hide"    ><span class="ng-binding"></span></div><div class="wp-form-input wp-form-input-small" ><input type="text"  placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+      </div>
+      <div class="wp-form-group">
+        <div class="wp-form-label"></div>
+        <div class="wp-form-action">
+          <div class="wp-btn-block wp-btn disabled"  ng-click="card_deduction_modal.submit()" ng-class="{'disabled': !card_deduction_modal.can_submit()}"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">抵扣</span></div></div></div>
+          <div class="wp-btn-block wp-btn"  ng-click="card_deduction_modal.toggle_show()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">取消</span></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+<!-- 开台确认浮层  -->  
+<div id="open-table-panel" class="wp-modal-md wp-modal ng-isolate-scope ng-hide"  wp-show="guest_num_modal.show">
+   <div class="wp-modal-mask" onclick="click_mask()"></div>
+   <div class="wp-modal-body" >
+    <div class="wp-modal-header ng-scope">开台</div>
+    <div class="wp-modal-content ng-scope">
+    
+      <div class="wp-form-group">
+        <div class="wp-form-label">请输入用餐人数</div>
+        <div input-model="guest_num_modal.guest_num" input-type="number" input-size="middle" placeholder="8" class="ng-isolate-scope">
+        <div class="wp-form-input wp-form-input-middle">
+        <input id="open-table-customer-num" type="text" value="8" class="ng-pristine ng-untouched ng-valid">
+        </div>
+        </div>
+      </div>
+      
+      
+      <div class="wp-form-group">
+        <div id="guest_num_pre_page" class="wp-btn-block wp-btn-sm" onselectstart="return false" onclick="guest_num_select_pre_page()" ><div class="text"><div class="overflow-hidden-text" ng-transclude="">
+          <i class="fa fa-chevron-left ng-scope"></i>
+        </div></div></div>
+        
+        <input id="guest_num_select_page" type="text" value="2" class="ng-pristine ng-untouched ng-hide">
+        
+        <div id="guest_num_1" class="wp-btn-block wp-btn-sm ng-scope" ng-class="{active: guest_num_modal.guest_num == guest_num}" 
+        onclick="set_guest_num('1')">
+        <div class="text">
+        <div class="overflow-hidden-text" ng-transclude="">
+        <span id="guest_num_val_1" class="ng-binding ng-scope">
+          6
+        </span>
+        </div>
+        </div>
+        </div>
+        
+        
+        <div id="guest_num_2" class="wp-btn-block wp-btn-sm ng-scope" ng-class="{active: guest_num_modal.guest_num == guest_num}" 
+        onclick="set_guest_num('2')">
+        <div class="text">
+        <div class="overflow-hidden-text" ng-transclude="">
+        <span id="guest_num_val_2" class="ng-binding ng-scope">
+          7
+        </span>
+        </div>
+        </div>
+        </div>
+        
+        <div id="guest_num_3" class="wp-btn-block wp-btn-sm ng-scope" ng-class="{active: guest_num_modal.guest_num == guest_num}" 
+        onclick="set_guest_num('3')">
+        <div class="text">
+        <div class="overflow-hidden-text" ng-transclude="">
+        <span id="guest_num_val_3" class="ng-binding ng-scope">
+          8
+        </span>
+        </div>
+        </div>
+        </div>
+        
+        <div id="guest_num_4" class="wp-btn-block wp-btn-sm ng-scope" ng-class="{active: guest_num_modal.guest_num == guest_num}" 
+        onclick="set_guest_num('4')">
+        <div class="text">
+        <div class="overflow-hidden-text" ng-transclude="">
+        <span id="guest_num_val_4" class="ng-binding ng-scope">
+          9
+        </span>
+        </div>
+        </div>
+        </div>
+        
+        <div id="guest_num_5" class="wp-btn-block wp-btn-sm ng-scope" ng-class="{active: guest_num_modal.guest_num == guest_num}" 
+        onclick="set_guest_num('5')">
+        <div class="text">
+        <div class="overflow-hidden-text" ng-transclude="">
+        <span id="guest_num_val_5" class="ng-binding ng-scope">
+          10
+        </span>
+        </div>
+        </div>
+        </div>
+        
+        <div class="wp-btn-block wp-btn-sm" onselectstart="return false" onclick="guest_num_select_next_page()"><div class="text"><div class="overflow-hidden-text" ng-transclude="">
+          <i class="fa fa-chevron-right ng-scope"></i>
+        </div></div></div>
+      </div>
+      
+      
+
+      <div class="wp-form-group">
+        <div class="wp-form-label"></div>
+        <div class="wp-form-action">
+          <div class="wp-btn-block wp-btn"  onclick="open_table_and_order()" ng-class="{'disabled': !guest_num_modal.can_submit()}"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">开台点菜</span></div></div></div>
+          <div class="wp-btn-block wp-btn"  onclick="open_table()" ><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">开台</span></div></div></div>
+          <div class="wp-btn-block wp-btn"  onclick="cancel_open_table()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">取消</span></div></div></div>
+ 
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+<!-- 加菜确认浮层  -->
+<div class="ng-scope">
+<div id="confirm_append_item_panel"  class="wp-modal ng-scope ng-isolate-scope ng-hide"  wp-show="append_itemable_modal.show">
+<div class="wp-modal-mask" onclick="click_mask()"></div><div class="wp-modal-body" >
+  <div class="wp-modal-header ng-scope">加菜确认</div>
+  <div class="wp-modal-content ng-scope">
+  <div id="confirm_appended_item_list_zone" ></div>
+    <div class="wp-form-group">
+      <div class="wp-form-label"></div>
+      <div class="wp-form-action">
+        <div class="wp-btn-block wp-btn"  onclick="submit_appended_item()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">确定</span></div></div></div>
+        <div class="wp-btn-block wp-btn"  onclick="click_mask()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">取消</span></div></div></div>
+      </div>
+    </div>
+  </div>
+</div></div></div>
+
+<!-- 单品改价确认浮层  -->
+<div id="good-change-price-panel" class="wp-modal ng-isolate-scope ng-hide"  wp-show="change_price_modal.show"><div class="wp-modal-mask" onclick="click_mask()"></div><div class="wp-modal-body" >
+    <div class="wp-modal-header ng-scope">单品改价</div>
+    <div class="wp-modal-content ng-scope">
+      <div class="wp-form-group">
+        <div class="wp-form-label">菜品</div>
+        <div id="good-change-price-name" class="wp-form-input ng-binding"></div>
+      </div>
+      <div class="wp-form-group">
+        <div class="wp-form-label">原价</div>
+        <div id="good-change-price-price" class="wp-form-input ng-binding"></div>
+      </div>
+      <div class="wp-form-group">
+        <div class="wp-form-label">改价</div>
+        <div input-model="change_price_modal.new_price" input-type="number" input-size="middle" class="ng-isolate-scope"><div class="wp-form-input-keypad wp-form-input-middle ng-hide"   data-ng-keypad-input="number" ><span class="ng-binding"></span></div><div class="wp-form-input-keypad wp-form-input-middle ng-hide"    ><span class="ng-binding"></span></div><div class="wp-form-input wp-form-input-middle" >
+        <input id="good-change-price-new-price" type="text"  placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+      </div>
+      <div class="wp-form-group">
+        <div class="wp-form-label"></div>
+        <div class="wp-form-action">
+          <div class="wp-btn-block wp-btn"  onclick="change_price_submit()" ng-class="{'disabled': !change_price_modal.can_submit()}"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">确定</span></div></div></div>
+          <div class="wp-btn-block wp-btn"  onclick="click_mask()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">取消</span></div></div></div>
+
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+<!-- 小票补打确认浮层  -->
+<div class="wp-modal ng-scope ng-isolate-scope ng-hide"  wp-show="reprint_modal.show"><div class="wp-modal-mask" ng-click="click_mask()"></div><div class="wp-modal-body" >
+  <div class="wp-modal-header ng-scope">小票补打</div>
+  <div class="wp-modal-content ng-scope">
+    <div class="wp-form-group">
+      <div class="wp-form-label">选择打印机</div>
+      <div>
+        <!-- ngRepeat: target in reprint_targets -->
+        <div class="wp-no-record" ng-hide="reprint_targets.length > 0">当前没有可选的打印机</div>
+      </div>
+    </div>
+    <div class="wp-form-group">
+      <div class="wp-form-label">备注</div>
+      <div input-model="reprint_modal.note" input-type="text" input-size="middle" class="ng-isolate-scope"><div class="wp-form-input-keypad wp-form-input-middle ng-hide"    ><span class="ng-binding"></span></div><div class="wp-form-input-keypad wp-form-input-middle ng-hide"    ><span class="ng-binding"></span></div><div class="wp-form-input wp-form-input-middle" ><input type="text"  placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+    </div>
+
+    <div class="wp-form-group">
+      <div class="wp-form-label"></div>
+      <div class="wp-form-action">
+        <div class="wp-btn-block wp-btn disabled"  ng-click="reprint_modal.submit()" ng-class="{'disabled': !reprint_modal.can_submit()}"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">确定</span></div></div></div>
+        <div class="wp-btn-block wp-btn"  ng-click="reprint_modal.cancel()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">取消</span></div></div></div>
+
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 取消订单确认浮层  -->
+<div id="cancel-order-panel" class="wp-modal ng-scope ng-isolate-scope ng-hide"  wp-show="cancel_modal.show"><div class="wp-modal-mask" onclick="click_mask()"></div><div class="wp-modal-body" >
+  <div class="wp-modal-header ng-binding ng-scope">取消订单</div>
+  <div class="wp-modal-content ng-scope">
+    <div class="wp-form-group">
+      <div class="wp-form-label ng-binding">选择取消订单原因</div>
+      <div>
+        <div id="cancel-reson-hwsq" class="wp-btn-block wp-btn ng-scope"  onclick="cancel_change_reason('hwsq')" ><div class="text"><div class="overflow-hidden-text" ><span class="ng-binding ng-scope">货物售罄</span></div></div></div>
+        <div id="cancel-reson-dzwx" class="wp-btn-block wp-btn ng-scope"  onclick="cancel_change_reason('dzwx')" ><div class="text"><div class="overflow-hidden-text" ><span class="ng-binding ng-scope">地址无效</span></div></div></div>
+        <div id="cancel-reson-ccfw" class="wp-btn-block wp-btn ng-scope"  onclick="cancel_change_reason('ccfw')" ><div class="text"><div class="overflow-hidden-text" ><span class="ng-binding ng-scope">超出范围</span></div></div></div>
+        <div id="cancel-reson-wfps" class="wp-btn-block wp-btn ng-scope"  onclick="cancel_change_reason('wfps')" ><div class="text"><div class="overflow-hidden-text" ><span class="ng-binding ng-scope">无法配送</span></div></div></div>
+        <div id="cancel-reson-ddwx" class="wp-btn-block wp-btn ng-scope"  onclick="cancel_change_reason('ddwx')" ><div class="text"><div class="overflow-hidden-text" ><span class="ng-binding ng-scope">订单无效</span></div></div></div>
+        <div id="cancel-reson-qt" class="wp-btn-block wp-btn ng-scope"  onclick="cancel_change_reason('qt')" ><div class="text"><div class="overflow-hidden-text" ><span class="ng-binding ng-scope">其他原因</span></div></div></div>
+      </div>
+    </div>
+    <div id="cancel-reson-qt-input" class="wp-form-group ng-hide" ng-show="cancel_modal.show_other_reason">
+      <div class="wp-form-label">填写其他原因</div>
+      <div input-model="cancel_modal.other_reason" input-type="text" input-size="middle" class="ng-isolate-scope"><div class="wp-form-input-keypad wp-form-input-middle ng-hide"    ><span class="ng-binding"></span></div><div class="wp-form-input-keypad wp-form-input-middle ng-hide"    ><span class="ng-binding"></span></div><div class="wp-form-input wp-form-input-middle" >
+      <input  id="cancel-reson-qt-input-content" type="text"  placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+    </div>
+
+    <div class="wp-form-group">
+      <div class="wp-form-label"></div>
+      <div class="wp-form-action">
+        <div class="wp-btn-block wp-btn"  onclick="cancel_order_submit()" ng-class="{'disabled': !cancel_modal.can_submit()}"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">确定</span></div></div></div>
+        <div class="wp-btn-block wp-btn"  onclick="click_mask()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">取消</span></div></div></div>
+
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+</div>
+<!-- end 右边的区域  -->
+
+</div>
+<!-- end 主视图区域 -->
+
+</div>
+<!-- end ngView:  -->
+
+
+<!-- action 确认panel:  -->
+<div ng-include="" class="ng-scope">
+<div class="wp-modals ng-scope"> 
+  <div id="confirm-panel" class="wp-modal wp-confirm-modal ng-isolate-scope ng-hide"  wp-show="confirm_modal.show" wp-lock-mask="confirm_modal.lock_mask" wp-confirm-info="" wp-ok-text="" wp-cancel-text="" wp-ok="confirm_modal.ok();" wp-cancel="confirm_modal.cancel();">
+  <div class="wp-modal-mask" onclick="click_mask()">
+  </div>
+  <div class="wp-modal-body">
+  <div id="confirm-panel-content" class="wp-confirm-info ng-binding" ng-bind-html="wpConfirmInfo|unsafe">
+  </div>
+  <div class="wp-confirm-actions">
+  <div id="confirm-action-yes" class="wp-btn-block wp-btn ng-hide"  onclick="confirm_action();" >
+  <div class="text">
+  <div class="overflow-hidden-text" >
+  <span class="ng-binding ng-scope">确定</span>
+  </div>
+  </div>
+  </div>
+  <div id="confirm-action-no" class="wp-btn-block wp-btn ng-hide"  onclick="click_mask();">
+  <div class="text">
+  <div class="overflow-hidden-text" >
+  <span class="ng-binding ng-scope">取消</span>
+  </div>
+  </div>
+  </div>
+   </div>
+   </div>
+   </div>
+</div>
+</div>
+<!-- end action 确认panel:  -->
+
+
+<!-- 换台结果:  -->
+<div ng-include="" class="ng-scope">
+<div class="wp-modals ng-scope"> 
+  <div id="confirm-panel-change-table" class="wp-modal wp-confirm-modal ng-isolate-scope ng-hide"  wp-show="confirm_modal.show" wp-lock-mask="confirm_modal.lock_mask" wp-confirm-info="" wp-ok-text="" wp-cancel-text="" wp-ok="confirm_modal.ok();" wp-cancel="confirm_modal.cancel();">
+  <div class="wp-modal-mask" onclick="click_mask()">
+  </div>
+   
+  <div class="wp-modal-body">
+  <div id="confirm-panel-change_table_rst_content" class="wp-confirm-info ng-binding" ng-bind-html="wpConfirmInfo|unsafe">ssss
+  </div>
+  <div class="wp-confirm-actions">
+  <div id="change_table_rst_confirm" class="wp-btn-block wp-btn ng-hide"  onclick="change_table_rst_confirm();" >
+  <div class="text">
+  <div class="overflow-hidden-text" >
+  <span class="ng-binding ng-scope">确定</span>
+  </div>
+  </div>
+  </div>
+   </div>
+   </div>
+   </div>
+</div>
+</div>
+<!-- end 换台结果:  -->
+
+<!-- 加菜成功  -->
+<div >
+<div class="wp-modals ng-scope">
+  <div id="append-item-rst-confirm" class="wp-modal wp-confirm-modal ng-isolate-scope ng-hide"  wp-show="confirm_modal.show" wp-lock-mask="confirm_modal.lock_mask" wp-confirm-info="加菜成功" wp-ok-text="确定" wp-cancel-text="" wp-ok="confirm_modal.ok();" wp-cancel="confirm_modal.cancel();">
+  <div class="wp-modal-mask" onclick="click_mask()"></div><div class="wp-modal-body"><div class="wp-confirm-info ng-binding" ng-bind-html="wpConfirmInfo|unsafe">加菜成功</div>
+  <div class="wp-confirm-actions">
+  <div class="wp-btn-block wp-btn"  onclick="click_mask()" ng-show="wpOkText">
+  <div class="text">
+  <div class="overflow-hidden-text" ><span class="ng-binding ng-scope">确定</span></div></div></div><div class="wp-btn-block wp-btn ng-hide"  ng-click="wpLockMask=false;wpCancel();" ng-show="wpCancelText"><div class="text"><div class="overflow-hidden-text" ><span class="ng-binding ng-scope"></span></div></div></div> </div></div></div>
+</div>
+</div>
+<!-- end 加菜成功  -->
+
+
+<!-- 减菜成功  -->
+<div >
+<div class="wp-modals ng-scope">
+  <div id="delete-item-rst-confirm" class="wp-modal wp-confirm-modal ng-isolate-scope ng-hide"  wp-show="confirm_modal.show" wp-lock-mask="confirm_modal.lock_mask" wp-confirm-info="加菜成功" wp-ok-text="确定" wp-cancel-text="" wp-ok="confirm_modal.ok();" wp-cancel="confirm_modal.cancel();">
+  <div class="wp-modal-mask" onclick="click_mask()"></div><div class="wp-modal-body"><div class="wp-confirm-info ng-binding" ng-bind-html="wpConfirmInfo|unsafe">减菜成功</div>
+  <div class="wp-confirm-actions">
+  <div class="wp-btn-block wp-btn"  onclick="click_mask()" ng-show="wpOkText">
+  <div class="text">
+  <div class="overflow-hidden-text" ><span class="ng-binding ng-scope">确定</span></div></div></div><div class="wp-btn-block wp-btn ng-hide"  ng-click="wpLockMask=false;wpCancel();" ng-show="wpCancelText"><div class="text"><div class="overflow-hidden-text" ><span class="ng-binding ng-scope"></span></div></div></div> </div></div></div>
+</div>
+</div>
+<!-- end 减菜成功  -->
+
+<!-- qrcode -->
+<div ng-include="" src="partial('qrcode')" class="ng-scope"><div class="wp-modal-sm wp-modal ng-scope ng-isolate-scope ng-hide"  wp-show="vip_scan_modal.show"><div class="wp-modal-mask" ng-click="click_mask()"></div><div class="wp-modal-body" >
+  <div class="wp-modal-header ng-binding ng-scope"></div>
+  <div class="wp-modal-content ng-scope">
+    <div class="wp-form-label ng-binding"></div>
+    <div class="clearfix"></div>
+    <div class="qrcode">
+      <img ng-src="" width="250px" height="250px">
+    </div>
+    <div class="clearfix"></div>
+    <div class="wp-form-label ng-hide" ng-show="vip_scan_modal.scan_success">扫描成功，点击确认进行授权</div>
+    <div class="wp-modal-actions left">
+      <div class="wp-btn-block wp-btn ng-hide"  ng-click="vip_scan_modal.reload_qrcode()" ng-show="vip_scan_modal.enable_reload"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">刷新</span></div></div></div>
+      <div class="wp-btn-block wp-btn"  ng-click="vip_scan_modal.close()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">返回</span></div></div></div>
+    </div>
+  </div>
+</div></div>
+</div>
+<!-- end qrcode -->
+<!-- scan -->
+<div ng-include="" src="partial('scan')" class="ng-scope"><div class="wp-modal ng-scope ng-isolate-scope ng-hide"  wp-show="scan_modal.show"><div class="wp-modal-mask" ng-click="click_mask()"></div><div class="wp-modal-body" >
+  <div class="wp-modal-header ng-binding ng-scope"></div>
+  <div class="wp-modal-content ng-scope">
+    <div class="wp-form-group">
+      <div class="wp-form-label ng-binding"></div>
+    </div>
+    <div class="wp-form-group">
+      <div class="wp-form-label ng-binding"></div>
+    </div>
+    <div class="wp-modal-actions">
+      <div class="wp-btn-block wp-btn ng-hide"  ng-click="scan_modal.action()" ng-show="scan_modal.action_name"><div class="text"><div class="overflow-hidden-text" ><span class="ng-binding ng-scope"></span></div></div></div>
+      <div class="wp-btn-block wp-btn"  ng-click="scan_modal.close()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">取消</span></div></div></div>
+    </div>
+  </div>
+</div></div>
+</div>
+<!-- end qrcode -->
+
+
+<!-- 品注 -->
+<!-- ngInclude:  -->
+<div ng-include="" src="partial(&#39;item_notes&#39;)" class="ng-scope">
+<div id="store_dish_note_select_panel" class="wp-modal ng-scope ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="item_notes_modal.show"><div class="wp-modal-mask" onclick="click_mask()"></div><div class="wp-modal-body" ng-transclude="">
+  <div class="wp-modal-header ng-scope">品注</div>
+  <div class="wp-modal-content ng-scope">
+    <div class="wp-form-group">
+      <div class="wp-form-label">品注</div>
+      <!-- ngRepeat: item_note in item_notes_modal.item_notes -->
+<div id="store_dish_note_zone"></div>
+    </div>
+    <div class="wp-form-group">
+      <div class="wp-form-label"></div>
+      <div class="wp-form-action">
+        <div class="wp-btn-block wp-btn"  onclick="dish_note_submit()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">确认</span></div></div></div>
+        <div class="wp-btn-block wp-btn"  onclick="click_mask()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">取消</span></div></div></div>
+      </div>
+    </div>
+  </div>
+</div></div></div>
+<!-- 品注 -->
+
+<!-- 已支付订单详情 -->
+<script type="text/html" id="store_table_order_info">
+<div class="order-info-side" ng-show="order">
+      <div id="checkout_table_name" class="table-table-name ng-binding" ng-show="order.table_name"><%=parent_table_name%>-<%=table_name%></div>
+      <table class="wp-table-sm" ng-show="order">
+        <thead>
+          <tr><th width="10%">序号</th>
+          <th width="50%">名称</th>
+          <th width="15%">数量</th>
+          <th width="25%">价格</th>
+        </tr></thead>
+        <tbody>
+
+<% if(extend_order_goods.length > 0){%>
+	<%for(i=0;i<extend_order_goods.length;i++){%>
+		<% if(i%2 == 0){%>
+		<tr ng-repeat="line_item in order.line_items" ng-class="odd" class="ng-scope odd">
+         <%}else{%>
+		<tr ng-repeat="line_item in order.line_items" ng-class="odd" class="ng-scope">
+		 <%}%>
+            <td class="ng-binding"><%=i+1%></td>
+            <td class="ng-binding">
+              <%=extend_order_goods[i].goods_name%>
+			  <% if(extend_order_goods[i].note != ''){%>
+				<span ng-show="line_item.note" class="ng-binding">[<%=extend_order_goods[i].note%>]</span>
+			  <%}%>
+			  <% if(extend_order_goods[i].gift == '1'){%>
+				<span ng-show="line_item.note" class="red ng-binding">(赠)</span>
+			  <%}%>
+            </td>
+            <td class="ng-binding"><%=extend_order_goods[i].goods_num%></td>
+            <td class="ng-binding">
+            
+
+		  <% if(extend_order_goods[i].goods_new_price > 0){%>
+ 			
+			<%=extend_order_goods[i].goods_new_price%>
+              <span class="original-price ng-binding" ng-show="line_item.price !== line_item.original_price"><%=extend_order_goods[i].goods_price%></span>
+            
+         <%}else if(extend_order_goods[i].gift=='1'){%>
+			<%=extend_order_goods[i].goods_new_price%>
+              <span class="original-price ng-binding" ng-show="line_item.price !== line_item.original_price"><%=extend_order_goods[i].goods_price%></span>
+          
+		 <%}else{%> 
+			<%=extend_order_goods[i].goods_price%>
+              <span class="original-price ng-binding ng-hide" ng-show="line_item.price !== line_item.original_price"><%=extend_order_goods[i].goods_price%></span>
+          
+        <%}%> 
+
+
+			</td>
+          </tr>
+	<%}%>
+<%}%>
+    </tbody>
+      </table>
+      <div class="table-order-total ng-binding" ng-show="order.total">合计: ￥<%=order_amount%></div>
+      <div class="detail-info">
+
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">订单编号</div>
+          <div class="info-value ng-binding"><%=order_sn%></div>
+        </div>
+
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">门店名称</div>
+          <div class="info-value ng-binding"><%=store_name%></div>
+        </div>
+
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">下单来源</div>
+          <div class="info-value ng-binding"><%=order_from%></div>
+        </div>
+
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">下单时间</div>
+          <div class="info-value ng-binding"><%=add_time%></div>
+        </div>
+
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">订单状态</div>
+          <div class="info-value ng-binding"><%=order_state%></div>
+        </div>
+
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">订单类型</div>
+          <div class="info-value ng-binding">堂点</div>
+        </div>
+
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">支付方式</div>
+          <div class="info-value ng-binding"><%=wepos_pay_name%></div>
+        </div>
+
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">支付状态</div>
+          <div class="info-value ng-binding"><%=order_state%></div>
+        </div>
+
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">桌台信息</div>
+          <div class="info-value ng-binding"><%=parent_table_name%>-<%=table_name%></div>
+        </div>
+
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">备注</div>
+          <div class="info-value ng-binding"></div>
+        </div>
+
+<% if(wepos_privilege_type == 1){%>
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">权限打折</div>
+          <div class="info-value ng-binding">-<%=wepos_privilege_amount%></div>
+        </div>
+<% } %>
+<% if(wepos_privilege_type == 2){%>
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">权限减免</div>
+          <div class="info-value ng-binding">-<%=wepos_privilege_amount%></div>
+        </div>
+<% } %>
+<% if(wepos_privilege_type == 3){%>
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">权限免单</div>
+          <div class="info-value ng-binding">-<%=wepos_privilege_amount%></div>
+        </div>
+<% } %>
+
+<% if(wepos_moling != 0){%>
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">抹零</div>
+          <div class="info-value ng-binding">-<%=wepos_moling%></div>
+        </div>
+<% } %>
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">合计</div>
+          <div class="info-value ng-binding">￥<%=order_amount%></div>
+        </div>
+
+      </div>
+      <div class="space"></div>
+    </div>
+</script>
+
+
+<!-- 餐桌类型 -->
+<script type="text/html" id="store_table_class">
+<div id="table_show_all" class="menu" onclick="show_all()" ng-class="{active: show_all_tables }">
+          	全部桌台
+</div>
+<% if(table_class.length > 0){%>
+	<% if(table_class_id == ''){%>
+		<%for(i=0;i<table_class.length;i++){%>
+		<% if(i == 0){%>
+			<div id="table_class_<%=table_class[i].stc_id;%>" class="menu ng-binding ng-scope active" ng-repeat="table_zone in table_zones" ng-class="{active: table_zone == active_table_zone}" onclick="getStoreTableInfo(<%=table_class[i].stc_id;%>);">
+       			<%=table_class[i].stc_name;%> 
+      		</div>	
+		<%} else {%> 
+			<div id="table_class_<%=table_class[i].stc_id;%>" class="menu ng-binding ng-scope" ng-repeat="table_zone in table_zones" ng-class="{active: table_zone == active_table_zone}" onclick="getStoreTableInfo(<%=table_class[i].stc_id;%>);">
+       			<%=table_class[i].stc_name;%>
+      		</div>	
+		<%}%>   
+		<%}%>
+	<%}else{%>
+		<%for(i=0;i<table_class.length;i++){%>
+		<% if(table_class[i].stc_id==table_class_id){%>
+			<div id="table_class_<%=table_class[i].stc_id;%>" class="menu ng-binding ng-scope active" ng-repeat="table_zone in table_zones" ng-class="{active: table_zone == active_table_zone}" onclick="getStoreTableInfo(<%=table_class[i].stc_id;%>);">
+       			<%=table_class[i].stc_name;%> 
+      		</div>	
+		<%} else {%> 
+			<div id="table_class_<%=table_class[i].stc_id;%>" class="menu ng-binding ng-scope" ng-repeat="table_zone in table_zones" ng-class="{active: table_zone == active_table_zone}" onclick="getStoreTableInfo(<%=table_class[i].stc_id;%>);">
+       			<%=table_class[i].stc_name;%>
+      		</div>	
+		<%}%>   
+		<%}%>
+	<%}%>
+    <div id="table_filter" class="menu"  onclick="open_table_filter_panel(true)" >
+         	 过滤桌台
+    </div>
+   
+ <%}%> 
+</script>
+<!-- 餐桌列表 -->
+<script type="text/html" id="store_table_list">
+<% if(table_class.length > 0){%>
+	<%for(i=0;i<table_class.length;i++){%>
+	<!--空闲 --> 
+	<% if(table_class[i].stc_table_state==0){%>
+		<div id="table_item_<%=table_class[i].stc_id;%>" class="wp-table-btn ng-scope table-state idle" onclick="choose_table(<%=table_class[i].store_id%>,<%=table_class[i].stc_parent_id%>,<%=table_class[i].stc_id%>,'<%=table_class[i].stc_name%>',<%=table_class[i].stc_table_state%>,<%=table_class[i].stc_seat_num%>,<%=table_class[i].order_id%>)" >
+        <div class="table-name-wrapper">
+          <div class="table-name ng-binding"><%=table_class[i].stc_name;%></div>
+        </div>
+        <div class="table-detail">
+          <div class="table-state">
+            <span class="ng-binding">空闲</span>
+            <span class="from-wechat ng-hide" ng-show="table.is_from_wechat"></span>
+          </div>
+          <div class="table-info">
+            <span ng-show="table.capacity &amp;&amp; !table.order_amount" class="ng-binding"><%=table_class[i].stc_seat_num;%>人桌</span>
+            <span ng-show="table.order_amount" class="ng-binding ng-hide"></span>
+          </div>
+          <!--桌台绑定的隐藏域-->
+          <input type="hidden" id="selected-parent-table-class-name-<%=table_class[i].stc_id;%>" name="selected-parent-table-class-name-<%=table_class[i].stc_id;%>" value="<%=table_class[i].stc_parent_name;%>">
+        </div>
+      </div>
+	<!--已开台 -->
+	<%}else if(table_class[i].stc_table_state==10){%>
+		<div id="table_item_<%=table_class[i].stc_id;%>" class="wp-table-btn ng-scope table-state opened" onclick="choose_table(<%=table_class[i].store_id%>,<%=table_class[i].stc_parent_id%>,<%=table_class[i].stc_id%>,'<%=table_class[i].stc_name%>',<%=table_class[i].stc_table_state%>,<%=table_class[i].stc_seat_num%>,<%=table_class[i].order_id%>)">
+        <div class="table-name-wrapper">
+          <div class="table-name ng-binding"><%=table_class[i].stc_name;%></div>
+        </div>
+        <div class="table-detail">
+          <div class="table-state">
+            <span class="ng-binding">已开台</span>
+            <span class="from-wechat ng-hide" ng-show="table.is_from_wechat"></span>
+          </div>
+          <div class="table-info">
+            <span ng-show="table.capacity &amp;&amp; !table.order_amount" class="ng-binding"><%=table_class[i].stc_customer_num;%>人桌</span>
+            <span ng-show="table.order_amount" class="ng-binding ng-hide"></span>
+          </div>
+          <!--桌台绑定的隐藏域-->
+          <input type="hidden" id="selected-parent-table-class-name-<%=table_class[i].stc_id;%>" name="selected-parent-table-class-name-<%=table_class[i].stc_id;%>"
+          value="<%=table_class[i].stc_parent_name;%>">
+        </div>
+      </div>
+	<!--已下单 -->
+	<%}else if(table_class[i].stc_table_state==20){%>
+		<div id="table_item_<%=table_class[i].stc_id;%>" class="wp-table-btn ng-scope table-state ordered"  onclick="choose_table(<%=table_class[i].store_id%>,<%=table_class[i].stc_parent_id%>,<%=table_class[i].stc_id%>,'<%=table_class[i].stc_name%>',<%=table_class[i].stc_table_state%>,<%=table_class[i].stc_seat_num%>,<%=table_class[i].order_id%>)" >
+        <div class="table-name-wrapper">
+          <div class="table-name ng-binding"><%=table_class[i].stc_name;%></div>
+        </div>
+        <div class="table-detail">
+          <div class="table-state">
+            <span class="ng-binding">已下单</span>
+            <span class="from-wechat ng-hide" ng-show="<%=table_class[i].stc_order_from;%>"></span>
+          </div>
+          <div class="table-info">
+            <span ng-show="table.capacity &amp;&amp; !table.order_amount" class="ng-binding ng-hide"><%=table_class[i].stc_seat_num;%>人桌</span>
+            <span id="table_item_price_<%=table_class[i].stc_id;%>" ng-show="table.order_amount" class="ng-binding">￥ <%=table_class[i].stc_charge;%></span>
+          </div>
+          <!--桌台绑定的隐藏域-->
+          <input type="hidden" id="selected-parent-table-class-name-<%=table_class[i].stc_id;%>" name="selected-parent-table-class-name-<%=table_class[i].stc_id;%>"
+          value="<%=table_class[i].stc_parent_name;%>">
+        </div>
+      </div>
+	<!--已支付 -->
+	<%}else if(table_class[i].stc_table_state==30){%>
+		<div id="table_item_<%=table_class[i].stc_id;%>" class="wp-table-btn ng-scope table-state paid"  onclick="choose_table(<%=table_class[i].store_id%>,<%=table_class[i].stc_parent_id%>,<%=table_class[i].stc_id%>,'<%=table_class[i].stc_name%>',<%=table_class[i].stc_table_state%>,<%=table_class[i].stc_seat_num%>,<%=table_class[i].order_id%>)" >
+        <div class="table-name-wrapper">
+          <div class="table-name ng-binding"><%=table_class[i].stc_name;%></div>
+        </div>
+        <div class="table-detail">
+          <div class="table-state">
+            <span class="ng-binding">已支付</span>
+            <span class="from-wechat ng-hide" ng-show="<%=table_class[i].stc_order_from;%>"></span>
+          </div>
+          <div class="table-info">
+            <span ng-show="table.capacity &amp;&amp; !table.order_amount" class="ng-binding ng-hide"><%=table_class[i].stc_seat_num;%>人桌</span>
+            <span ng-show="table.order_amount" class="ng-binding">￥ <%=table_class[i].stc_charge;%></span>
+          </div>
+          <!--桌台绑定的隐藏域-->
+          <input type="hidden" id="selected-parent-table-class-name-<%=table_class[i].stc_id;%>" name="selected-parent-table-class-name-<%=table_class[i].stc_id;%>"
+          value="<%=table_class[i].stc_parent_name;%>">
+        </div>
+      </div>
+	<%}%>
+
+
+	<%}%>
+<%}else{%>
+<div class="wp-no-record ng-hide" ng-hide="table_class.length > 0">
+        <span ng-hide="show_filtered_tables">该区域没有桌台</span>
+        <span  class="ng-binding ng-hide">没有桌台</span>
+</div>
+<%}%>
+
+</script>
+
+<!-- 已下单列表 -->
+<script type="text/html" id="table-item-zone-ordered-item-list">
+
+<table class="wp-table-sm" ng-show="cart.line_items.length">
+        <thead>
+          <tr><th width="10%">序号</th>
+          <th width="50%">名称</th>
+          <th width="15%">数量</th>
+          <th width="25%">单价</th>
+        </tr></thead>
+        <tbody>
+
+<% if(ordered_goods_list.length > 0){%>
+	<%for(i=0;i<ordered_goods_list.length;i++){%>
+		<% if(i%2 == 0){%>
+		<tr id="selected_line_<%=ordered_goods_list[i].goods_id%>" onclick="select_selected_good(<%=ordered_goods_list[i].goods_id%>,'<%=ordered_goods_list[i].goods_name%>','<%=ordered_goods_list[i].goods_price%>','<%=ordered_goods_list[i].goods_num%>')"  class="transition ng-scope odd">
+         <%}else{%>
+		<tr id="selected_line_<%=ordered_goods_list[i].goods_id%>" onclick="select_selected_good(<%=ordered_goods_list[i].goods_id%>,'<%=ordered_goods_list[i].goods_name%>','<%=ordered_goods_list[i].goods_price%>','<%=ordered_goods_list[i].goods_num%>')"  class="transition ng-scope">
+		 <%}%>
+			<td class="ng-binding"><%=i+1%></td>
+            <td class="ng-binding">
+              <%=ordered_goods_list[i].goods_name%>
+			  <% if(ordered_goods_list[i].note != ''){%>
+				<span ng-show="line_item.note" class="ng-binding">[<%=ordered_goods_list[i].note%>]</span>
+			  <%}%>
+              
+			  <% if(ordered_goods_list[i].gift == '1'){%>
+				<span ng-show="itemable.gift" class="red">(赠)</span>
+			  <%}%>
+            </td>
+			<td class="ng-binding"><%=ordered_goods_list[i].goods_num%></td>
+		<% if(ordered_goods_list[i].goods_new_price > 0){%>
+            <td class="ng-binding"><%=ordered_goods_list[i].goods_new_price%>
+			<span class="original-price ng-binding" ><%=ordered_goods_list[i].goods_price%></span>
+			</td>
+         <%}else if(ordered_goods_list[i].gift=='1'){%>
+			<td class="ng-binding"><%=ordered_goods_list[i].goods_new_price%>
+			<span class="original-price ng-binding" ><%=ordered_goods_list[i].goods_price%></span>
+			</td>
+		 <%}else{%> 
+			<td class="ng-binding"><%=ordered_goods_list[i].goods_price%></td>
+        <%}%> 
+		</tr>
+	<%}%>
+<%}%>
+</tbody>
+</table>
+<div id="table-item-zone-ordered-item-total-price" class="table-order-total ng-binding" ng-show="table.order">合计: <%=order_amount%></div>
+</script>
+
+<!-- 菜品大类 -->
+<script type="text/html" id="store_goods_class">
+<% if(goods_class.length > 0){%>
+		<%for(i=0;i<goods_class.length;i++){%>
+		<% if(i == 0){%>
+			<div id="goods_class_<%=goods_class[i].stc_id;%>" class="fillet wp-btn-block wp-btn-sm ng-scope active"  ng-repeat="category in categories" ng-class="{'active': category == active_category}" onclick="getStoreGoodsInfo(<%=goods_class[i].stc_id;%>)">
+				<div class="text">
+				<div class="overflow-hidden-text" >
+				<span class="ng-binding ng-scope"><%=goods_class[i].stc_name;%></span>
+				</div>
+				</div>
+			</div>
+		<%} else {%> 
+			<div id="goods_class_<%=goods_class[i].stc_id;%>" class="fillet wp-btn-block wp-btn-sm ng-scope"  ng-repeat="category in categories" ng-class="{'active': category == active_category}" onclick="getStoreGoodsInfo(<%=goods_class[i].stc_id;%>)">
+				<div class="text">
+				<div class="overflow-hidden-text" >
+				<span class="ng-binding ng-scope"><%=goods_class[i].stc_name;%></span>
+				</div>
+				</div>
+			</div>
+		<%}%>   
+		<%}%>
+ <%}%> 
+</script>
+
+<!-- 菜品列表 -->
+<script type="text/html" id="store_goods_list">
+<% if(goods_list.length > 0){%>
+	<%for(i=0;i<goods_list.length;i++){%> 
+	<% if(goods_list[i].soldout == 1){%>
+	<div class="product-btn wp-btn-block wp-btn-md ng-scope disabled"  ><div class="text"><div class="overflow-hidden-text" >
+            <input type="hidden" id="good_id_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_id%>" />
+            <input type="hidden" id="good_name_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_name%>" />
+            <input type="hidden" id="good_price_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_price%>" />
+            <input type="hidden" id="good_new_price_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_new_price%>" />            
+			<input type="hidden" id="good_state_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_state%>" />
+            <input type="hidden" id="good_storage_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_storage%>" />
+
+			<div class="product-name ng-binding ng-scope"><%=goods_list[i].goods_name%></div>
+            <div class="product-price ng-binding ng-scope">￥<%=goods_list[i].goods_price%></div>
+            <span ng-show="!product.on_shelf" class="small">(估清或下架)</span>
+    </div></div></div>
+<%}else{%>
+<div class="product-btn wp-btn-block wp-btn-md ng-scope"  onclick="append_good(<%=goods_list[i].goods_id%>)"><div class="text"><div class="overflow-hidden-text" >
+            <input type="hidden" id="good_id_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_id%>" />
+            <input type="hidden" id="good_name_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_name%>" />
+            <input type="hidden" id="good_price_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_price%>" />
+            <input type="hidden" id="good_new_price_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_new_price%>" />
+			<input type="hidden" id="good_state_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_state%>" />
+            <input type="hidden" id="good_storage_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_storage%>" />
+
+			<div class="product-name ng-binding ng-scope"><%=goods_list[i].goods_name%></div>
+            <div class="product-price ng-binding ng-scope">￥<%=goods_list[i].goods_price%></div>
+    </div></div></div>
+<%}%>
+
+
+	<%}%>
+<%}else{%>
+<div class="wp-no-record ng-hide" ng-hide="table_class.length > 0">
+        <span ng-hide="show_filtered_tables">该区域没有桌台</span>
+        <span  class="ng-binding ng-hide">没有桌台</span>
+</div>
+<%}%>
+
+</script>
+
+
+<!-- 添加菜品 -->
+<script type="text/html" id="appended_goods_list">
+<div class="ng-scope">
+<div class="ng-scope">
+  <div class="wp-subject">加菜列表</div>
+  <div class="wp-table">
+    <div class="wp-table-row" >
+      <div class="wp-table-col col-1 ng-scope">序号</div>
+      <div class="wp-table-col col-7 ng-scope">名称2</div>
+      <div class="wp-table-col col-3 ng-scope">数量</div>
+      <div class="wp-table-col col-3 ng-scope">单品总价</div>
+    </div>
+
+    <!-- 已经选择添加的菜品列表 -->
+<% if(appendedGoodsArray.length > 0){%>
+	<%for(i=0;i<appendedGoodsArray.length;i++){%>
+	<div id="appended_item_<%=appendedGoodsArray[i].good_id%>" class="transition wp-table-row ng-scope"  ng-repeat="itemable in append_itemables" onclick="change_active_append_item(<%=appendedGoodsArray[i].good_id%>)" ng-class="{'active': itemable == active_append_itemable}">
+      <div class="wp-table-col col-1 ng-binding ng-scope"><%=i+1%></div>
+      <div class="wp-table-col col-7 ng-binding ng-scope">
+        <%=appendedGoodsArray[i].good_name%>
+		<% if(appendedGoodsArray[i].note != ''){%>
+				<span ng-show="line_item.note" class="ng-binding">[<%=appendedGoodsArray[i].note%>]</span>
+			  <%}%>
+
+        <span ng-show="itemable.gift" class="red ng-hide">(赠)</span>
+      </div>
+      <div class="wp-table-col col-3 ng-binding ng-scope"><%=appendedGoodsArray[i].good_num%></div>
+      <div class="wp-table-col col-3 ng-binding ng-scope">
+        <%=appendedGoodsArray[i].good_amount%>
+      </div>
+    </div>
+	<%}%>
+<%}%>
+<!-- end 已经选择添加的菜品列表 -->
+
+  </div>
+  <div class="actions">
+    <div id="appeded-item-action" ng-show="active_append_itemable" class="ng-hide"> 
+      <div class="wp-btn-block wp-btn-sm"  onclick="add_appended_item()"><div class="text"><div class="overflow-hidden-text" >
+        <i class="fa fa-plus fa-2x gray ng-scope"></i>
+      </div></div></div>
+      <div class="wp-btn-block wp-btn-sm"  onclick="remove_appended_item()"><div class="text"><div class="overflow-hidden-text" >
+        <i class="fa fa-minus fa-2x gray ng-scope"></i>
+      </div></div></div>
+      <div id="add_dish_note" class="wp-btn-block wp-btn-sm disabled"  onclick="change_note()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">
+        品注
+      </span></div></div></div>
+      <div class="wp-btn-block wp-btn-sm ng-hide"  ng-click="change_append_itemable_gift(active_append_itemable)" ng-class="{active: active_append_itemable.gift}"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">
+        赠菜
+      </span></div></div></div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="hover wp-btn-block wp-btn-sm"  ng-class="{'disabled':!can_append_itemables()}" onclick="confirm_append_item()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">加菜提交</span></div></div></div>
+  </div>
+</div></div>
+</script>
+
+<!-- 确认加菜列表 -->
+<script type="text/html" id="confirm_appended_item_list">
+<% if(appendedGoodsArray.length > 0){%>
+	<%for(i=0;i<appendedGoodsArray.length;i++){%> 
+	<div class="wp-form-group ng-scope">
+      <div class="wp-form-label"></div>
+      <div class="wp-form-input ng-binding">
+		<%=appendedGoodsArray[i].good_name%> * <%=appendedGoodsArray[i].good_num%>
+			<% if(appendedGoodsArray[i].note != ''){%>
+				<span ng-show="line_item.note" class="ng-binding">[<%=appendedGoodsArray[i].note%>]</span>
+			<%}%>
+	</div>
+    </div>
+	<%}%>
+<%}%>
+</script>
+  
+
+<script type="text/html" id="store_dish_note">
+<% if(note_list.length > 0){%>
+		<%for(i=0;i<note_list.length;i++){%>
+<div id="note_id_<%=i%>" class="wp-btn-block wp-btn ng-scope" onclick="dish_note_select(<%=i%>)">
+<input type="hidden" id="note_state_<%=i%>" value="0" class="dish_note_item" note="<%=note_list[i].stc_name%>" />
+<div class="text">
+<div class="overflow-hidden-text" ng-transclude="">
+<span class="ng-binding ng-scope">
+         <%=note_list[i].stc_name%>
+        </span></div></div></div>
+		<%}%>
+ <%}%> 
+</script>
+
+
+ <!-- 确认退菜列表 -->
+<script type="text/html" id="in_ordered_goods_list"> 
+  <div class="table-cart-line-item-index">
+
+    <div class="wp-table" ng-show="line_items.length">
+      <div class="wp-table-row" >
+        <div class="wp-table-col col-1 ng-scope">序号</div>
+        <div class="wp-table-col col-7 ng-scope">名称3</div>
+        <div class="wp-table-col col-3 ng-scope">数量</div>
+        <div class="wp-table-col col-3 ng-scope">单价</div>
+      </div>
+
+<% if(inOrderedGoodsArray.length > 0){%>
+	<%for(i=0;i<inOrderedGoodsArray.length;i++){%>
+<div id="delete_good_id_<%=inOrderedGoodsArray[i].good_id%>" class="wp-table-row ng-scope"  ng-repeat="line_item in line_items" onclick="selecte_delete_item(<%=i%>, <%=inOrderedGoodsArray[i].good_id%>)" ng-class="{'active':line_item == active_line_item}">
+        <div class="wp-table-col col-1 ng-binding ng-scope"><%=i+1%></div>
+        <div class="wp-table-col col-7 ng-binding ng-scope">
+          <%=inOrderedGoodsArray[i].good_name%>
+			<% if(inOrderedGoodsArray[i].note != ''){%>
+				<span ng-show="line_item.note" class="ng-binding">[<%=inOrderedGoodsArray[i].note%>]</span>
+			  <%}%>
+        </div>
+        <div class="wp-table-col col-3 ng-binding ng-scope"><%=inOrderedGoodsArray[i].good_num%></div>
+<div class="wp-table-col col-3 ng-binding ng-scope">
+		<% if(inOrderedGoodsArray[i].good_new_price > 0){%>
+<%=inOrderedGoodsArray[i].good_new_price%>
+         <%}else if(inOrderedGoodsArray[i].gift=='1'){%>
+			<%=inOrderedGoodsArray[i].good_new_price%>
+		 <%}else{%> 
+<%=inOrderedGoodsArray[i].good_price%>
+        <%}%> 
+</div>
+      </div>
+	<%}%>
+<%}%>
+    </div>
+    <div class="actions">
+      <div ng-show="active_line_item" class="">
+        <div id="delete-item-action-add" class="wp-btn-block wp-btn-sm"  onclick="add_ordered_itemable()"><div class="text"><div class="overflow-hidden-text" >
+          <i id="delete-item-action-add-tag" class="fa fa-plus fa-2x ng-scope gray" ng-class="{red: can_plus(active_line_item), gray: !can_plus(active_line_item)}"></i>
+        </div></div></div>
+        <div id="delete-item-action-remove" class="wp-btn-block wp-btn-sm"  onclick="remove_ordered_itemable()"><div class="text"><div class="overflow-hidden-text" >
+          <i id="delete-item-action-remove-tag" class="fa fa-minus fa-2x ng-scope red" ng-class="{red: can_minus(active_line_item), gray: !can_minus(active_line_item)}"></i>
+        </div></div></div>
+      </div>
+      <div class="active wp-btn-block wp-btn-sm"  onclick="submit_deleted_item()"><div class="text"><div class="overflow-hidden-text" >
+        <span class="ng-scope">确定退菜</span>
+      </div></div></div>
+      <div class="space"></div>
+    </div>
+  
+ </div>
+</script>
+</body>
+
+
+
+
+<script src="./js/zepto.min.js"></script>
+<script src="./js/simple-plugin.js"></script>
+<script src="./js/common.js"></script>
+<script src="./js/template.js"></script>
+<script src="./js/index.js"></script>
+<script src="./js/index.append.js"></script>
+<script src="./js/wepos.js"></script>
+
+<script>
+getStoreTableClassInfo();
+getStoreDishNoteInfo();
+
+//datazone
+//餐桌列表
+var storeTableArray = [];
+//过滤后的餐桌列表
+var filteredStoreTableArray = [];
+//加菜列表
+var appendedGoodsArray = [];
+//已经下单的菜品列表
+var inOrderedGoodsArray = [];
+ 
+</script>
+
+</html>

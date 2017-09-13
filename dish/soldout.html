@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html ng-app="webpos" class="ng-scope"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}</style>
+<meta charset="utf-8">
+<meta content="" name="keywords">
+<meta content="" name="description">
+<meta content="" name="author">
+<meta content="production" name="env">
+<meta content="" name="mobile_device">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" name="viewport">
+<meta content="IE=EmulateIE9" http-equiv="X-UA-Compatible">
+<link href="./css/webpos.css" media="all" rel="stylesheet">
+<link href="./css/main.css" media="all" rel="stylesheet">
+
+<title>云餐厅收银系统</title>
+</head>
+<body>
+<!-- ngView:  -->
+<div ng-view="" style="height: 100%;" class="ng-scope">
+<!-- ngInclude:  -->
+<!--#include file="header.html"-->
+<!--#include file="footer.html"-->
+<!--#include file="keyboard.html"-->
+
+<div class="main-view ng-scope">
+  <!-- ngInclude:  --><div class="master-part product-choose-cell ng-scope" ng-controller="productChooseCell">
+  <div class="menu-part scroll-wrapper" wp-scroll-zone="">
+    <div style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);"><div>
+      <!-- ngRepeat: choose_way in choose_ways --><div class="menu ng-binding ng-scope active" ng-repeat="choose_way in choose_ways" ng-click="change_active_choose_way(choose_way)" ng-class="{active: active_choose_way == choose_way }">
+        单点
+      </div><!-- end ngRepeat: choose_way in choose_ways -->
+      <div class="menu ng-binding ng-scope ng-hide" ng-repeat="choose_way in choose_ways" ng-click="change_active_choose_way(choose_way)" ng-class="{active: active_choose_way == choose_way }">
+        套餐
+      </div><!-- end ngRepeat: choose_way in choose_ways -->
+    </div></div>
+  </div>
+  <div class="master-part-with-menu scroll-wrapper" wp-scroll-zone="">
+    <div style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);"><div ng-show="active_choose_way.value == &#39;variant&#39;">
+      <div class="wp-search-input ng-isolate-scope" input-model="search_key"><div class="keypad-input ng-pristine ng-untouched ng-valid ng-hide" ng-show="enable_jvk" data-ng-model="input_model" data-ng-keypad-input="text"><span class="ng-binding"></span></div><div class="normal-input" ng-show="!enable_jvk">
+      <input id="filter-var-soldout" type="text" oninput="filter_goods()" 
+      onfocus="input_onfocus('filter-var-soldout')" onblur="reset_keyboard()"
+      ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div><i class="fa fa-search"></i></div>
+          
+      <div class="clearfix"></div>
+      <div ng-hide="search_key">
+      
+        <div id="store_goods_class_zone">
+        </div>
+        <div class="clearfix"></div>
+        <div>
+          <div class="fillet wp-btn-block wp-btn-sm active ng-hide" onselectstart="return false" ng-class="{&#39;active&#39;:active_sub_category==null}" ng-click="change_active_sub_category(null)" ng-show="is_show_default_sub_category(active_category)"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+            默认
+          </span></div></div></div>
+          <!-- ngRepeat: sub in active_category.subs -->
+        </div>
+        <div class="clearfix"></div>
+        <div id="goods_list_zone" class="products">
+          <div class="space"></div>
+        </div>
+      </div>
+      <div ng-show="search_key" class="ng-hide">
+        <div class="products">
+          <!-- ngRepeat: product in search_products -->
+          <div class="space"></div>
+        </div>
+      </div>
+    </div><div ng-show="active_choose_way.value == &#39;combo&#39;" class="ng-hide">
+      <div class="combos-wapper">
+        <div>
+          <!-- ngRepeat: combo in combos -->
+        </div>
+        <div class="clearfix"></div>
+        <div class="combo-items-wapper">
+          <!-- ngRepeat: combo_item in active_combo.combo_items -->
+          <div class="combo-action">
+            <div class="wp-btn-block wp-btn-md disabled ng-hide" onselectstart="return false" ng-class="{&#39;disabled&#39;: !can_add_combo_package(active_combo)}" ng-show="active_combo" ng-click="add_combo_package(active_combo)"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">添加套餐</span></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+    
+  </div>
+  <div class="wp-modal ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="active_product"><div class="wp-modal-mask" ng-click="click_mask()"></div><div class="wp-modal-body" ng-transclude="">
+    <div class="wp-modal-header ng-binding ng-scope"> 规格选择</div>
+    <div class="wp-modal-content ng-scope">
+      <!-- ngRepeat: variant in active_product.variants -->
+    </div>
+  </div></div>
+</div>
+  <div class="op-part scroll-wrapper" wp-scroll-zone="">
+    <div style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);">
+    <div class="actions">
+      <div id ="order-good-clean" class="wp-btn-block wp-btn-sm ng-hide" onselectstart="return false" onclick="clean_selected_good()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">全部清空</span></div></div></div>
+      <div class="space"></div>
+    </div>
+    
+    <div class="table-cart-line-item-index">
+<div class="wp-subject">估清列表 <span class="red">(点击即可撤销估清)</span></div>
+
+      <div id="selected_goods_list_zone"></div>
+       
+       <input type="hidden" id="selected-store-id" name="selected-store-id" value="" />
+       <input type="hidden" id="selected-table-id" name="selected-table-id" value="" />
+       <input type="hidden" id="selected-selected-good-id" name="selected-selected-good-id" value="" />
+       
+       
+      <div id="selected_goods_total_price" class="table-order-total ng-binding ng-hide" ng-show="cart.line_items.length">合计: </div>
+      <div id="selected_goods_actions" class="actions ng-hide" ng-show="active_line_item">
+      </div>
+    </div></div>
+    
+  </div>
+</div>
+</div>
+
+
+<div ng-include="" src="partial(&#39;modals&#39;)" class="ng-scope">
+<div class="wp-modals ng-scope">
+  <div class="wp-modal wp-confirm-modal ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="confirm_modal.show" wp-lock-mask="confirm_modal.lock_mask" wp-confirm-info="确定要将 大厅-T003 清台？" wp-ok-text="确定" wp-cancel-text="取消" wp-ok="confirm_modal.ok();" wp-cancel="confirm_modal.cancel();">
+  <div class="wp-modal-mask" ng-click="click_mask()"></div>
+  <div class="wp-modal-body">
+  <div class="wp-confirm-info ng-binding" ng-bind-html="wpConfirmInfo|unsafe">确定要将 大厅-T003 清台？</div>
+  <div class="wp-confirm-actions"><div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="wpLockMask=false;wpOk();" ng-show="wpOkText">
+  <div class="text">
+  <div class="overflow-hidden-text" ng-transclude="">
+  <span class="ng-binding ng-scope">确定</span>
+  </div>
+  </div>
+  </div>
+  <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="wpLockMask=false;wpCancel();" ng-show="wpCancelText">
+  <div class="text">
+  <div class="overflow-hidden-text" ng-transclude="">
+  <span class="ng-binding ng-scope">取消</span>
+  </div>
+  </div>
+  </div> 
+  </div>
+  </div>
+  </div>
+</div>
+</div>
+
+<div class="wp-modal ng-scope ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="address_modal.show"><div class="wp-modal-mask" ng-click="click_mask()"></div><div class="wp-modal-body" ng-transclude="">
+  <div class="wp-modal-header ng-scope">请填写外卖信息</div>
+  <div class="wp-modal-content ng-scope">
+    <div class="wp-form-group">
+      <div class="wp-form-label">电话</div>
+      <div input-model="user.phone" input-type="text" input-size="large" class="ng-isolate-scope"><div class="wp-form-input-keypad wp-form-input-large ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input-keypad wp-form-input-large ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input wp-form-input-large" ng-show="!enable_jvk"><input type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+    </div>
+    <div class="wp-form-group">
+      <div class="wp-form-label"></div>
+      <!-- ngRepeat: address in addresses_collection -->
+    </div>
+    <div class="wp-form-group">
+      <div class="wp-form-label">姓名</div>
+      <div input-model="user.name" input-type="text" input-size="large" class="ng-isolate-scope"><div class="wp-form-input-keypad wp-form-input-large ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input-keypad wp-form-input-large ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input wp-form-input-large" ng-show="!enable_jvk"><input type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+    </div>
+    <div class="wp-form-group">
+      <div class="wp-form-label">地址</div>
+      <div input-model="user.address" input-type="text" input-size="large" class="ng-isolate-scope"><div class="wp-form-input-keypad wp-form-input-large ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input-keypad wp-form-input-large ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input wp-form-input-large" ng-show="!enable_jvk"><input type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+    </div>
+    <!-- ngIf: can_show_delivery_zone() -->
+    <!-- ngIf: can_show_delivery_date() --><div class="wp-form-group ng-scope" ng-if="can_show_delivery_date()">
+      <div class="wp-form-label">配送时间</div>
+      <div class="wp-form-select">
+        <select class="wp-form-select-small ng-pristine ng-valid ng-touched" ng-change="change_delivery_date()" ng-model="user.delivery_date" ng-options="delivery_date as delivery_date.display for delivery_date in delivery_dates"><option value="0" selected="selected" label="今天">今天</option></select>
+        <!-- ngIf: can_show_delivery_time() -->
+      </div>
+    </div><!-- end ngIf: can_show_delivery_date() -->
+    <!-- ngIf: can_show_delivery_man() -->
+    <!-- ngRepeat: element in form_elements -->
+    <div class="wp-form-group">
+      <div class="wp-form-label">备注</div>
+      <div input-model="user.note" input-type="text" input-size="large" class="ng-isolate-scope"><div class="wp-form-input-keypad wp-form-input-large ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input-keypad wp-form-input-large ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input wp-form-input-large" ng-show="!enable_jvk"><input type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+    </div>
+    <div class="wp-form-group">
+      <div class="wp-form-label"></div>
+      <div class="wp-form-action">
+        <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="address_modal.show = false;"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">确定</span></div></div></div>
+        <div class="space"></div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<div ng-include="" class="ng-scope">
+<div class="wp-modals ng-scope"> 
+  <div id="confirm-panel" class="wp-modal wp-confirm-modal ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="confirm_modal.show" wp-lock-mask="confirm_modal.lock_mask" wp-confirm-info="" wp-ok-text="" wp-cancel-text="" wp-ok="confirm_modal.ok();" wp-cancel="confirm_modal.cancel();">
+  <div class="wp-modal-mask" onclick="click_mask()">
+  </div>
+  <div class="wp-modal-body">
+  <div id="confirm-panel-content" class="wp-confirm-info ng-binding" ng-bind-html="wpConfirmInfo|unsafe">
+  </div>
+  <div class="wp-confirm-actions">
+  <div id="confirm-action-yes" class="wp-btn-block wp-btn ng-hide" onselectstart="return false" onclick="clean_table();" >
+  <div class="text">
+  <div class="overflow-hidden-text" ng-transclude="">
+  <span class="ng-binding ng-scope">确定</span>
+  </div>
+  </div>
+  </div>
+  <div id="confirm-action-no" class="wp-btn-block wp-btn ng-hide" onselectstart="return false" onclick="click_mask();">
+  <div class="text">
+  <div class="overflow-hidden-text" ng-transclude="">
+  <span class="ng-binding ng-scope">取消</span>
+  </div>
+  </div>
+  </div>
+   </div>
+   </div>
+   </div>
+</div>
+</div>
+
+<!-- ngInclude:  -->
+<div ng-include="" src="partial(&#39;qrcode&#39;)" class="ng-scope"><div class="wp-modal-sm wp-modal ng-scope ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="vip_scan_modal.show"><div class="wp-modal-mask" ng-click="click_mask()"></div><div class="wp-modal-body" ng-transclude="">
+  <div class="wp-modal-header ng-binding ng-scope"></div>
+  <div class="wp-modal-content ng-scope">
+    <div class="wp-form-label ng-binding"></div>
+    <div class="clearfix"></div>
+    <div class="qrcode">
+      <img ng-src="" width="250px" height="250px">
+    </div>
+    <div class="clearfix"></div>
+    <div class="wp-form-label ng-hide" ng-show="vip_scan_modal.scan_success">扫描成功，点击确认进行授权</div>
+    <div class="wp-modal-actions left">
+      <div class="wp-btn-block wp-btn ng-hide" onselectstart="return false" ng-click="vip_scan_modal.reload_qrcode()" ng-show="vip_scan_modal.enable_reload"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">刷新</span></div></div></div>
+      <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="vip_scan_modal.close()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">返回</span></div></div></div>
+    </div>
+  </div>
+</div></div></div>
+<!-- ngInclude:  --><div ng-include="" src="partial(&#39;scan&#39;)" class="ng-scope"><div class="wp-modal ng-scope ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="scan_modal.show"><div class="wp-modal-mask" ng-click="click_mask()"></div><div class="wp-modal-body" ng-transclude="">
+  <div class="wp-modal-header ng-binding ng-scope"></div>
+  <div class="wp-modal-content ng-scope">
+    <div class="wp-form-group">
+      <div class="wp-form-label ng-binding"></div>
+    </div>
+    <div class="wp-form-group">
+      <div class="wp-form-label ng-binding"></div>
+    </div>
+    <div class="wp-modal-actions">
+      <div class="wp-btn-block wp-btn ng-hide" onselectstart="return false" ng-click="scan_modal.action()" ng-show="scan_modal.action_name"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-binding ng-scope"></span></div></div></div>
+      <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="scan_modal.close()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">取消</span></div></div></div>
+    </div>
+  </div>
+</div></div></div>
+<!-- ngInclude:  --><div ng-include="" src="partial(&#39;item_notes&#39;)" class="ng-scope"><div class="wp-modal ng-scope ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="item_notes_modal.show"><div class="wp-modal-mask" ng-click="click_mask()"></div><div class="wp-modal-body" ng-transclude="">
+  <div class="wp-modal-header ng-scope">品注</div>
+  <div class="wp-modal-content ng-scope">
+    <div class="wp-form-group">
+      <div class="wp-form-label">品注</div>
+      <!-- ngRepeat: item_note in item_notes_modal.item_notes -->
+    </div>
+    <div class="wp-form-group">
+      <div class="wp-form-label"></div>
+      <div class="wp-form-action">
+        <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="item_notes_modal.submit()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">确认</span></div></div></div>
+        <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="item_notes_modal.close()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">取消</span></div></div></div>
+      </div>
+    </div>
+  </div>
+</div></div></div>
+
+<script type="text/html" id="store_goods_class">
+<% if(goods_class.length > 0){%>
+		<%for(i=0;i<goods_class.length;i++){%>
+		<% if(i == 0){%>
+			<div id="goods_class_<%=goods_class[i].stc_id;%>" class="fillet wp-btn-block wp-btn-sm ng-scope active" onselectstart="return false" ng-repeat="category in categories" ng-class="{'active': category == active_category}" onclick="getStoreGoodsInfo(<%=goods_class[i].stc_id;%>)">
+				<div class="text">
+				<div class="overflow-hidden-text" ng-transclude="">
+				<span class="ng-binding ng-scope"><%=goods_class[i].stc_name;%></span>
+				</div>
+				</div>
+			</div>
+		<%} else {%> 
+			<div id="goods_class_<%=goods_class[i].stc_id;%>" class="fillet wp-btn-block wp-btn-sm ng-scope" onselectstart="return false" ng-repeat="category in categories" ng-class="{'active': category == active_category}" onclick="getStoreGoodsInfo(<%=goods_class[i].stc_id;%>)">
+				<div class="text">
+				<div class="overflow-hidden-text" ng-transclude="">
+				<span class="ng-binding ng-scope"><%=goods_class[i].stc_name;%></span>
+				</div>
+				</div>
+			</div>
+		<%}%>   
+		<%}%>
+ <%}%> 
+</script>
+
+<script type="text/html" id="store_goods_list">
+<% if(goods_list.length > 0){%>
+	<%for(i=0;i<goods_list.length;i++){%>
+	
+	<div class="product-btn wp-btn-block wp-btn-md ng-scope" onselectstart="return false" onclick="add_good(<%=goods_list[i].goods_id%>)"><div class="text"><div class="overflow-hidden-text" ng-transclude="">
+            <input type="hidden" id="good_id_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_id%>" />
+            <input type="hidden" id="good_name_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_name%>" />
+            <input type="hidden" id="good_price_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_price%>" />
+            <input type="hidden" id="good_state_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_state%>" />
+            <input type="hidden" id="good_storage_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_storage%>" />
+
+			<div class="product-name ng-binding ng-scope"><%=goods_list[i].goods_name%></div>
+            <div class="product-price ng-binding ng-scope">￥<%=goods_list[i].goods_price%></div>
+            <!-- <span ng-show="!product.on_shelf" class="small">(估清或下架)</span> -->
+    </div></div></div>
+
+
+
+	<%}%>
+<%}else{%>
+<div class="wp-no-record ng-hide" ng-hide="table_class.length > 0">
+        <span ng-hide="show_filtered_tables">该区域没有桌台</span>
+        <span ng-show="show_filtered_tables" class="ng-binding ng-hide">没有桌台</span>
+</div>
+<%}%>
+
+</script>
+
+
+
+<script type="text/html" id="selected_goods_list">
+
+<table class="wp-table-sm" ng-show="cart.line_items.length">
+        <thead>
+          <tr><th width="10%">序号</th>
+          <th width="50%">名称</th>
+          <th width="15%">数量</th>
+          <th width="25%">单价</th>
+        </tr></thead>
+        <tbody>
+
+<% if(selectedGoodsArray.length > 0){%>
+	<%for(i=0;i<selectedGoodsArray.length;i++){%>
+		<% if(i%2 == 0){%>
+		<tr id="selected_line_<%=selectedGoodsArray[i].good_id%>" onclick="select_selected_good(<%=selectedGoodsArray[i].good_id%>)"  class="transition ng-scope odd">
+         <%}else{%>
+		<tr id="selected_line_<%=selectedGoodsArray[i].good_id%>" onclick="select_selected_good(<%=selectedGoodsArray[i].good_id%>)"  class="transition ng-scope">
+		 <%}%>
+			<td class="ng-binding"><%=i+1%></td>
+            <td class="ng-binding">
+              <%=selectedGoodsArray[i].good_name%>
+              <span ng-show="line_item.note" class="ng-binding ng-hide">[]</span>
+              <!-- ngIf: line_item.gift -->
+            </td>
+            <td class="ng-binding"><%=selectedGoodsArray[i].good_num%></td>
+            <td class="ng-binding"><%=selectedGoodsArray[i].good_price%></td>
+         </tr>
+	<%}%>
+<%}%>
+</tbody>
+</table>
+
+</script>
+
+<script src="./js/zepto.min.js"></script>
+<script src="./js/simple-plugin.js"></script>
+<script src="./js/common.js"></script>
+<script src="./js/template.js"></script>
+<script src="./js/soldout.js"></script>
+<script src="./js/wepos.js"></script>
+
+
+<script>
+//datazone
+getStoreGoodsClassInfo();
+
+var selectedGoodsArray = [];
+var selected_total_price = 0;
+var g_cart_id = 0;
+
+//菜品列表
+var storeGoodArray = [];
+//过滤后的菜品列表
+var filteredStoreGoodArray = [];
+getStoreTableCartInfo();
+</script> 
+
+</body>
+</html>

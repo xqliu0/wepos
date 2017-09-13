@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html ng-app="webpos" class="ng-scope">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}</style>
+<meta charset="utf-8">
+<meta content="" name="keywords">
+<meta content="" name="description">
+<meta content="" name="author">
+<meta content="production" name="env">
+<meta content="" name="mobile_device">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" name="viewport">
+<meta content="IE=EmulateIE9" http-equiv="X-UA-Compatible">
+<link href="./css/webpos.css" media="all" rel="stylesheet">
+
+<title>云餐厅收银系统</title>
+</head>
+<body>
+<!-- ngView:  -->
+<div ng-view="" style="height: 100%;" class="ng-scope">
+<!-- ngInclude:  -->
+<!--#include file="header.html"-->
+<!--#include file="footer.html"-->
+<!--#include file="keyboard.html"-->
+
+
+<div class="main-view ng-scope">
+  <!-- ngInclude:  --><div class="master-part vip-infos ng-scope scroll-wrapper" ng-controller="vipInfoChooseCell" wp-scroll-zone="">
+  <div style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); -webkit-transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; -webkit-transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);"><div class="vip-level-index">
+    <div class="wp-subject">会员</div>
+    <!-- <wp-btn  ng-repeat="vip_level in vip_levels"
+             ng-click="switch_vip_level(vip_level);"
+             ng-class="{ 'active': !is_search && !is_apply && vip_level == active_vip_level }"
+             ng-hide="$index == 0 && table_action">
+        {{::vip_level.name}}
+    </wp-btn> -->
+    <div ng-hide="table_action">
+      <div class="wp-btn-block wp-btn"  ng-click="is_apply_vip()" ng-class="{ &#39;active&#39;: is_apply}"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">等待申请用户</span></div></div></div>
+      <div class="wp-btn-block wp-btn"  ng-click="create_vip_info()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">新建会员</span></div></div></div>
+      <div class="wp-btn-block wp-btn"  ng-click="read_card()" ng-show="can(&#39;read&#39;, &#39;card&#39;)"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">读卡</span></div></div></div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="wp-btn-block wp-btn active"  ng-click="switch_to_search()" ng-class="{ &#39;active&#39;: is_search}"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">搜索</span></div></div></div>
+    <div class="wp-form-group" ng-show="is_search">
+      <div input-model="search_key" input-type="text" class="ng-isolate-scope"><div class="wp-form-input-keypad  ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding">o</span></div><div class="wp-form-input-keypad  ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding">*</span></div><div class="wp-form-input " ng-show="!enable_jvk">
+      <input id="vip-filter-input" oninput="query_vip()" 
+      onfocus="input_onfocus('vip-filter-input')" onblur="reset_keyboard()"
+      type="text" ng-model="input_model" placeholder="" class="ng-valid ng-dirty ng-valid-parse ng-touched"></div></div>
+      <div class="wp-form-label">请输入会员号、ID、姓名、电话搜索</div>
+    </div>
+    <div class="space"></div>
+  </div><div>
+    <div class="wp-subject">会员列表</div>
+    <div id="vip-list-zone" class="wp-table">
+    </div>
+    <div class="wp-paginate ng-isolate-scope ng-hide" ng-show="can_show()" page-model="page_vip_infos"><div class="wp-btn-block wp-btn disabled"  ng-click="load_previous_page()" ng-class="{&#39;disabled&#39;:!can_previous()}"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">上一页</span></div></div></div><div class="disabled wp-btn-block wp-btn"  ng-click="query()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-binding ng-scope">第1页</span></div></div></div><div class="wp-btn-block wp-btn disabled"  ng-click="load_next_page()" ng-class="{&#39;disabled&#39;:!can_next()}"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">下一页</span></div></div></div></div>
+  </div></div>
+  
+</div>
+
+
+  <div id="vip-oper-zone" class="op-part vip-info scroll-wrapper ng-hide" wp-scroll-zone="">
+    <div style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); -webkit-transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; -webkit-transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);"><div class="wp-subject">会员操作区</div><div class="vip-info-side" ng-show="vip_info">
+      <div>
+        <!-- ngIf: vip_info.is_apply_vip -->
+        <!-- ngIf: !vip_info.is_default --><div ng-if="!vip_info.is_default" class="ng-scope">
+          <div class="wp-btn-block wp-btn"  ng-click="card_recharge(vip_info.card_wallet)"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">余额充值</span></div></div></div>
+
+          <div class="wp-btn-block wp-btn"  ng-click="card_exchange(vip_info.card_wallet)" ng-show="can(&#39;exchange&#39;,&#39;user_card_wallet&#39;)"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">余额兑换</span></div></div></div>
+          <div class="wp-btn-block wp-btn"  ng-click="credits_exchange(vip_info.credits_wallet)" ng-show="can(&#39;exchange&#39;,&#39;user_credits_wallet&#39;)"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">积分兑换</span></div></div></div>
+          <!--
+          <wp-btn ng-click="choose_avarilable_groupons()"
+                  ng-if="branch_id"
+            >团购券</wp-btn>
+          <wp-btn ng-click="choose_avarilable_vouchers()"
+                  ng-if="branch_id"
+            >代金券</wp-btn>
+          <wp-btn ng-click="go('branches/'+branch_id+'/vip_infos/'+vip_info.id+'/'+vip_info.user_id+'/orders')"
+                  ng-if="branch_id"
+            >查看历史订单</wp-btn>
+          -->
+          <div class="wp-btn-block wp-btn"  ng-click="credits_wallet_logs()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">积分日志</span></div></div></div>
+          <div class="wp-btn-block wp-btn"  ng-click="card_wallet_logs()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">余额日志</span></div></div></div>
+          <!-- ngIf: vip_info --><div class="wp-btn-block wp-btn ng-scope"  ng-click="update_vip_info()" ng-if="vip_info"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">更改信息</span></div></div></div><!-- end ngIf: vip_info -->
+        </div><!-- end ngIf: !vip_info.is_default -->
+          <div class="space"></div>
+      </div>
+      <div id="vip-info-zone" class="wp-table">
+      </div>
+      <div>
+        <div class="wp-btn-block wp-btn"  ng-click="init_card()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">初始化会员卡</span></div></div></div>
+        <div class="wp-btn-block wp-btn ng-hide"  ng-click="become_vip_info()" ng-show="vip_info &amp;&amp; vip_info.is_default"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">升级成为会员</span></div></div></div>
+        <div class="wp-btn-block wp-btn"  ng-click="write_card()" ng-show="vip_info &amp;&amp; !vip_info.is_default"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">写卡</span></div></div></div>
+        <div class="wp-btn-block wp-btn"  ng-click="bind_user()" ng-show="vip_info &amp;&amp; !vip_info.is_default &amp;&amp; !vip_info.user_id"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">绑定微信会员</span></div></div></div>
+        <div class="space"></div>
+        <div class="wp-btn-block wp-btn"  ng-click="clear_card()" ng-show="can(&#39;clear&#39;, &#39;card&#39;)"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">重置并清空实体卡</span></div></div></div>
+        <div class="wp-btn-block wp-btn ng-hide"  ng-click="read_card()" ng-show="env == &#39;development&#39;"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">读卡</span></div></div></div>
+        <div class="space"></div>
+      </div>
+    </div><div class="space"></div></div>
+    
+
+    
+  </div>
+</div>
+
+<div class="wp-modal ng-scope ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="amount_modal.show"><div class="wp-modal-mask" ng-click="click_mask()"></div><div class="wp-modal-body" >
+  <div class="wp-modal-header ng-binding ng-scope"></div>
+  <div class="wp-modal-content ng-scope">
+    <div style="font-size:32px;margin-top: 20px; margin-bottom: 20px;" class="ng-binding">
+      
+    </div>
+    <div class="wp-form-group">
+      <div class="wp-form-label">操作数额</div>
+      <div input-model="amount_modal.amount" input-type="number" class="ng-isolate-scope"><div class="wp-form-input-keypad  ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="number" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input-keypad  ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input " ng-show="!enable_jvk"><input type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+    </div>
+    <div class="wp-form-group ng-hide" ng-show="amount_modal.type==&#39;card_recharge&#39;">
+      <div class="wp-form-label">实际到帐</div>
+      <div input-model="amount_modal.actually_amount" input-type="number" class="ng-isolate-scope"><div class="wp-form-input-keypad  ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="number" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input-keypad  ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input " ng-show="!enable_jvk"><input type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+    </div>
+    <div class="wp-form-group">
+      <div class="wp-form-action">
+        <div class="wp-form-label"></div>
+        <div class="wp-btn-block wp-btn disabled"  ng-click="do_submit()" ng-class="{&#39;disabled&#39;: !amount_modal.amount}"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">确认</span></div></div></div>
+        <div class="wp-btn-block wp-btn"  ng-click="amount_modal.show=false;"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">取消</span></div></div></div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<div class="wp-modal ng-scope ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="exchange_modal.show"><div class="wp-modal-mask" ng-click="click_mask()"></div><div class="wp-modal-body" >
+  <div class="wp-modal-header ng-scope">兑换</div>
+  <div class="wp-modal-content ng-scope">
+    <div class="wp-form-group">
+      <!-- ngRepeat: promotion in promotions -->
+    </div><br>
+
+    <div class="wp-form-group">
+      <div class="wp-form-action">
+        <div class="wp-form-label"></div>
+        <div class="wp-btn-block wp-btn"  ng-click="do_exchange()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">确认</span></div></div></div>
+        <div class="wp-btn-block wp-btn"  ng-click="exchange_modal.show=false;"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">取消</span></div></div></div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+
+<div class="wp-modal ng-scope ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="vipinfo_modal.show"><div class="wp-modal-mask" ng-click="click_mask()"></div><div class="wp-modal-body" >
+  <div class="wp-modal-header ng-scope">会员信息</div>
+  <div class="wp-modal-content ng-scope">
+    <div class="wp-form-group">
+      <div class="wp-form-label">会员编号：</div>
+      <div input-model="modal_vip_info.vip_no" input-type="text" input-size="normal" placeholder="不填则自动生成" class="ng-isolate-scope"><div class="wp-form-input-keypad wp-form-input-normal ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input-keypad wp-form-input-normal ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input wp-form-input-normal" ng-show="!enable_jvk"><input type="text" ng-model="input_model" placeholder="不填则自动生成" class="ng-pristine ng-untouched ng-valid"></div></div>
+    </div>
+    <div class="wp-form-group">
+      <div class="wp-form-label">会员姓名：</div>
+      <div input-model="modal_vip_info.name" input-type="text" input-size="normal" class="ng-isolate-scope"><div class="wp-form-input-keypad wp-form-input-normal ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input-keypad wp-form-input-normal ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input wp-form-input-normal" ng-show="!enable_jvk"><input type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+    </div>
+    <div class="wp-form-group">
+      <div class="wp-form-label">手机号：</div>
+      <div input-model="modal_vip_info.phone" input-type="text" input-size="normal" class="ng-isolate-scope"><div class="wp-form-input-keypad wp-form-input-normal ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input-keypad wp-form-input-normal ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input wp-form-input-normal" ng-show="!enable_jvk"><input type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+    </div>
+    <div class="wp-form-group">
+      <div class="wp-form-label">会员级别：</div>
+      <div class="wp-form-select">
+        <select class="wp-form-select-small ng-pristine ng-untouched ng-valid" ng-model="modal_vip_info.vip_level_id" ng-options="vip_level.id as vip_level.name for vip_level in modal_vip_levels"><option value="?" selected="selected" label=""></option></select>
+      </div>
+    </div>
+    <div class="wp-modal-actions">
+      <div class="wp-btn-block wp-btn disabled"  ng-click="vipinfo_modal.submit()" ng-class="{&#39;disabled&#39;: !vipinfo_modal.can_submit()}"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">确定</span></div></div></div>
+      <div class="wp-btn-block wp-btn"  ng-click="vipinfo_modal.close()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">取消</span></div></div></div>
+    </div>
+  </div>
+</div></div>
+</div>
+
+<!-- ngInclude:  --><div ng-include="" src="partial(&#39;modals&#39;)" class="ng-scope"><div class="wp-modals ng-scope">
+  <div class="wp-modal wp-confirm-modal ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="confirm_modal.show" wp-lock-mask="confirm_modal.lock_mask" wp-confirm-info="对不起，您无权进行此操作，请向您的管理员确认您是否具备此操作权限。" wp-ok-text="确定" wp-cancel-text="" wp-ok="confirm_modal.ok();" wp-cancel="confirm_modal.cancel();"><div class="wp-modal-mask" ng-click="click_mask()"></div><div class="wp-modal-body"><div class="wp-confirm-info ng-binding" ng-bind-html="wpConfirmInfo|unsafe">对不起，您无权进行此操作，请向您的管理员确认您是否具备此操作权限。</div><div class="wp-confirm-actions"><div class="wp-btn-block wp-btn"  ng-click="wpLockMask=false;wpOk();" ng-show="wpOkText"><div class="text"><div class="overflow-hidden-text" ><span class="ng-binding ng-scope">确定</span></div></div></div><div class="wp-btn-block wp-btn ng-hide"  ng-click="wpLockMask=false;wpCancel();" ng-show="wpCancelText"><div class="text"><div class="overflow-hidden-text" ><span class="ng-binding ng-scope"></span></div></div></div> </div></div></div>
+</div>
+</div>
+
+<div ng-include="" src="partial(&#39;qrcode&#39;)" class="ng-scope"><div class="wp-modal-sm wp-modal ng-scope ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="vip_scan_modal.show"><div class="wp-modal-mask" ng-click="click_mask()"></div><div class="wp-modal-body" >
+  <div class="wp-modal-header ng-binding ng-scope"></div>
+  <div class="wp-modal-content ng-scope">
+    <div class="wp-form-label ng-binding"></div>
+    <div class="clearfix"></div>
+    <div class="qrcode">
+      <img ng-src="" width="250px" height="250px">
+    </div>
+    <div class="clearfix"></div>
+    <div class="wp-form-label ng-hide" ng-show="vip_scan_modal.scan_success">扫描成功，点击确认进行授权</div>
+    <div class="wp-modal-actions left">
+      <div class="wp-btn-block wp-btn ng-hide"  ng-click="vip_scan_modal.reload_qrcode()" ng-show="vip_scan_modal.enable_reload"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">刷新</span></div></div></div>
+      <div class="wp-btn-block wp-btn"  ng-click="vip_scan_modal.close()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">返回</span></div></div></div>
+    </div>
+  </div>
+</div></div></div>
+<!-- ngInclude:  --><div ng-include="" src="partial(&#39;scan&#39;)" class="ng-scope"><div class="wp-modal ng-scope ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="scan_modal.show"><div class="wp-modal-mask" ng-click="click_mask()"></div><div class="wp-modal-body" >
+  <div class="wp-modal-header ng-binding ng-scope"></div>
+  <div class="wp-modal-content ng-scope">
+    <div class="wp-form-group">
+      <div class="wp-form-label ng-binding"></div>
+    </div>
+    <div class="wp-form-group">
+      <div class="wp-form-label ng-binding"></div>
+    </div>
+    <div class="wp-modal-actions">
+      <div class="wp-btn-block wp-btn ng-hide"  ng-click="scan_modal.action()" ng-show="scan_modal.action_name"><div class="text"><div class="overflow-hidden-text" ><span class="ng-binding ng-scope"></span></div></div></div>
+      <div class="wp-btn-block wp-btn"  ng-click="scan_modal.close()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">取消</span></div></div></div>
+    </div>
+  </div>
+</div></div></div>
+<!-- ngInclude:  --><div ng-include="" src="partial(&#39;item_notes&#39;)" class="ng-scope"><div class="wp-modal ng-scope ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="item_notes_modal.show"><div class="wp-modal-mask" ng-click="click_mask()"></div><div class="wp-modal-body" >
+  <div class="wp-modal-header ng-scope">品注</div>
+  <div class="wp-modal-content ng-scope">
+    <div class="wp-form-group">
+      <div class="wp-form-label">品注</div>
+      <!-- ngRepeat: item_note in item_notes_modal.item_notes -->
+    </div>
+    <div class="wp-form-group">
+      <div class="wp-form-label"></div>
+      <div class="wp-form-action">
+        <div class="wp-btn-block wp-btn"  ng-click="item_notes_modal.submit()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">确认</span></div></div></div>
+        <div class="wp-btn-block wp-btn"  ng-click="item_notes_modal.close()"><div class="text"><div class="overflow-hidden-text" ><span class="ng-scope">取消</span></div></div></div>
+      </div>
+    </div>
+  </div>
+</div></div></div>
+
+
+<script type="text/html" id="vip-list">
+<% if(vip_list.length > 0){%>
+	<div id="vip-list-title" class="wp-table-row"  ng-hide="vip_infos.length == 0">
+        <div class="wp-table-col col-1 ng-scope">会员编号</div>
+        <div class="wp-table-col col-3 ng-scope">姓名</div>
+        <div class="wp-table-col col-3 ng-scope">电话</div>
+      </div>
+		<%for(i=0;i<vip_list.length;i++){%>
+	 		<div id="vip-list-item-<%=vip_list[i].member_id;%>" class="wp-table-row ng-scope"  
+  			 onclick="choose_vip_info('<%=vip_list[i].member_id;%>')" >
+        			<div class="wp-table-col col-1 ng-binding ng-scope"><%=vip_list[i].member_id;%></div>
+        			<div class="wp-table-col col-3 ng-binding ng-scope"><%=vip_list[i].member_name;%></div>
+        			<div class="wp-table-col col-3 ng-binding ng-scope"><%=vip_list[i].member_mobile;%></div>
+      		</div>
+
+		<%}%>
+ <%}else{%> 
+	<div id="no-vip" class="wp-no-record" ng-hide="vip_infos.length &gt; 0">当前尚没有记录</div>
+<%}%>
+</script>
+
+
+<script type="text/html" id="vip-info">
+<div class="wp-table">
+        <div class="wp-table-row" >
+          <div class="wp-table-col col-1 ng-scope">姓名: </div>
+          <div class="wp-table-col col-3 ng-binding ng-scope"><%=vip_info[0].member_name;%></div>
+        </div>
+        <div class="wp-table-row" >
+          <div class="wp-table-col col-1 ng-scope">电话: </div>
+          <div class="wp-table-col col-3 ng-binding ng-scope"><%=vip_info[0].member_mobile;%></div>
+        </div>
+        <div class="wp-table-row" >
+          <div class="wp-table-col col-1 ng-scope">会员编号: </div>
+          <div class="wp-table-col col-3 ng-binding ng-scope"><%=vip_info[0].member_id;%></div>
+        </div>
+        <div class="wp-table-row" >
+          <div class="wp-table-col col-1 ng-scope">会员级别: </div>
+          <div class="wp-table-col col-3 ng-binding ng-scope">普通卡</div>
+        </div>
+        <div class="wp-table-row" >
+          <div class="wp-table-col col-1 ng-scope">会员折扣: </div>
+          <div class="wp-table-col col-3 ng-binding ng-scope">10.0</div>
+        </div>
+        <div class="wp-table-row" >
+          <div class="wp-table-col col-1 ng-scope">当前余额: </div>
+          <div class="wp-table-col col-3 ng-binding ng-scope">￥ <%=vip_info[0].available_predeposit;%></div>
+        </div>
+        <div class="wp-table-row" >
+          <div class="wp-table-col col-1 ng-scope">当前积分: </div>
+          <div class="wp-table-col col-3 ng-binding ng-scope"><%=vip_info[0].member_points;%></div>
+        </div>
+      </div>
+</script>
+
+
+<script src="./js/zepto.min.js"></script>
+<script src="./js/simple-plugin.js"></script>
+<script src="./js/template.js"></script>
+<script src="./js/vip.js"></script>
+<script src="./js/wepos.js"></script>
+
+<script>
+var vipArray = [];
+</script>
+
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html ng-app="webpos" class="ng-scope">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}</style>
+<meta charset="utf-8">
+<meta content="" name="keywords">
+<meta content="" name="description">
+<meta content="" name="author">
+<meta content="production" name="env">
+<meta content="" name="mobile_device">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" name="viewport">
+<meta content="IE=EmulateIE9" http-equiv="X-UA-Compatible">
+
+<link href="./css/webpos.css" media="all" rel="stylesheet">
+<link href="./css/main.css" media="all" rel="stylesheet">
+
+<title>云餐厅收银系统</title>
+</head>
+<body>
+<!-- ngView:  -->
+<div ng-view="" style="height: 100%;" class="ng-scope">
+<!--#include file="header.html"-->
+<!--#include file="footer.html"-->
+<!--#include file="keyboard.html"-->
+
+<div class="branch-reservation-page main-view ng-scope">
+  <div class="master-part">
+    <div class="menu-part scroll-wrapper" wp-scroll-zone="">
+      <div id="resvervation-date-list-zone" style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);"><div>
+
+        <div class="menu ng-binding ng-scope active" ng-repeat="date in reservation_dates" ng-click="change_active_date(date)" ng-class="{active: active_date == date }" ng-if="branch.use_reservation_setting">
+          今天 10-22周四
+        </div><div class="menu ng-binding ng-scope" ng-repeat="date in reservation_dates" ng-click="change_active_date(date)" ng-class="{active: active_date == date }" ng-if="branch.use_reservation_setting">
+          明天 10-23周五
+        </div><div class="menu ng-binding ng-scope" ng-repeat="date in reservation_dates" ng-click="change_active_date(date)" ng-class="{active: active_date == date }" ng-if="branch.use_reservation_setting">
+          后天 10-24周六
+        </div><div class="menu ng-binding ng-scope" ng-repeat="date in reservation_dates" ng-click="change_active_date(date)" ng-class="{active: active_date == date }" ng-if="branch.use_reservation_setting">
+          10-25 周日
+        </div><div class="menu ng-binding ng-scope" ng-repeat="date in reservation_dates" ng-click="change_active_date(date)" ng-class="{active: active_date == date }" ng-if="branch.use_reservation_setting">
+          10-26 周一
+        </div><div class="menu ng-binding ng-scope" ng-repeat="date in reservation_dates" ng-click="change_active_date(date)" ng-class="{active: active_date == date }" ng-if="branch.use_reservation_setting">
+          10-27 周二
+        </div><div class="menu ng-binding ng-scope" ng-repeat="date in reservation_dates" ng-click="change_active_date(date)" ng-class="{active: active_date == date }" ng-if="branch.use_reservation_setting">
+          10-28 周三
+        </div>
+
+     </div></div>
+    </div>
+    <div class="master-part-with-menu ng-scope scroll-wrapper" wp-scroll-zone="" ng-if="branch.use_reservation_setting">
+      <div style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);"><div>
+        <div id="resvervation-time-list-zone" ng-repeat="table_zone in table_zones" class="ng-scope">
+        </div>
+        <input type="hidden" id="today" name="today" value="0" />
+        <input type="hidden" id="date_string" name="date_string" value="0" />
+        
+        <input type="hidden" id="time-id" name="time-id" value="0" />
+        <input type="hidden" id="time-id-value" name="time-id-value" value="0" />
+        <input type="hidden" id="time-zone-id" name="time-zone-id" value="0" />
+        <input type="hidden" id="time-zone-name" name="time-zone-name" value="0" />
+        <input type="hidden" id="table-id" name="table-id" value="0" />
+        <input type="hidden" id="table-name" name="table-name" value="0" />
+        <input type="hidden" id="gender" name="gender" value="0" />
+        
+        
+        <div class="space"></div>
+        <div class="clearfix"></div>
+        <div id="resvervation-table-list-zone" class="tables">
+         
+          <div class="space"></div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+  <div class="op-part scroll-wrapper" ng-show="branch.use_reservation_setting" wp-scroll-zone="">
+    <div style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);"><div>
+      <div id="reserv-info" class="wp-modal-content ng-hide" ng-show="active_table">
+        <div class="wp-form-group">
+          <div class="wp-form-label wp-form-label-xs">预订时间</div>
+          <div id="reserv-time" class="wp-form-input red ng-binding">今天 10-22周四 16:33</div>
+        </div>
+        <div class="wp-form-group">
+          <div class="wp-form-label wp-form-label-xs">预订桌台</div>
+          <div id="reserv-table" class="wp-form-input red ng-binding">包间-B003</div>
+        </div>
+        <div ng-hide="active_table.reservation_info">
+          <div class="wp-form-group">
+            <div class="wp-form-label wp-form-label-xs">姓名</div>
+            <div input-model="reservation_info.name" input-type="text" class="ng-isolate-scope">
+            <div class="wp-form-input-keypad  ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" 
+            data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict="">
+            <span class="ng-binding"></span></div>
+            <div class="wp-form-input-keypad  ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" 
+            data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict="">
+            <span class="ng-binding"></span></div><div class="wp-form-input " ng-show="!enable_jvk">
+            <input id="reserv-name" onfocus="input_onfocus('reserv-name')" onblur="reset_keyboard()"   oninput="input_reserv_info('reserv-name')" type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+          </div>
+          <div class="wp-form-group">
+            <div class="wp-form-label wp-form-label-xs">性别</div>
+            <!-- ngRepeat: gender in gender_collection -->
+            <div id="gender-man" class="wp-btn-block wp-btn-sm ng-scope active" onselectstart="return false" ng-repeat="gender in gender_collection" onclick="setgender('0');" ng-class="{active: reservation_info.gender == gender.value}"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-binding ng-scope">
+              先生
+            </span></div></div></div><!-- end ngRepeat: gender in gender_collection -->
+            <div id="gender-woman" class="wp-btn-block wp-btn-sm ng-scope" onselectstart="return false" ng-repeat="gender in gender_collection" onclick="setgender('1');" ng-class="{active: reservation_info.gender == gender.value}"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-binding ng-scope">
+              女士
+            </span></div></div></div><!-- end ngRepeat: gender in gender_collection -->
+          </div> 
+          <div class="wp-form-group">
+            <div class="wp-form-label wp-form-label-xs">电话</div>
+            <div input-model="reservation_info.phone" input-type="text" class="ng-isolate-scope">
+            <div class="wp-form-input-keypad  ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" 
+            data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding">
+            </span></div><div class="wp-form-input-keypad  ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" 
+            data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding">
+            </span></div><div class="wp-form-input " ng-show="!enable_jvk">
+            <input id="reserv-phone" onfocus="input_onfocus('reserv-phone')" onblur="reset_keyboard()" 
+            oninput="input_reserv_info('reserv-phone')" type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+          </div>
+          <div class="wp-form-group">
+            <div class="wp-form-label wp-form-label-xs">备注</div>
+            <div input-model="reservation_info.note" input-type="text" class="ng-isolate-scope">
+            <div class="wp-form-input-keypad  ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" 
+            data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding">
+            </span></div><div class="wp-form-input-keypad  ng-hide" ng-show="enable_jvk &amp;&amp; is_password()"
+             data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding">
+             </span></div><div class="wp-form-input " ng-show="!enable_jvk">
+             <input id="reserv-note" onfocus="input_onfocus('reserv-note')" onblur="reset_keyboard()" 
+             oninput="input_reserv_info('reserv-note')" type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+          </div>
+          <div class="wp-form-group">
+            <div class="wp-form-action">
+              <div id="pre-order" class="wp-btn-block wp-btn disabled" onselectstart="return false" 
+              onclick="submit_preorder()" ng-class="{&#39;disabled&#39;: !can_submit()}"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+                预订
+              </span></div></div></div>
+              <div class="space"></div>
+            </div>
+          </div>
+        </div>
+        <div ng-show="active_table.reservation_info" class="ng-hide">
+          <div class="wp-form-group">
+            <div class="wp-form-label wp-form-label-xs">姓名</div>
+            <div input-model="active_table.reservation_info.name" input-type="text" class="ng-isolate-scope"><div class="wp-form-input-keypad  ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input-keypad  ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input " ng-show="!enable_jvk"><input type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+          </div>
+          <div class="wp-form-group">
+            <div class="wp-form-label wp-form-label-xs">性别</div>
+            <!-- ngRepeat: gender in gender_collection -->
+            <div  class="wp-btn-block wp-btn-sm ng-scope" onselectstart="return false" ng-repeat="gender in gender_collection" onclick="setgender('0');" ng-class="{active: active_table.reservation_info.gender == gender.value}"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-binding ng-scope">
+              先生
+            </span></div></div></div><!-- end ngRepeat: gender in gender_collection -->
+            <div  class="wp-btn-block wp-btn-sm ng-scope" onselectstart="return false" ng-repeat="gender in gender_collection" onclick="setgender('1');" ng-class="{active: active_table.reservation_info.gender == gender.value}"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-binding ng-scope">
+              女士
+            </span></div></div></div><!-- end ngRepeat: gender in gender_collection -->
+          </div>
+           
+          <div class="wp-form-group">
+            <div class="wp-form-label wp-form-label-xs">电话</div>
+            <div input-model="active_table.reservation_info.phone" input-type="text" class="ng-isolate-scope"><div class="wp-form-input-keypad  ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input-keypad  ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input " ng-show="!enable_jvk"><input type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+          </div>
+          <div class="wp-form-group">
+            <div class="wp-form-label wp-form-label-xs">备注</div>
+            <div input-model="active_table.reservation_info.note" input-type="text" class="ng-isolate-scope"><div class="wp-form-input-keypad  ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input-keypad  ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input " ng-show="!enable_jvk"><input type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+          </div>
+          <div class="wp-form-group">
+            <div class="wp-form-action">
+              <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="submit()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+                更改
+              </span></div></div></div>
+              <div class="space"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div></div>
+  </div>
+</div>
+</div>
+
+
+
+<script type="text/html" id="resvervation-time-list">
+<% if(time_list.length > 0){%>
+	<%for(i=0;i<time_list.length;i++){%>
+<% if(time_list[i].valid == 1){%>
+	<div id="time-id-<%=time_list[i].time_id%>" class="fillet wp-btn-block wp-btn-sm ng-scope" onselectstart="return false" 
+      	onclick="getTimePointTableList('<%=time_list[i].store_id%>',
+		'<%=time_list[i].table_zone_id%>','<%=time_list[i].table_zone_name%>',
+		'<%=time_list[i].time_id%>', '<%=time_list[i].reservation_time%>')" >
+		<div class="text">
+			<div class="overflow-hidden-text" ng-transclude="">
+				<span class="ng-binding ng-scope">
+            		<%=time_list[i].table_zone_name%><%=time_list[i].reservation_time%> 剩余<%=time_list[i].reserv_left%>
+          		</span>
+		   </div>
+		</div>
+	</div>
+<%}else{%>
+	<div id="time-id-<%=time_list[i].time_id%>" class="fillet wp-btn-block wp-btn-sm ng-scope disabled" onselectstart="return false" >
+		<div class="text">
+			<div class="overflow-hidden-text" ng-transclude="">
+				<span class="ng-binding ng-scope">
+            		<%=time_list[i].table_zone_name%><%=time_list[i].reservation_time%> 剩余<%=time_list[i].reserv_left%>
+          		</span>
+		   </div>
+		</div>
+	</div>
+<%}%>
+	<%}%>
+<%}%>
+</script>
+
+
+<script type="text/html" id="resvervation-date-list">
+<% if(date_list.length > 0){%>
+	<%for(i=0;i<date_list.length;i++){%>
+
+<% if(date_list[i].index == 0){%>
+<div id="date-id-<%=date_list[i].index%>" class="menu ng-binding ng-scope active" 
+onclick="getReservationTimePoint('<%=date_list[i].index%>','<%=date_list[i].date_day%>')" >
+         <%=date_list[i].date_day%>
+        </div>
+<%}else{%>
+<div id="date-id-<%=date_list[i].index%>" class="menu ng-binding ng-scope" 
+onclick="getReservationTimePoint('<%=date_list[i].index%>','<%=date_list[i].date_day%>')" >
+         <%=date_list[i].date_day%>
+        </div>
+<%}%>
+	<%}%>
+<%}%>
+</script>
+
+
+
+<script type="text/html" id="resvervation-table-list">
+<% if(table_list.length > 0){%>
+	<%for(i=0;i<table_list.length;i++){%>
+<% if(table_list[i].reserved > 0){%>
+	<div id="table-id-<%=table_list[i].stc_id%>" class="product-btn wp-btn-block wp-btn-md ng-scope disabled" onselectstart="return false" ng-repeat="table in active_time_point.tables" 
+		ng-class="{ 'active': table == active_table, 'disabled': !table.can_reservation }" 
+		onclick="select_table('<%=table_list[i].stc_id%>','<%=table_list[i].stc_name%>','<%=table_list[i].reserved%>')">
+	<div class="text">
+		<div class="overflow-hidden-text" ng-transclude="">
+            <div class="product-name ng-binding ng-scope"><%=table_list[i].stc_name%></div>
+            <div class="product-price ng-scope">
+              <span ng-show="table.capacity" class="ng-binding"><%=table_list[i].stc_seat_num%>人桌</span>
+              <span ng-hide="table.can_reservation"> 已预订</span>
+            </div>
+         </div>
+	</div>
+</div>
+<%}else{%>
+	<div id="table-id-<%=table_list[i].stc_id%>" class="product-btn wp-btn-block wp-btn-md ng-scope" onselectstart="return false" ng-repeat="table in active_time_point.tables" 
+		ng-class="{ 'active': table == active_table, 'disabled': !table.can_reservation }" 
+		onclick="select_table('<%=table_list[i].stc_id%>','<%=table_list[i].stc_name%>', '<%=table_list[i].reserved%>')">
+	<div class="text">
+		<div class="overflow-hidden-text" ng-transclude="">
+            <div class="product-name ng-binding ng-scope"><%=table_list[i].stc_name%></div>
+            <div class="product-price ng-scope">
+              <span ng-show="table.capacity" class="ng-binding"><%=table_list[i].stc_seat_num%>人桌</span>
+              <span class="ng-hide"> 已预订</span>
+            </div>
+         </div>
+	</div>
+</div>
+<%}%>
+	<%}%>
+<%}%>
+</script>
+
+<script src="./js/zepto.min.js"></script>
+<script src="./js/simple-plugin.js"></script>
+<script src="./js/common.js"></script>
+<script src="./js/template.js"></script>
+<script src="./js/reservation.js"></script>
+<script src="./js/wepos.js"></script>
+
+
+<script>
+getReservationDateList();
+//datazone
+var storeTableArray = [];
+</script>
+
+</body>
+</html>

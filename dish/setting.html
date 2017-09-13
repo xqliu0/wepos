@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html ng-app="webpos" class="ng-scope"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}</style>
+<meta charset="utf-8">
+<meta content="" name="keywords">
+<meta content="" name="description">
+<meta content="" name="author">
+<meta content="production" name="env">
+<meta content="" name="mobile_device">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" name="viewport">
+<meta content="IE=EmulateIE9" http-equiv="X-UA-Compatible">
+
+<link href="./css/webpos.css" media="all" rel="stylesheet">
+<link href="./css/main.css" media="all" rel="stylesheet">
+
+<title>云餐厅收银系统</title>
+</head>
+
+<body>
+<!-- ngView:  -->
+<div ng-view="" style="height: 100%;" class="ng-scope">
+<!--#include file="header.html"-->
+<!--#include file="footer.html"-->
+<!--#include file="keyboard.html"-->
+
+ <div class="main-view ng-scope">
+
+<div class="main-part">
+    <div class="menu-part fill-parent" wp-scroll-zone="">
+      <div class="fill-parent scroll-wrapper" style="transform: translateZ(0px);"><div style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);"><div>
+        <div id="setting_1" class="menu ng-binding ng-scope active" onclick="change_setting(1);">
+          模块开关
+        </div>
+        <div id="setting_2" class="menu ng-binding ng-scope ng-hide" onclick="change_setting(2);">
+          当前打印机
+        </div>
+        <div id="setting_3" class="menu ng-binding ng-scope" onclick="change_setting(3);">
+          抹零设置
+        </div>
+        <div id="setting_4" class="menu ng-binding ng-scope" onclick="change_setting(4);">
+          交班记录
+        </div>
+      </div></div></div>
+    </div>
+    <div class="master-part-with-menu" style="overflow:auto;overflow-x: hidden">
+    
+    <div id="module-setting-div-1" class="ng-scope">
+        <div class="setting-title">模块开关</div>
+        <div class="wp-form-group">
+          <div class="wp-form-label">堂点</div>
+          <div class="wp-form-btns">
+            <div id="tangdian-open"  class="wp-btn-block wp-btn-sm active" onclick="module_set(1,1)" ><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              启用
+            </span></div></div></div>
+            <div id="tangdian-close" class="wp-btn-block wp-btn-sm" onclick="module_set(1, 0)" ><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              关闭
+            </span></div></div></div>
+          </div>
+        </div>
+        
+        <div class="wp-form-group">
+          <div class="wp-form-label">外卖</div>
+          <div class="wp-form-btns">
+            <div id="deliver-open"  class="wp-btn-block wp-btn-sm active" onclick="module_set(2,1)" ><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              启用
+            </span></div></div></div>
+            <div id="deliver-close" class="wp-btn-block wp-btn-sm" onclick="module_set(2, 0)" ><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              关闭
+            </span></div></div></div>
+          </div>
+        </div>
+        
+        
+        <div class="wp-form-group">
+          <div class="wp-form-label">预订</div>
+          <div class="wp-form-btns">
+            <div id="preoder-open"  class="wp-btn-block wp-btn-sm active" onclick="module_set(3,1)" ><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              启用
+            </span></div></div></div>
+            <div id="preoder-close" class="wp-btn-block wp-btn-sm" onclick="module_set(3, 0)" ><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              关闭
+            </span></div></div></div>
+          </div>
+        </div>
+        
+        
+        <div class="wp-form-group">
+          <div class="wp-form-label">快餐</div>
+          <div class="wp-form-btns">
+            <div id="fastfood-open"  class="wp-btn-block wp-btn-sm active" onclick="module_set(4,1)" ><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              启用
+            </span></div></div></div>
+            <div id="fastfood-close" class="wp-btn-block wp-btn-sm" onclick="module_set(4, 0)" ><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              关闭
+            </span></div></div></div>
+          </div>
+        </div>
+        
+        <div class="wp-form-group">
+          <div class="wp-form-label">买单</div>
+          <div class="wp-form-btns">
+            <div id="buyorder-open"  class="wp-btn-block wp-btn-sm active" onclick="module_set(5,1)" ><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              启用
+            </span></div></div></div>
+            <div id="buyorder-close" class="wp-btn-block wp-btn-sm" onclick="module_set(5, 0)" ><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              关闭
+            </span></div></div></div>
+          </div>
+        </div>
+        
+        
+        <div class="wp-form-group">
+          <div class="wp-form-label">订单管理</div>
+          <div class="wp-form-btns">
+            <div id="ordermng-open"  class="wp-btn-block wp-btn-sm active" onclick="module_set(6,1)" ><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              启用
+            </span></div></div></div>
+            <div id="ordermng-close" class="wp-btn-block wp-btn-sm" onclick="module_set(6, 0)" ><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              关闭
+            </span></div></div></div>
+          </div>
+        </div>
+        
+        
+        
+        <div class="wp-form-group">
+          <div class="wp-form-label">微信预约</div>
+          <div class="wp-form-btns">
+            <div id="wxorder-open"  class="wp-btn-block wp-btn-sm active" onclick="module_set(7,1)" ><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              启用
+            </span></div></div></div>
+            <div id="wxorder-close" class="wp-btn-block wp-btn-sm" onclick="module_set(7, 0)" ><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              关闭
+            </span></div></div></div>
+          </div>
+        </div>
+        
+        
+        
+        <div class="wp-form-group">
+          <div class="wp-form-label">产品估清</div>
+          <div class="wp-form-btns">
+            <div id="soldout-open"  class="wp-btn-block wp-btn-sm active" onclick="module_set(8,1)" ><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              启用
+            </span></div></div></div>
+            <div id="soldout-close" class="wp-btn-block wp-btn-sm" onclick="module_set(8, 0)" ><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              关闭
+            </span></div></div></div>
+          </div>
+        </div>
+        <div class="wp-form-group">
+          <div class="wp-form-label">排号</div>
+          <div class="wp-form-btns">
+            <div id="queue-open"  class="wp-btn-block wp-btn-sm active" onclick="module_set(9,1)" ><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              启用
+            </span></div></div></div>
+            <div id="queue-close" class="wp-btn-block wp-btn-sm" onclick="module_set(9, 0)" ><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              关闭
+            </span></div></div></div>
+          </div>
+        </div>
+      </div>
+      
+      
+      <div id="module-setting-div-3" class="ng-scope ng-hide">
+        <div class="setting-title">抹零设置</div>
+        <div class="wp-form-group">
+          <div class="wp-form-label">自动设置</div>
+          <div class="wp-form-btns">
+            <div class="wp-btn-block wp-btn-sm active" ng-click="moling_setting.change_auto(false)" ng-class="{'active': moling_setting.auto == false}"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              手动抹零
+            </span></div></div></div>
+            <div class="wp-btn-block wp-btn-sm" ng-click="moling_setting.change_auto(true)" ng-class="{'active': moling_setting.auto == true}"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              自动抹零
+            </span></div></div></div>
+          </div>
+        </div>
+        <div class="wp-form-group">
+          <div class="wp-form-label">类型</div>
+          <div class="wp-form-btns">
+            <div id="moling-type-erase" class="wp-btn-block wp-btn-sm" ng-click="moling_setting.change_type('erase')" ng-class="{'active': moling_setting.type == 'erase'}" onclick="changeMolingType(1)"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              直接抹除
+            </span></div></div></div>
+            <div id="moling-type-round" class="wp-btn-block wp-btn-sm active" ng-click="moling_setting.change_type('round')" ng-class="{'active': moling_setting.type == 'round'}" onclick="changeMolingType(0)"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              四舍五入
+            </span></div></div></div>
+          </div>
+        </div>
+        <div class="wp-form-group">
+          <div class="wp-form-label">抹到</div>
+          <div class="wp-form-btns">
+            <div id="moling-scale-jiao" class="wp-btn-block wp-btn-sm" ng-click="moling_setting.change_ndigits(1)" ng-class="{'active': moling_setting.ndigits == 1}" onclick="changeMolingScale(1)"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              角
+            </span></div></div></div>
+            <div id="moling-scale-yuan" class="wp-btn-block wp-btn-sm active" ng-click="moling_setting.change_ndigits(0)" ng-class="{'active': moling_setting.ndigits == 0}" onclick="changeMolingScale(0)"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              元
+            </span></div></div></div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="module-setting-div-4" class="fill-parent scroll-wrapper ng-hide" style="transform: translateZ(0px);"><div style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);"><div class="statistic-params">
+        <div class="fillet wp-btn-block wp-btn-sm active" ng-click="change_statistic_type('product_sales')" ng-class="{active: statistic_type=='product_sales'}"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">交班记录</span></div></div></div>
+        <div class="time-filter-select">
+          <div  id="shift-timespan-today" class="time-item active" onclick="get_shift_list('today')" >今天</div>
+          <div id="shift-timespan-yesterday" class="time-item" onclick="get_shift_list('yesterday')" >昨天</div>
+          <div id="shift-timespan-this_week" class="time-item" onclick="get_shift_list('this_week')" >7日内</div>
+          <div id="shift-timespan-last_week" class="time-item" onclick="get_shift_list('last_week')" >15日内</div>
+        </div>
+      </div><div class="statistic-list">
+        <div id="store_shift_list_zone" class="wp-statistic-table" ng-hide="is_empty()">
+          
+        </div>
+      </div></div></div>
+      
+      
+    </div>
+  </div>
+  
+</div></div>
+
+<script src="./js/zepto.min.js"></script>
+<script src="./js/simple-plugin.js"></script>
+<script src="./js/common.js"></script>
+<script src="./js/template.js"></script>
+<script src="./js/wepos.js"></script>
+<script src="./js/setting.js?t=2"></script>
+
+
+
+<script type="text/html" id="store_shift_list">
+
+		<div class="wp-st-header">
+            <div class="wp-st-col-index">序号</div>
+            <div class="wp-st-col">员工名称</div>
+            <div class="wp-st-col">值班状态</div>
+            <div class="wp-st-col-time">开班时间</div>
+            <div class="wp-st-col-time">交班时间</div>
+            <div class="wp-st-col">开班现金(元)</div>
+            <div class="wp-st-col">收入现金(元)</div>
+            <div class="wp-st-col">交班现金(元)</div>
+            <div class="wp-st-col">微信刷卡(元)</div>
+            <div class="wp-st-col">微信扫码(元)</div>
+            <div class="wp-st-col">银行卡(元)</div>
+          </div>
+
+<% if(shiftlist.length > 0){%>
+	<%for(i=0;i<shiftlist.length;i++){%>
+		<% if(i%2 == 0){%>
+		<div class="wp-st-row ng-scope active" >
+         <%}else{%>
+		<div class="wp-st-row ng-scope" >
+		 <%}%>
+			<div class="wp-st-col-index ng-binding"><%=i+1%></div>
+            <div class="wp-st-col ng-binding"><%=shiftlist[i].staff_name%></div>
+
+<% if(shiftlist[i].shift_state == '已开班'){%>
+            <div class="wp-st-col ng-binding"><font color="red"><%=shiftlist[i].shift_state%></font></div>
+<%}else{%>
+            <div class="wp-st-col ng-binding"><%=shiftlist[i].shift_state%></div>
+<%}%>
+            <div class="wp-st-col-time ng-binding"><%=shiftlist[i].start_time%></div>
+
+<% if(shiftlist[i].shift_state == '已开班'){%>
+            <div class="wp-st-col-time ng-binding"><font color="red">还未交班</font></div>
+<%}else{%>
+            <div class="wp-st-col-time ng-binding"><%=shiftlist[i].end_time%></div>
+<%}%>
+            <div class="wp-st-col ng-binding"><%=shiftlist[i].start_cash_amount%></div>
+            <div class="wp-st-col ng-binding"><%=shiftlist[i].cash_amount%></div>
+
+<% if(shiftlist[i].shift_state == '已开班'){%>
+            <div class="wp-st-col ng-binding"><font color="red">还未交班</font></div>
+<%}else{%>
+            <div class="wp-st-col ng-binding"><%=shiftlist[i].end_cash_amount%></div>
+<%}%>
+            <div class="wp-st-col ng-binding"><%=shiftlist[i].wx_card_amount%></div>
+            <div class="wp-st-col ng-binding"><%=shiftlist[i].wx_code_amount%></div>
+            <div class="wp-st-col ng-binding"><%=shiftlist[i].bank_amount%></div>
+
+
+          </div>
+	<%}%>
+<%}else{%>
+<div class="wp-st-no-result ng-scope" ng-if="is_empty()">当前统计范围没有交班记录</div>
+<%}%>
+</script>
+
+
+<script>
+//datazone
+
+</script> 
+
+</body>
+</html>

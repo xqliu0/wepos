@@ -1,0 +1,13 @@
+﻿
+{restaurant}
+收银员:{cashier}
+桌号:{number}
+菜品        数量    单价   金额
+{order_list}	
+消费总计:{total}
+折扣:{discount}
+应收:{price}
+期待您的下次光临！！
+地址:{address}
+电话:{phone}
+{day} {time}

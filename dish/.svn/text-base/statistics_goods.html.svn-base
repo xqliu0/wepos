@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html ng-app="webpos" class="ng-scope"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}</style>
+<meta charset="utf-8">
+<meta content="" name="keywords">
+<meta content="" name="description">
+<meta content="" name="author">
+<meta content="production" name="env">
+<meta content="" name="mobile_device">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" name="viewport">
+<meta content="IE=EmulateIE9" http-equiv="X-UA-Compatible">
+
+<link href="./css/webpos.css" media="all" rel="stylesheet">
+<link href="./css/main.css" media="all" rel="stylesheet">
+
+<title>云餐厅收银系统</title>
+</head>
+
+<body>
+<!-- ngView:  -->
+<div ng-view="" style="height: 100%;" class="ng-scope">
+<!--#include file="header.html"-->
+<!--#include file="footer.html"-->
+<!--#include file="keyboard.html"-->
+
+ <div class="main-view ng-scope">
+  <div class="main-part">
+    <div class="menu-part fill-parent" wp-scroll-zone="">
+      <div class="fill-parent scroll-wrapper" style="transform: translateZ(0px);"><div style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);"><div>
+        
+        <div class="menu ng-binding ng-scope active" ng-repeat="branch in branches" ng-class="{active: branch == active_branch}" ng-click="change_active_branch(branch)">
+          产品销量
+        </div><div class="menu ng-binding ng-scope" ng-repeat="branch in branches" ng-class="{active: branch == active_branch}" ng-click="change_active_branch(branch)">
+          订单量
+        </div>
+      </div></div></div>
+    </div>
+    <div class="master-part-with-menu fill-parent" wp-scroll-zone="">
+      <div class="fill-parent scroll-wrapper" style="transform: translateZ(0px);"><div style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);"><div class="statistic-params">
+        <div class="fillet wp-btn-block wp-btn-sm active" ng-click="change_statistic_type(&#39;product_sales&#39;)" ng-class="{active: statistic_type==&#39;product_sales&#39;}"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">产品销量</span></div></div></div>
+        <div class="fillet wp-btn-block wp-btn-sm" ng-click="change_statistic_type(&#39;order_quantity&#39;)" ng-class="{active: statistic_type==&#39;order_quantity&#39;}"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">订单量</span></div></div></div>
+        <div class="time-filter-select">
+          <div class="time-item" ng-click="change_time_filter(&#39;today&#39;)" ng-class="{active: time_filter==&#39;today&#39;}">今天</div>
+          <div class="time-item" ng-click="change_time_filter(&#39;yesterday&#39;)" ng-class="{active: time_filter==&#39;yesterday&#39;}">昨天</div>
+          <div class="time-item" ng-click="change_time_filter(&#39;this_week&#39;)" ng-class="{active: time_filter==&#39;this_week&#39;}">这周</div>
+          <div class="time-item active" ng-click="change_time_filter(&#39;last_week&#39;)" ng-class="{active: time_filter==&#39;last_week&#39;}">上周</div>
+        </div>
+      </div><div class="statistic-list">
+        <div class="wp-statistic-table" ng-hide="is_empty()">
+          <div class="wp-st-header" ng-show="statistic_type == &#39;product_sales&#39;">
+            <div class="wp-st-col">产品名称</div>
+            <div class="wp-st-col">销量</div>
+          </div>
+          <div class="wp-st-header ng-hide" ng-show="statistic_type == &#39;order_quantity&#39;">
+            <div class="wp-st-col">日期</div>
+            <div class="wp-st-col">订单数</div>
+          </div>
+          
+          <div class="wp-st-row ng-scope active" ng-repeat="(name, value) in result" ng-class="{active: $index%2==0}">
+            <div class="wp-st-col ng-binding">你是土豆我是孜然</div>
+            <div class="wp-st-col ng-binding">6</div>
+          </div><div class="wp-st-row ng-scope" ng-repeat="(name, value) in result" ng-class="{active: $index%2==0}">
+            <div class="wp-st-col ng-binding">农家小豆腐</div>
+            <div class="wp-st-col ng-binding">4</div>
+          </div><div class="wp-st-row ng-scope active" ng-repeat="(name, value) in result" ng-class="{active: $index%2==0}">
+            <div class="wp-st-col ng-binding">加州干红</div>
+            <div class="wp-st-col ng-binding">1</div>
+          </div><div class="wp-st-row ng-scope" ng-repeat="(name, value) in result" ng-class="{active: $index%2==0}">
+            <div class="wp-st-col ng-binding">小炒秋葵</div>
+            <div class="wp-st-col ng-binding">1</div>
+          </div><div class="wp-st-row ng-scope active" ng-repeat="(name, value) in result" ng-class="{active: $index%2==0}">
+            <div class="wp-st-col ng-binding">张裕解百纳</div>
+            <div class="wp-st-col ng-binding">2</div>
+          </div><div class="wp-st-row ng-scope" ng-repeat="(name, value) in result" ng-class="{active: $index%2==0}">
+            <div class="wp-st-col ng-binding">扁尖老鸭汤</div>
+            <div class="wp-st-col ng-binding">1</div>
+          </div><div class="wp-st-row ng-scope active" ng-repeat="(name, value) in result" ng-class="{active: $index%2==0}">
+            <div class="wp-st-col ng-binding">长城94干红</div>
+            <div class="wp-st-col ng-binding">7</div>
+          </div><div class="wp-st-row ng-scope" ng-repeat="(name, value) in result" ng-class="{active: $index%2==0}">
+            <div class="wp-st-col ng-binding">香旮旯小炒</div>
+            <div class="wp-st-col ng-binding">1</div>
+          </div>
+        </div>
+        <!-- ngIf: is_empty() -->
+      </div></div></div>
+    </div>
+  </div>
+</div></div>
+
+
+
+<script type="text/html" id="store_goods_list">
+<% if(goods_list.length > 0){%>
+	<%for(i=0;i<goods_list.length;i++){%>
+	<% if(goods_list[i].soldout == 1){%>
+	<div class="product-btn wp-btn-block wp-btn-md ng-scope disabled" onselectstart="return false" onclick=""><div class="text"><div class="overflow-hidden-text" ng-transclude="">
+            <input type="hidden" id="good_id_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_id%>" />
+            <input type="hidden" id="good_name_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_name%>" />
+            <input type="hidden" id="good_price_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_price%>" />
+            <input type="hidden" id="good_state_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_state%>" />
+            <input type="hidden" id="good_storage_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_storage%>" />
+
+			<div class="product-name ng-binding ng-scope"><%=goods_list[i].goods_name%></div>
+            <div class="product-price ng-binding ng-scope">￥<%=goods_list[i].goods_price%></div>
+            <!-- <span ng-show="!product.on_shelf" class="small">(估清或下架)</span> -->
+    </div></div></div>
+<%}else{%>
+<div class="product-btn wp-btn-block wp-btn-md ng-scope" onselectstart="return false" onclick="add_good(<%=goods_list[i].goods_id%>)"><div class="text"><div class="overflow-hidden-text" ng-transclude="">
+            <input type="hidden" id="good_id_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_id%>" />
+            <input type="hidden" id="good_name_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_name%>" />
+            <input type="hidden" id="good_price_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_price%>" />
+            <input type="hidden" id="good_state_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_state%>" />
+            <input type="hidden" id="good_storage_<%=goods_list[i].goods_id%>" value="<%=goods_list[i].goods_storage%>" />
+
+			<div class="product-name ng-binding ng-scope"><%=goods_list[i].goods_name%></div>
+            <div class="product-price ng-binding ng-scope">￥<%=goods_list[i].goods_price%></div>
+            <!-- <span ng-show="!product.on_shelf" class="small">(估清或下架)</span> -->
+    </div></div></div>
+<%}%>
+
+	<%}%>
+<%}else{%>
+<div class="wp-no-record ng-hide" ng-hide="table_class.length > 0">
+        <span ng-hide="show_filtered_tables">该区域没有桌台</span>
+        <span ng-show="show_filtered_tables" class="ng-binding ng-hide">没有桌台</span>
+</div>
+<%}%>
+
+</script>
+
+
+<script src="./js/zepto.min.js"></script>
+<script src="./js/simple-plugin.js"></script>
+<script src="./js/common.js"></script>
+<script src="./js/template.js"></script>
+<script src="./js/statistics.js"></script>
+<script src="./js/wepos.js"></script>
+
+<script>
+//datazone
+getStoreGoodsSalesInfo();
+
+var selectedGoodsArray = [];
+var selected_total_price = 0;
+var g_cart_id = 0;
+
+//菜品列表
+var storeGoodArray = [];
+//过滤后的菜品列表
+var filteredStoreGoodArray = [];
+
+var deliveryAddressInfo = [];
+
+
+</script> 
+
+</body>
+</html>

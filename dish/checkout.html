@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html ng-app="webpos" class="ng-scope"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}</style>
+<meta charset="utf-8">
+<meta content="" name="keywords">
+<meta content="" name="description">
+<meta content="" name="author">
+<meta content="production" name="env">
+<meta content="" name="mobile_device">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" name="viewport">
+<meta content="IE=EmulateIE9" http-equiv="X-UA-Compatible">
+<link href="./css/webpos.css" media="all" rel="stylesheet">
+<script src="http://cdn.bootcss.com/spin.js/2.3.2/spin.min.js"></script>
+
+<title>云餐厅收银系统</title>
+</head>
+<body>
+<!-- ngView:  --><div ng-view="" style="height: 100%;" class="ng-scope">
+<!--#include file="header.html"-->
+<!--#include file="footer.html"-->
+<!--#include file="keyboard.html"-->
+
+<div class="order-settle-page main-view ng-scope">
+  <div class="master-left-part">
+    <div class="wp-subject">订单结算</div>
+    <div class="settle-promotions">
+      <div id="sp-hysb" style="overflow:auto;overflow-x:hidden;display:none" class="sp sp-1 " ng-class="{active: active_menu_key == &#39;hysb&#39;}">
+        <div class="sp-title" onclick="toggle_menu_key('hysb')">会员识别</div>
+        <div id="sp-content-hysb" style="overflow:auto;overflow-x:hidden" class="sp-content scroll-wrapper" ng-show="active_menu_key == &#39;hysb&#39;" wp-scroll-zone="" style="height: 408px;">
+          <div style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);"><div class="sp-content-item">
+            <div class="sp-item-title">实体卡识别</div>
+            <div class="sp-item-action">
+              <div class="wp-btn-block wp-btn-sm" onselectstart="return false" ng-click="vip_modal.read_card()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">读卡</span></div></div></div>
+            </div>
+            <div class="sp-item-desc">请将会员卡放入感应区</div>
+          </div><div class="sp-content-item">
+            <div class="sp-item-title">微信会员识别</div>
+            <div class="sp-item-action">
+              <div class="wp-btn-block wp-btn-sm" onselectstart="return false" ng-click="vip_modal.read_qrcode()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">扫码</span></div></div></div>
+            </div>
+            <div class="sp-item-desc">顾客微信扫码</div>
+          </div><div class="sp-content-item">
+            <div class="sp-item-title">会员支付码识别</div>
+            <div class="sp-item-action">
+              <div class="wp-btn-block wp-btn-sm" onselectstart="return false" ng-click="vip_modal.scan_code()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">扫码</span></div></div></div>
+            </div>
+            <div class="sp-item-desc">扫顾客的会员支付码</div>
+          </div><div class="sp-content-item" ng-show="can(&#39;index&#39;, &#39;vip_info&#39;)">
+            <div class="sp-item-title">会员搜索</div>
+            <div class="sp-item-action">
+              <div class="wp-btn-block wp-btn-sm" onselectstart="return false" ng-click="vip_modal.search_open()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">搜索</span></div></div></div>
+            </div>
+            <div class="sp-item-desc">姓名/手机/会员号</div>
+          </div><div class="sp-content-item">
+            <!-- <div class="sp-item-info">会员编号：<span>{{vip_modal.vip_info.vip_no}}</span></div> -->
+            <!-- <div class="sp-item-info">会员编号：<span>{{vip_modal.vip_info.vip_level_name}}</span></div> -->
+            <!-- <div class="sp-item-info">手机：<span>{{vip_modal.vip_info.phone}}</span></div> -->
+            <div class="sp-item-info">会员：<span class="ng-binding"> </span></div>
+            <div class="sp-item-info">余额：<span class="ng-binding"></span></div>
+            <div class="sp-item-info">积分：<span class="ng-binding"></span></div>
+          </div><div class="sp-content-item">
+            <div class="sp-item-action-c">
+              <div class="fillet wp-btn-block wp-btn-sm disabled" onselectstart="return false" ng-click="vip_modal.submit()" ng-class="{disabled: !vip_modal.can_submit()}"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">确认</span></div></div></div>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <div id="sp-qxdz" style="overflow:auto;overflow-x: hidden" class="sp sp-1 active" ng-class="{active: active_menu_key == &#39;qxdz&#39;}">
+        <div class="sp-title" onclick="toggle_menu_key('qxdz')">权限打折</div>
+        <div id="sp-content-qxdz" style="overflow:auto;overflow-x:hidden;height:auto;" class="sp-content ng-scope scroll-wrapper" ng-if="active_menu_key == 'qxdz'" wp-scroll-zone="">
+          <div style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);"><div class="sp-content-item">
+            <div class="clearfix"></div>
+            <div class="sp-item-title-c">折扣 (1~99)</div>
+            <div class="sp-item-action">
+              <div class="wp-form-group">
+                <div input-model="discount_modal.discount_percent" input-type="number" input-size="small" input-restrict="^[0-9]{0,2}$" class="ng-isolate-scope"><div class="wp-form-input-keypad wp-form-input-small ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="number" ng-keypad-restrict="^[0-9]{0,2}$"><span class="ng-binding">80</span></div><div class="wp-form-input-keypad wp-form-input-small ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict="^[0-9]{0,2}$"><span class="ng-binding">**</span></div>
+                <div class="wp-form-input wp-form-input-small" ng-show="!enable_jvk">
+                <input id="input-qxdz" oninput="add_privilege('qxdz')" type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+          </div><div class="sp-content-item">
+            <div class="sp-item-info">打折前: <span id="pre-amount-qxdz" class="ng-binding"></span></div>
+            <div class="sp-item-info">打折后: <span id="pro-amount-qxdz" class="ng-binding">0</span></div>
+          </div><div class="sp-content-item">
+            <div class="sp-item-action-c">
+              <div id="confirm-qxdz" class="fillet wp-btn-block wp-btn-sm disabled" onselectstart="return false" onclick="discount_submit('qxdz')" ng-class="{disabled: !discount_modal.can_submit()}"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">确认</span></div></div></div>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <div id="sp-qxjm" style="overflow:auto;overflow-x:hidden" class="sp sp-2" ng-class="{active: active_menu_key == &#39;qxjm&#39;}">
+        <div class="sp-title" onclick="toggle_menu_key('qxjm')">权限减免</div>
+        <div id="sp-content-qxjm" style="overflow:auto;overflow-x: hidden" class="sp-content ng-scope scroll-wrapper ng-hide" ng-if="active_menu_key == 'qxjm'" wp-scroll-zone="" style="height: 138px;">
+          <div style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);"><div class="sp-content-item">
+            <div class="clearfix"></div>
+            <div class="sp-item-title-c">减免</div>
+            <div class="sp-item-action">
+              <div class="wp-form-group">
+                <div input-model="reduction_modal.reduce_amount" input-type="number" input-size="small" class="ng-isolate-scope"><div class="wp-form-input-keypad wp-form-input-small ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="number" ng-keypad-restrict=""><span class="ng-binding">800</span></div><div class="wp-form-input-keypad wp-form-input-small ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding">***</span></div><div class="wp-form-input wp-form-input-small" ng-show="!enable_jvk">
+                <input id="input-qxjm" oninput="add_privilege('qxjm')" type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+          </div><div class="sp-content-item">
+            <div class="sp-item-info">减免前: <span id="pre-amount-qxjm" class="ng-binding">806.0</span></div>
+            <div class="sp-item-info">减免后: <span id="pro-amount-qxjm" class="ng-binding">6.00</span></div>
+          </div><div class="sp-content-item">
+            <div class="sp-item-action-c">
+              <div id="confirm-qxjm" class="fillet wp-btn-block wp-btn-sm disabled" onselectstart="return false" onclick="discount_submit('qxjm')" ng-class="{disabled: !reduction_modal.can_submit()}"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">确认</span></div></div></div>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <div id="sp-qxmd" style="overflow:auto;overflow-x:hidden" class="sp sp-3" ng-class="{active: active_menu_key == &#39;qxmd&#39;}">
+        <div class="sp-title" onclick="toggle_menu_key('qxmd')">权限免单</div>
+        <div id="sp-content-qxmd" style="overflow:auto;overflow-x: hidden" class="sp-content ng-scope scroll-wrapper ng-hide" ng-if="active_menu_key == 'qxmd'" wp-scroll-zone="" style="height: 138px;">
+          <div style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);"><div class="sp-content-item">
+            <div class="sp-item-action-c">
+              <div id="confirm-qxmd" class="fillet wp-btn-block wp-btn-sm" onselectstart="return false" onclick="discount_submit('qxmd')"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">确认免单</span></div></div></div>
+            </div>
+          </div></div>
+        </div>
+      </div>
+      <div id="sp-yhq" style="overflow:auto;overflow-x:hidden" class="sp sp-4" ng-class="{active: active_menu_key == &#39;yhq&#39;}">
+        <div class="sp-title" onclick="toggle_menu_key('yhq')">优惠券</div>
+        <div id="sp-content-yhq" style="overflow:auto;overflow-x:hidden" class="sp-content ng-scope scroll-wrapper ng-hide" ng-if="active_menu_key == 'yhq'" wp-scroll-zone="" style="height: 138px;">
+          <div style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);"><div class="sp-content-item">
+            <div class="sp-item-title-c">优惠券兑换码</div>
+            <div class="sp-item-action">
+              <div class="wp-btn-block wp-btn-sm" onselectstart="return false" ng-click="coupon_modal.search_coupon()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">查询</span></div></div></div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="wp-form-group">
+              <div input-model="coupon_modal.code" input-type="number" input-size="normal" class="ng-isolate-scope"><div class="wp-form-input-keypad wp-form-input-normal ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="number" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input-keypad wp-form-input-normal ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input wp-form-input-normal" ng-show="!enable_jvk"><input type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+            </div>
+          </div><div class="sp-content-item">
+            <div class="sp-item-title-c">扫码验券</div>
+            <div class="sp-item-action">
+              <div class="wp-btn-block wp-btn-sm" onselectstart="return false" ng-click="coupon_modal.scan_code()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">扫码</span></div></div></div>
+            </div>
+          </div><div class="sp-content-item">
+            <div class="sp-item-info">名称: <span class="ng-binding"></span></div>
+            <div class="sp-item-info">描述: <span class="ng-binding"></span></div>
+          </div><div class="sp-content-item">
+            <div class="sp-item-action-c">
+              <div class="fillet wp-btn-block wp-btn-sm disabled" onselectstart="return false" ng-click="coupon_modal.submit()" ng-class="{disabled: !coupon_modal.can_submit()}"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">确认</span></div></div></div>
+            </div>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="master-center-part scroll-wrapper" wp-scroll-zone="" style="overflow:auto;overflow-x:hidden">
+    <div style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);"><div class="wp-os-action-wrapper">
+      <div class="wp-subject">
+        <span>支付方式</span>
+        <div input-model="pay_method_filter_key" input-type="text" input-size="normal" class="ng-isolate-scope"><div class="wp-form-input-keypad wp-form-input-normal ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input-keypad wp-form-input-normal ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div></div>
+      </div>
+      <div class="wp-os-pay-methods">
+        <div class="wp-os-pre-page" ng-click="pay_method_pre_page()" ng-show="true"><i class="fa fa-chevron-left"></i></div>
+        <div class="wp-os-next-page" ng-click="pay_method_next_page()" ng-show="true"><i class="fa fa-chevron-right"></i></div>
+        <!-- ngRepeat: pay_method in show_builtin_pay_methods() --><div class="wp-btn-block wp-btn ng-scope color- color-6" onselectstart="return false" ng-repeat="pay_method in show_builtin_pay_methods()" onclick="select_pay_method_name('cash')" ng-show="show_index($index)" ng-class="key_color(pay_method.name_abbr)"><div class="text"><div class="overflow-hidden-text" ng-transclude="">
+          <span ng-show="pay_method.code" class="ng-binding ng-scope ng-hide"><br></span>
+          <span class="ng-binding ng-scope">现金</span>
+        </div></div></div><!-- end ngRepeat: pay_method in show_builtin_pay_methods() -->
+        <div class="wp-btn-block wp-btn ng-scope color- color-10" onselectstart="return false" ng-repeat="pay_method in show_builtin_pay_methods()" onclick="select_pay_method_name('wx_pay')" ><div class="text"><div class="overflow-hidden-text" ng-transclude="">
+          <span ng-show="pay_method.code" class="ng-binding ng-scope ng-hide"><br></span>
+          <span class="ng-binding ng-scope">微信刷卡支付</span>
+        </div></div></div>
+        
+        
+        <div class="wp-btn-block wp-btn ng-scope color- color-10" onselectstart="return false" ng-repeat="pay_method in show_builtin_pay_methods()" onclick="select_pay_method_name('wx_sm_pay')" ><div class="text"><div class="overflow-hidden-text" ng-transclude="">
+          <span ng-show="pay_method.code" class="ng-binding ng-scope ng-hide"><br></span>
+          <span class="ng-binding ng-scope">微信扫码支付</span>
+        </div></div></div>
+        
+        <!-- end ngRepeat: pay_method in show_builtin_pay_methods() --><div class="wp-btn-block wp-btn ng-scope color- color-7" onselectstart="return false" ng-repeat="pay_method in show_builtin_pay_methods()" onclick="select_pay_method_name('bank_card')" ng-show="show_index($index)" ng-class="key_color(pay_method.name_abbr)"><div class="text"><div class="overflow-hidden-text" ng-transclude="">
+          <span ng-show="pay_method.code" class="ng-binding ng-scope ng-hide"><br></span>
+          <span class="ng-binding ng-scope">银行卡</span>
+        </div></div></div><!-- end ngRepeat: pay_method in show_builtin_pay_methods() -->
+        <!-- ngRepeat: pay_method in show_custom_pay_methods() -->
+
+        <div class="wp-form-btns">
+            <div id="normal_pay_mode_confirm" class="wp-btn-block wp-btn-sm" onclick="payMode.switch(0)"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              普通支付
+            </span></div></div></div>
+            <div id="compose_pay_mode_confirm" class="wp-btn-block wp-btn-sm" onclick="payMode.switch(1)"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">
+              组合支付
+            </span></div></div></div>
+          </div>
+
+        <div class="clearfix"></div>
+      </div>
+      <div class="wp-table without-border center">
+        <div class="wp-table-row ng-hide" ng-transclude="" ng-show="order.vip_info">
+          <div class="wp-table-col col-4 ng-scope">会员折扣：</div>
+          <div class="wp-table-col col-4 ng-scope">
+            <span ng-show="order.vip_info" class="ng-binding ng-hide">
+              &nbsp;&nbsp;
+              NaN折
+            </span>
+            <span ng-hide="order.vip_info">无</span>
+          </div>
+          <div class="wp-table-col col-4 ng-scope">
+            <div class="wp-btn-block wp-btn-sm ng-hide" onselectstart="return false" ng-show="order.vip_info" ng-click="unbind_vip_info()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">解除绑定</span></div></div></div>
+          </div>
+        </div>
+        <div id="privilege_discount_row" class="wp-table-row ng-hide" ng-transclude="" ng-show="order.privilege_discount">
+          <div class="wp-table-col col-4 ng-scope">权限折扣：</div>
+          <div class="wp-table-col col-4 ng-scope">
+            <span id="privilege_discount" ng-show="order.privilege_discount" class="ng-binding ng-hide"></span>
+          </div>
+          <div class="wp-table-col col-4 ng-scope">
+            <div id="privilege_discount_clear" class="warning wp-btn-block wp-btn-sm" onselectstart="return false" ng-show="order.privilege_discount" onclick="cancel_privi_confirm('qxdz')"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">清除</span></div></div></div>
+          </div>
+        </div>
+        <div id="privilege_reduction_row" class="wp-table-row ng-hide" ng-transclude="" ng-show="order.privilege_reduction">
+          <div class="wp-table-col col-4 ng-scope">权限减免：</div>
+          <div class="wp-table-col col-4 ng-scope">
+            <span id="privilege_reduction" ng-show="order.privilege_reduction" class="ng-binding ng-hide"></span>
+          </div>
+          <div class="wp-table-col col-4 ng-scope">
+            <div class="warning wp-btn-block wp-btn-sm" onselectstart="return false" ng-show="order.privilege_reduction" onclick="cancel_privi_confirm('qxjm')"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">清除</span></div></div></div>
+          </div>
+        </div>
+        <div id="privilege_freeorder_row" class="wp-table-row ng-hide" ng-transclude="" ng-show="order.privilege_freeorder">
+          <div class="wp-table-col col-4 ng-scope">权限免单：</div>
+          <div class="wp-table-col col-4 ng-scope">
+            <span id="privilege_freeorder" ng-show="order.privilege_freeorder" class="ng-hide">是</span>
+          </div>
+          <div class="wp-table-col col-4 ng-scope">
+            <div class="warning wp-btn-block wp-btn-sm" onselectstart="return false" ng-show="order.privilege_freeorder" onclick="cancel_privi_confirm('qxjm')"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">清除</span></div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="wp-table without-border center wp-order-total">
+        <div class="wp-table-row" ng-transclude="">
+          <div class="wp-table-col col-4 total ng-scope">合计:</div>
+          <div id="order-pay-amount" class="wp-table-col col-4 total ng-binding ng-scope"></div>
+          <div class="wp-table-col col-4 ng-scope">
+            <div id="moling" class="wp-btn-block wp-btn-sm" onselectstart="return false" onclick="moling(true)"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">抹零</span></div></div></div>
+            <div id="cancel-moling" class="wp-btn-block wp-btn-sm ng-hide" onselectstart="return false" onclick="moling(false)" ng-show="order.has_moling"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">撤销抹零</span></div></div></div>
+          </div>
+        </div>
+      </div>
+      <div id="pay_list_zone" class="wp-table without-border center wp-os-pay-items">
+      </div>
+
+      <div class="wp-os-actions" id="submit_zone">
+        <div id="submit-checkout" class="wp-os-submit-btn wp-btn-block wp-btn disabled" onselectstart="return false" onclick="checkout()" ng-class="{&#39;disabled&#39;: !can_settle(), &#39;primary&#39;: can_settle()}" ng-hide="order.pay_items.length"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">结算</span></div></div></div>
+        <div id="submit-re-checkout" class="wp-os-submit-btn primary wp-btn-block wp-btn ng-hide" onselectstart="return false" onclick="clear_pay_items()" ng-show="order.pay_items.length"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">重新结算</span></div></div></div>
+      </div>
+    </div></div>
+  </div>
+  <div class="op-part order-info scroll-wrapper" wp-scroll-zone="" style="overflow:auto;overflow-x:hidden">
+    <div style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);"><div class="order-info-side" ng-show="order">
+      <!-- ngIf: order.line_items.length > 0 --><div class="wp-subject ng-scope" ng-if="order.line_items.length &gt; 0">订单详情</div><!-- end ngIf: order.line_items.length > 0 -->
+      <div class="wp-btn-block wp-btn-sm ng-hide" onselectstart="return false" ng-show="is_fast_food()" ng-click="go_modify_fast_food()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">返回修改</span></div></div></div>
+    <div id="store_table_order_info_zone"></div>
+    <div class="space"></div>
+  </div></div>
+
+  <div class="wp-modal ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="vip_modal.search_show" wp-lock-mask="true"><div class="wp-modal-mask" onclick="click_mask()"></div><div class="wp-modal-body" ng-transclude="">
+    <div class="wp-modal-header ng-scope">会员查询</div>
+    <div class="wp-modal-content ng-scope">
+      <div class="wp-form-group">
+        <div class="wp-form-label">输入会员姓名/手机/编号：</div>
+        <div input-model="vip_modal.search_key" input-type="text" input-size="normal" class="ng-isolate-scope"><div class="wp-form-input-keypad wp-form-input-normal ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input-keypad wp-form-input-normal ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input wp-form-input-normal" ng-show="!enable_jvk"><input type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+        <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="vip_modal.search_vip_info()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">查找</span></div></div></div>
+      </div>
+      <div class="wp-table">
+        <div class="wp-table-row ng-hide" ng-transclude="" ng-show="vip_modal.vip_infos.length &gt; 0">
+          <div class="wp-table-col col-1 ng-scope">会员编号</div>
+          <div class="wp-table-col col-3 ng-scope">姓名</div>
+          <div class="wp-table-col col-3 ng-scope">电话</div>
+        </div>
+        <!-- ngRepeat: vip_info in vip_modal.vip_infos -->
+      </div>
+      <div class="wp-modal-actions">
+        <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="vip_modal.search_confirm()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">确定</span></div></div></div>
+        <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="vip_modal.search_close()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">返回</span></div></div></div>
+      </div>
+    </div>
+  </div></div>
+
+  <div class="wp-modal ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="voucher_modal.show"><div class="wp-modal-mask" onclick="click_mask()"></div><div class="wp-modal-body" ng-transclude="">
+    <div class="wp-modal-header ng-scope">代金券兑换</div>
+    <div class="wp-modal-content ng-scope">
+      <div class="wp-form-group">
+        <div class="wp-form-label">输入代金券兑换码：</div>
+        <div input-model="voucher_modal.code" input-type="text" input-size="normal" class="ng-isolate-scope"><div class="wp-form-input-keypad wp-form-input-normal ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input-keypad wp-form-input-normal ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input wp-form-input-normal" ng-show="!enable_jvk"><input type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+        <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="voucher_modal.search_voucher()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">查找</span></div></div></div>
+      </div>
+      <div class="wp-form-group">
+        <div class="wp-form-label">名称：</div>
+        <div class="wp-form-input ng-binding"></div>
+      </div>
+      <div class="wp-form-group">
+        <div class="wp-form-label">描述：</div>
+        <div class="wp-form-input ng-binding"></div>
+      </div>
+      <div class="wp-modal-actions">
+        <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="voucher_modal.submit()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">确定</span></div></div></div>
+        <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="voucher_modal.close()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">取消</span></div></div></div>
+      </div>
+    </div>
+  </div></div>
+
+  <div class="wp-modal ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="other_voucher_modal.show"><div class="wp-modal-mask" onclick="click_mask()"></div><div class="wp-modal-body" ng-transclude="">
+    <div class="wp-modal-header ng-scope">其他平台代金券</div>
+    <div class="wp-modal-content ng-scope">
+      <div class="wp-form-group">
+        <div class="wp-form-label">来自平台</div>
+        <div class="wp-form-select">
+          <select class="wp-form-select-small ng-pristine ng-untouched ng-valid" ng-model="other_voucher_modal.from_platform" ng-options="from_platform.value as from_platform.label for from_platform in other_voucher_modal.from_platform_collection"><option value="" selected="selected" label=""></option><option value="0" label="美团">美团</option><option value="1" label="大众点评">大众点评</option></select>
+        </div>
+      </div>
+      <div class="wp-form-group">
+        <div class="wp-form-label">金额</div>
+        <div input-model="other_voucher_modal.amount" input-type="number" input-size="normal" class="ng-isolate-scope"><div class="wp-form-input-keypad wp-form-input-normal ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="number" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input-keypad wp-form-input-normal ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input wp-form-input-normal" ng-show="!enable_jvk"><input type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+      </div>
+      <div class="wp-form-group">
+        <div class="wp-form-label">编号</div>
+        <div input-model="other_voucher_modal.number" input-type="text" input-size="normal" class="ng-isolate-scope"><div class="wp-form-input-keypad wp-form-input-normal ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input-keypad wp-form-input-normal ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input wp-form-input-normal" ng-show="!enable_jvk"><input type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+      </div>
+      <div class="wp-modal-actions">
+        <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="other_voucher_modal.submit()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">确定</span></div></div></div>
+        <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="other_voucher_modal.close()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">取消</span></div></div></div>
+      </div>
+    </div>
+  </div></div>
+  <div class="wp-modal ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="authrization_modal.show"><div class="wp-modal-mask" onclick="click_mask()"></div><div class="wp-modal-body" ng-transclude="">
+    <div class="wp-modal-header ng-scope">该操作需要店长授权</div>
+    <div class="wp-modal-content ng-scope">
+      <div class="wp-form-group">
+        <div class="wp-form-label">选择店长</div>
+        <!-- ngRepeat: boss in authrization_modal.bosses -->
+      </div>
+      <div class="wp-form-group">
+        <div class="wp-form-label">输入密码</div>
+        <div input-model="authrization_modal.password" input-type="password" input-size="normal" class="ng-isolate-scope"><div class="wp-form-input-keypad wp-form-input-normal ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="password" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input-keypad wp-form-input-normal ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input wp-form-input-normal" ng-show="!enable_jvk"><input type="password" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+      </div>
+      <div class="wp-modal-actions">
+        <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="authrization_modal.submit()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">确定</span></div></div></div>
+        <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="authrization_modal.close()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">取消</span></div></div></div>
+      </div>
+    </div>
+  </div></div>
+  <div id="pay-money-amount-panel" class="wp-modal-md wp-modal ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="pay_item_modal.show"><div class="wp-modal-mask" onclick="click_mask()"></div><div class="wp-modal-body" ng-transclude="">
+    <div class="wp-modal-header ng-scope">支付项目</div>
+    <div class="wp-modal-content ng-scope">
+      <div class="wp-form-group">
+        <div id="pay-method" class="wp-form-label ng-binding"></div>
+        <div input-model="pay_item_modal.pay_item.amount" input-type="number" input-size="normal" class="ng-isolate-scope">
+        <div class="wp-form-input-keypad wp-form-input-normal ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="number" ng-keypad-restrict="">
+        <span class="ng-binding"></span></div><div class="wp-form-input-keypad wp-form-input-normal ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input wp-form-input-normal" ng-show="!enable_jvk">
+        <input id="pay-method-amount" type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+        <div class="wp-btn-block wp-btn-sm" onselectstart="return false" onclick="re_input('pay-method-amount')"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">重录</span></div></div></div>
+      </div>
+      <div class="wp-modal-actions">
+        <div class="wp-btn-block wp-btn" onselectstart="return false" onclick="submit_pay_amount()" ng-class="{&#39;disabled&#39;:!pay_item_modal.can_submit()}"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">确定</span></div></div></div>
+        <div class="wp-btn-block wp-btn" onselectstart="return false" onclick="click_mask()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">取消</span></div></div></div>
+      </div>
+    </div>
+  </div></div>
+
+  <div id="cash-pay-panel" class="wp-modal-md wp-modal ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="pay_on_face_modal.show"><div class="wp-modal-mask" onclick="cancelPay()"></div><div class="wp-modal-body" ng-transclude="">
+    
+    <input type="hidden" id="cash-pay-panel-total-amount" name="cash-pay-panel-total-amount" value="" />
+    <input type="hidden" id="cash-pay-panel-paid-amount" name="cash-pay-panel-paid-amount" value="0" />
+    
+    
+    <div class="wp-modal-header ng-scope">现金支付</div>
+    <div class="wp-modal-content ng-scope">
+      <div class="wp-form-group">
+          <div class="wp-btn-block wp-btn-sm" onselectstart="return false" onclick="add_money(100)"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">100</span></div></div></div>
+          <div class="wp-btn-block wp-btn-sm" onselectstart="return false" onclick="add_money(50)"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">50</span></div></div></div>
+          <div class="wp-btn-block wp-btn-sm" onselectstart="return false" onclick="add_money(20)"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">20</span></div></div></div>
+          <div class="wp-btn-block wp-btn-sm" onselectstart="return false" onclick="add_money(10)"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">10</span></div></div></div>
+          <div class="wp-btn-block wp-btn-sm" onselectstart="return false" onclick="add_money(5)"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">5</span></div></div></div>
+          <div class="wp-btn-block wp-btn-sm" onselectstart="return false" onclick="add_money(1)"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">1</span></div></div></div>
+      </div>
+      <hr>
+      <div class="wp-form-group">
+        <div class="wp-form-label">应收</div>
+        <div id="cash-pay-panel-amount" class="wp-form-label ng-binding"></div>
+      </div>
+      <div class="wp-form-group">
+        <div class="wp-form-label">收取</div>
+        <div input-model="pay_on_face_modal.paid_amount" input-type="number" input-size="small" class="ng-isolate-scope"><div class="wp-form-input-keypad wp-form-input-small ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="number" ng-keypad-restrict=""><span class="ng-binding">0</span></div><div class="wp-form-input-keypad wp-form-input-small ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input wp-form-input-small" ng-show="!enable_jvk">
+        <input id="cash-pay-panel-paid-amount-input" type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+        <div class="wp-btn-block wp-btn-sm" onselectstart="return false" onclick="reinput_paid_amount('cash-pay-panel-paid-amount-input')"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">重录</span></div></div></div>
+      </div>
+      
+      <div class="wp-form-group">
+        <div class="wp-form-label">找零</div>
+        <div id="cash-pay-panel-paid-amount-exchange" class="wp-form-label ng-binding">0</div>
+      </div>
+      <div class="wp-modal-actions">
+        <div id="cash-pay-panel-confirm" class="wp-btn-block wp-btn disabled" onselectstart="return false" onclick="confirm_pay()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">确定</span></div></div></div>
+        <div class="wp-btn-block wp-btn" onselectstart="return false" onclick="cancelPay()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">取消</span></div></div></div>
+      </div>
+    </div>
+  </div></div>
+  
+  
+  <div id="wx-pay-panel" class="wp-modal-md wp-modal ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="pay_on_face_modal.show"><div class="wp-modal-mask" onclick="cancelPay()"></div>
+  <div class="wp-modal-body" ng-transclude="">
+    
+    <input type="hidden" id="wx-pay-panel-total-amount" name="wx-pay-panel-total-amount" value="" />
+    <input type="hidden" id="wx-pay-panel-paid-amount" name="wx-pay-panel-paid-amount" value="0" />
+    
+    
+    <div class="wp-modal-header ng-scope">微信刷卡支付</div>
+    <div id="img_wait" class="wp-modal-content ng-scope">
+    
+      <div class="wp-form-group">
+        <div class="wp-form-label">菜品</div>
+        <div id="wx-pay-panel-good-name" class="wp-form-label ng-binding"></div>
+      </div>
+      
+      <div class="wp-form-group">
+        <div class="wp-form-label">应收</div>
+        <div id="wx-should-pay-panel-amount" class="wp-form-label ng-binding"></div>
+      </div>
+      <div class="wp-form-group">
+        <div class="wp-form-label">收取</div>
+        <div id="wx-pay-panel-amount" class="wp-form-label ng-binding"></div>
+      </div>
+      
+      <div class="wp-form-group">
+        <div class="wp-form-label">扫描</div>
+        <div input-model="pay_on_face_modal.paid_amount" input-type="number" input-size="small" class="ng-isolate-scope">
+        <div class="wp-form-input-keypad wp-form-input ng-hide">
+        <span class="ng-binding">0</span></div>
+        <div  class="wp-form-input wp-form-input" >
+        <input id="wx-pay-panel-paid-code" type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"><div ></div></div></div>
+      </div>
+      <div class="wp-form-group">
+        <div class="wp-form-label"></div>
+        <div input-type="number" input-size="small" class="ng-isolate-scope"><div class="wp-form-input-keypad wp-form-input-small ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" data-ng-model="input_model" data-ng-keypad-input="number" ng-keypad-restrict=""><span class="ng-binding">0</span></div><div class="wp-form-input-keypad wp-form-input-small ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div><div class="wp-form-input wp-form-input-small" ng-show="!enable_jvk">
+        <span id="wx_scan_pay_note" class="ng-scope red">请用扫描枪扫描微信支付条形码</span></div></div>
+      </div>
+      
+      <div class="wp-modal-actions">
+        <div id="cash-pay-panel-confirm" class="wp-btn-block wp-btn" onselectstart="return false" onclick="refresh_wxscan_pay()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">刷新</span></div></div></div>
+        <div class="wp-btn-block wp-btn" onselectstart="return false" onclick="cancelPay()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">取消</span></div></div></div>
+      </div>
+    </div>
+  </div></div>
+  
+
+  <div id="wx-sm-pay-panel" class="wp-modal-sm wp-modal ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="pay_item_qrcode_modal.show"><div class="wp-modal-mask" onclick="cancelPay()"></div><div class="wp-modal-body" ng-transclude="">
+    <div class="wp-modal-header ng-scope">微信扫码支付</div>
+    
+     <input type="hidden" id="wx-sm-pay-panel-total-amount" name="wx-sm-pay-panel-total-amount" value="" />
+    <input type="hidden" id="wx-sm-pay-panel-paid-amount" name="wx-sm-pay-panel-paid-amount" value="0" />
+  
+  
+    <div class="wp-modal-content ng-scope">
+      <div class="wp-form-label ng-binding">请客户使用微信扫描下面的二维码支付</div>
+      <div class="clearfix"></div>
+      <div class="qrcode">
+        <img id="wx-sm-pay-qcode" width="250px" height="250px" src="">
+      </div>
+      <div id="wx-sm-pay-result" class="wp-form-label ng-binding red">微信扫码支付结果：</div>
+      <div class="wp-modal-actions left">
+        <div class="wp-btn-block wp-btn" onselectstart="return false" onclick="wxSMPay()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">刷新二维码</span></div></div></div>
+        <div class="wp-btn-block wp-btn" onselectstart="return false" onclick="wxSMPayQueryResult()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">返回并刷新状态</span></div></div></div>
+      </div>
+    </div>
+  </div></div>
+  
+  <div class="wp-modal-sm wp-modal ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="pay_item_qrcode_modal.show"><div class="wp-modal-mask" onclick="cancelPay()"></div><div class="wp-modal-body" ng-transclude="">
+    <div class="wp-modal-header ng-scope">扫码支付</div>
+    <div class="wp-modal-content ng-scope">
+      <div class="wp-form-label ng-binding"></div>
+      <div class="clearfix"></div>
+      <div class="qrcode">
+        <img ng-src="" width="250px" height="250px">
+      </div>
+      <div class="wp-modal-actions left">
+        <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="pay_item_qrcode_modal.refresh_qr_code()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">刷新二维码</span></div></div></div>
+        <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="pay_item_qrcode_modal.back()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">返回并刷新状态</span></div></div></div>
+      </div>
+    </div>
+  </div></div>
+
+</div>
+</div></div>
+
+
+<div class="ng-scope">
+<div id="confirm-pay-panel" class="wp-modals ng-scope ng-hide">
+
+<input type="hidden" id="confirm-pay-wepos-pay-id" name="confirm-pay-wepos-pay-id" value="" />
+<input type="hidden" id="confirm-pay-code" name="confirm-pay-code" value="" />
+
+
+  <div class="wp-modal wp-confirm-modal ng-isolate-scope" ng-show="wpShow" wp-show="confirm_modal.show" wp-lock-mask="confirm_modal.lock_mask" wp-confirm-info="确认支付: 银行卡 352.0" wp-ok-text="确定" wp-cancel-text="取消" wp-ok="confirm_modal.ok();" wp-cancel="confirm_modal.cancel();">
+  <div class="wp-modal-mask" onclick="cancelPay()"></div>
+  <div class="wp-modal-body">
+  <div id="confirm-pay-panel-content" class="wp-confirm-info ng-binding" ng-bind-html="wpConfirmInfo|unsafe">确认支付: 银行卡 352.0</div>
+  <div class="wp-confirm-actions">
+  
+  <div class="wp-btn-block wp-btn" onselectstart="return false" onclick="confirm_pay();" ng-show="wpOkText">
+  <div class="text">
+  <div class="overflow-hidden-text" ng-transclude="">
+  <span class="ng-binding ng-scope">确定</span>
+  </div>
+  </div>
+  </div>
+  
+  <div class="wp-btn-block wp-btn" onselectstart="return false" onclick="cancelPay();" ng-show="wpCancelText"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-binding ng-scope">取消</span></div></div></div> 
+  
+  </div></div></div>
+</div>
+</div>
+
+
+
+<div class="ng-scope">
+<div id="confirm-clear-pay-panel" class="wp-modals ng-scope ng-hide">
+  <div class="wp-modal wp-confirm-modal ng-isolate-scope" ng-show="wpShow" wp-show="confirm_modal.show" wp-lock-mask="confirm_modal.lock_mask" wp-confirm-info="确认支付: 银行卡 352.0" wp-ok-text="确定" wp-cancel-text="取消" wp-ok="confirm_modal.ok();" wp-cancel="confirm_modal.cancel();">
+  <div class="wp-modal-mask" onclick="click_mask()"></div>
+  <div class="wp-modal-body">
+  <div class="wp-confirm-info ng-binding" ng-bind-html="wpConfirmInfo|unsafe">确定重新结算？</div>
+  <div class="wp-confirm-actions">
+  <div class="wp-btn-block wp-btn" onselectstart="return false" onclick="clear_pay();" ng-show="wpOkText">
+  <div class="text">
+  <div class="overflow-hidden-text" ng-transclude="">
+  <span class="ng-binding ng-scope">确定</span>
+  </div>
+  </div>
+  </div>
+  <div class="wp-btn-block wp-btn" onselectstart="return false" onclick="click_mask()" ng-show="wpCancelText"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-binding ng-scope">取消</span></div></div></div> 
+  </div></div></div>
+</div>
+</div>
+
+<div class="ng-scope">
+<div id="confirm-abort-pay-panel" class="wp-modals ng-scope ng-hide">
+  <div class="wp-modal wp-confirm-modal ng-isolate-scope" ng-show="wpShow" wp-show="confirm_modal.show" wp-lock-mask="confirm_modal.lock_mask" wp-confirm-info="支付未完成，确认离开？" wp-ok-text="确定" wp-cancel-text="取消" wp-ok="confirm_modal.ok();" wp-cancel="confirm_modal.cancel();">
+  <div class="wp-modal-mask" onclick="click_mask()"></div>
+  <div class="wp-modal-body">
+  <div class="wp-confirm-info ng-binding" ng-bind-html="wpConfirmInfo|unsafe">支付未完成，确认离开？</div>
+  <div class="wp-confirm-actions">
+  <div id="abort-pay-confirm" class="wp-btn-block wp-btn" onselectstart="return false"  ng-show="wpOkText">
+  <div class="text">
+  <div class="overflow-hidden-text" ng-transclude="">
+  <span class="ng-binding ng-scope">确定</span>
+  </div>
+  </div>
+  </div>
+  <div class="wp-btn-block wp-btn" onselectstart="return false" onclick="click_mask()" ng-show="wpCancelText"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-binding ng-scope">取消</span></div></div></div> 
+  </div></div></div>
+</div>
+</div>
+
+<div >
+<div id="note-panel" class="wp-modals ng-scope ng-hide">
+  <div class="wp-modal wp-confirm-modal ng-isolate-scope" ng-show="wpShow" wp-show="confirm_modal.show" wp-lock-mask="confirm_modal.lock_mask" wp-confirm-info="一个订单只能享受一个权限优惠，若要更改，请先清除之前的权限优惠" wp-ok-text="确定" wp-cancel-text="" wp-ok="confirm_modal.ok();" wp-cancel="confirm_modal.cancel();"><div class="wp-modal-mask" onclick="click_mask()"></div>
+  <div class="wp-modal-body"><div class="wp-confirm-info ng-binding" ng-bind-html="wpConfirmInfo|unsafe">一个订单只能享受一项优惠，若要更改，请先清除已选优惠</div>
+  <div class="wp-confirm-actions"><div class="wp-btn-block wp-btn" onselectstart="return false" onclick="click_mask();" ng-show="wpOkText"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-binding ng-scope">确定</span></div></div></div><div class="wp-btn-block wp-btn ng-hide" onselectstart="return false" ng-click="wpLockMask=false;wpCancel();" ng-show="wpCancelText"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-binding ng-scope"></span></div></div></div> </div></div></div>
+</div>
+</div>
+
+<div class="ng-scope">
+<div id="cancel-privilege-confirm-panel" class="wp-modals ng-scope ng-hide">
+  <div class="wp-modal wp-confirm-modal ng-isolate-scope"  wp-confirm-info="确定取消权限减免？" wp-ok-text="确定" wp-cancel-text="取消" wp-ok="confirm_modal.ok();" wp-cancel="confirm_modal.cancel();">
+  <div class="wp-modal-mask" onclick="click_mask()"></div>
+  <div class="wp-modal-body">
+  <div id="cancel-privilege-confirm-note" class="wp-confirm-info ng-binding" ng-bind-html="wpConfirmInfo|unsafe">确定取消权限减免？</div>
+  <div class="wp-confirm-actions">
+  <div class="wp-btn-block wp-btn" onselectstart="return false" onclick="cancel_privilege_discount();" ng-show="wpOkText"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-binding ng-scope">确定</span></div></div></div>
+  <div class="wp-btn-block wp-btn" onselectstart="return false" onclick="click_mask();" ng-show="wpCancelText"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-binding ng-scope">取消</span></div></div></div> </div></div></div>
+</div>
+</div>
+
+<div class="ng-scope">
+<div id="moling-change-confirm-panel" class="wp-modals ng-scope ng-hide">
+  <div class="wp-modal wp-confirm-modal ng-isolate-scope"  wp-confirm-info="确定抹零并重新结算？" wp-ok-text="确定" wp-cancel-text="取消" wp-ok="confirm_modal.ok();" wp-cancel="confirm_modal.cancel();">
+  <div class="wp-modal-mask" onclick="click_mask()"></div>
+  <div class="wp-modal-body">
+  <div id="moling-change-confirm-note" class="wp-confirm-info ng-binding" ng-bind-html="wpConfirmInfo|unsafe">确定抹零并重新结算？</div>
+  <div class="wp-confirm-actions">
+  <div class="wp-btn-block wp-btn" onselectstart="return false" onclick="callMolingService();" ng-show="wpOkText"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-binding ng-scope">确定</span></div></div></div>
+  <div class="wp-btn-block wp-btn" onselectstart="return false" onclick="click_mask();" ng-show="wpCancelText"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-binding ng-scope">取消</span></div></div></div> </div></div></div>
+</div>
+</div>
+
+<div class="ng-scope">
+<div id="discount-confirm-panel" class="wp-modals ng-scope ng-hide">
+  <div class="wp-modal wp-confirm-modal ng-isolate-scope"  wp-confirm-info="确定打折并重新结算？" wp-ok-text="确定" wp-cancel-text="取消" wp-ok="confirm_modal.ok();" wp-cancel="confirm_modal.cancel();">
+  <div class="wp-modal-mask" onclick="click_mask()"></div>
+  <div class="wp-modal-body">
+  <div id="discount-confirm-note" class="wp-confirm-info ng-binding" ng-bind-html="wpConfirmInfo|unsafe">确定打折并重新结算？</div>
+  <div class="wp-confirm-actions">
+  <div class="wp-btn-block wp-btn" onselectstart="return false" onclick="call_discout_submit_service(true);" ng-show="wpOkText"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-binding ng-scope">确定</span></div></div></div>
+  <div class="wp-btn-block wp-btn" onselectstart="return false" onclick="click_mask();" ng-show="wpCancelText"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-binding ng-scope">取消</span></div></div></div> </div></div></div>
+</div>
+</div>
+
+<div class="ng-scope">
+<div id="free-charge-confirm-panel" class="wp-modals ng-scope ng-hide">
+  <div class="wp-modal wp-confirm-modal ng-isolate-scope"  wp-confirm-info="确认当前桌台免单？" wp-ok-text="确定" wp-cancel-text="取消" wp-ok="confirm_modal.ok();" wp-cancel="confirm_modal.cancel();">
+  <div class="wp-modal-mask" onclick="click_mask()"></div>
+  <div class="wp-modal-body">
+  <div id="free-charge-confirm-note" class="wp-confirm-info ng-binding" ng-bind-html="wpConfirmInfo|unsafe">确认当前桌台免单？</div>
+  <div class="wp-confirm-actions">
+  <div class="wp-btn-block wp-btn" onselectstart="return false" onclick="confirm_pay();" ng-show="wpOkText"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-binding ng-scope">确定</span></div></div></div>
+  <div class="wp-btn-block wp-btn" onselectstart="return false" onclick="click_mask();" ng-show="wpCancelText"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-binding ng-scope">取消</span></div></div></div> </div></div></div>
+</div>
+</div>
+
+<!-- ngInclude:  --><div ng-include="" src="partial(&#39;modals&#39;)" class="ng-scope"><div class="wp-modals ng-scope">
+  <div class="wp-modal wp-confirm-modal ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="confirm_modal.show" wp-lock-mask="confirm_modal.lock_mask" wp-confirm-info="此操作不可逆，确定取消订单？" wp-ok-text="确定" wp-cancel-text="取消" wp-ok="confirm_modal.ok();" wp-cancel="confirm_modal.cancel();"><div class="wp-modal-mask" onclick="click_mask()"></div><div class="wp-modal-body"><div class="wp-confirm-info ng-binding" ng-bind-html="wpConfirmInfo|unsafe">此操作不可逆，确定取消订单？</div><div class="wp-confirm-actions"><div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="wpLockMask=false;wpOk();" ng-show="wpOkText"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-binding ng-scope">确定</span></div></div></div><div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="wpLockMask=false;wpCancel();" ng-show="wpCancelText"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-binding ng-scope">取消</span></div></div></div> </div></div></div>
+</div>
+</div>
+
+<div ng-include="" src="partial(&#39;qrcode&#39;)" class="ng-scope"><div class="wp-modal-sm wp-modal ng-scope ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="vip_scan_modal.show"><div class="wp-modal-mask" onclick="click_mask()"></div><div class="wp-modal-body" ng-transclude="">
+  <div class="wp-modal-header ng-binding ng-scope"></div>
+  <div class="wp-modal-content ng-scope">
+    <div class="wp-form-label ng-binding"></div>
+    <div class="clearfix"></div>
+    <div class="qrcode">
+      <img ng-src="" width="250px" height="250px">
+    </div>
+    <div class="clearfix"></div>
+    <div class="wp-form-label ng-hide" ng-show="vip_scan_modal.scan_success">扫描成功，点击确认进行授权</div>
+    <div class="wp-modal-actions left">
+      <div class="wp-btn-block wp-btn ng-hide" onselectstart="return false" ng-click="vip_scan_modal.reload_qrcode()" ng-show="vip_scan_modal.enable_reload"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">刷新</span></div></div></div>
+      <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="vip_scan_modal.close()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">返回</span></div></div></div>
+    </div>
+  </div>
+</div></div></div>
+<!-- ngInclude:  --><div ng-include="" src="partial(&#39;scan&#39;)" class="ng-scope"><div class="wp-modal ng-scope ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="scan_modal.show"><div class="wp-modal-mask" onclick="click_mask()"></div><div class="wp-modal-body" ng-transclude="">
+  <div class="wp-modal-header ng-binding ng-scope"></div>
+  <div class="wp-modal-content ng-scope">
+    <div class="wp-form-group">
+      <div class="wp-form-label ng-binding"></div>
+    </div>
+    <div class="wp-form-group">
+      <div class="wp-form-label ng-binding"></div>
+    </div>
+    <div class="wp-modal-actions">
+      <div class="wp-btn-block wp-btn ng-hide" onselectstart="return false" ng-click="scan_modal.action()" ng-show="scan_modal.action_name"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-binding ng-scope"></span></div></div></div>
+      <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="scan_modal.close()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">取消</span></div></div></div>
+    </div>
+  </div>
+</div></div></div>
+<!-- ngInclude:  --><div ng-include="" src="partial(&#39;item_notes&#39;)" class="ng-scope"><div class="wp-modal ng-scope ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="item_notes_modal.show"><div class="wp-modal-mask" onclick="click_mask()"></div><div class="wp-modal-body" ng-transclude="">
+  <div class="wp-modal-header ng-scope">品注</div>
+  <div class="wp-modal-content ng-scope">
+    <div class="wp-form-group">
+      <div class="wp-form-label">品注</div>
+      <!-- ngRepeat: item_note in item_notes_modal.item_notes -->
+    </div>
+    <div class="wp-form-group">
+      <div class="wp-form-label"></div>
+      <div class="wp-form-action">
+        <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="item_notes_modal.submit()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">确认</span></div></div></div>
+        <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="item_notes_modal.close()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">取消</span></div></div></div>
+      </div>
+    </div>
+  </div>
+</div></div></div>
+<div class="hide" data-host="" id="sound"></div>
+<!-- / flash -->
+
+<input type="hidden" id="selected-store-id" name="selected-store-id" value="" />
+<input type="hidden" id="selected-parent-table-id" name="selected-parent-table-id" value="" />
+<input type="hidden" id="selected-table-id" name="selected-table-id" value="" />
+<input type="hidden" id="selected-order-id" name="selected-order-id" value="" />
+<input type="hidden" id="selected-sp-id" name="selected-sp-id" value="qxdz" />
+
+
+
+<input type="hidden" id="selected-order-pay-amount" name="selected-order-pay-amount" value="" />
+<input type="hidden" id="selected-order-pay-original-amount" name="selected-order-pay-original-amount" value="" />
+<input type="hidden" id="selected-order-pay-remain-amount" name="selected-order-pay-remain-amount" value="" />
+<input type="hidden" id="selected-order-pay-method" name="selected-order-pay-method" value="" />
+<input type="hidden" id="wepos_pay_state" name="wepos_pay_state" value="" />
+<input type="hidden" id="wepos_privilege_type" name="wepos_pay_state" value="" />
+
+<input type="hidden" id="selected-order-wepos-privilege-type" name="selected-order-wepos-privilege-type" value="0" />
+<input type="hidden" id="selected-order-wepos-privilege-amount" name="selected-order-wepos-privilege-amount" value="0" />
+
+<script type="text/html" id="store_table_order_info">
+<div class="order-info-side" ng-show="order">
+      <div id="checkout_table_name" class="table-table-name ng-binding" ng-show="order.table_name"><%=parent_table_name%>-<%=table_name%></div>
+      <table class="wp-table-sm" ng-show="order">
+        <thead>
+          <tr><th width="10%">序号</th>
+          <th width="50%">名称</th>
+          <th width="15%">数量</th>
+          <th width="25%">价格</th>
+        </tr></thead>
+        <tbody>
+
+<% if(extend_order_goods.length > 0){%>
+	<%for(i=0;i<extend_order_goods.length;i++){%>
+		<% if(i%2 == 0){%>
+		<tr ng-repeat="line_item in order.line_items" ng-class="odd" class="ng-scope odd">
+         <%}else{%>
+		<tr ng-repeat="line_item in order.line_items" ng-class="odd" class="ng-scope">
+		 <%}%>
+            <td class="ng-binding"><%=i+1%></td>
+            <td class="ng-binding">
+              <%=extend_order_goods[i].goods_name%>
+			  <% if(extend_order_goods[i].note != ''){%>
+				<span ng-show="line_item.note" class="ng-binding">[<%=extend_order_goods[i].note%>]</span>
+			  <%}%>
+			  <% if(extend_order_goods[i].gift == '1'){%>
+				<span ng-show="line_item.note" class="red ng-binding">(赠)</span>
+			  <%}%>
+            </td>
+            <td class="ng-binding"><%=extend_order_goods[i].goods_num%></td>
+            <td class="ng-binding">
+            
+
+		  <% if(extend_order_goods[i].goods_new_price > 0){%>
+ 			
+			<%=extend_order_goods[i].goods_new_price%>
+              <span class="original-price ng-binding" ng-show="line_item.price !== line_item.original_price"><%=extend_order_goods[i].goods_price%></span>
+            
+         <%}else if(extend_order_goods[i].gift=='1'){%>
+			<%=extend_order_goods[i].goods_new_price%>
+              <span class="original-price ng-binding" ng-show="line_item.price !== line_item.original_price"><%=extend_order_goods[i].goods_price%></span>
+          
+		 <%}else{%> 
+			<%=extend_order_goods[i].goods_price%>
+              <span class="original-price ng-binding ng-hide" ng-show="line_item.price !== line_item.original_price"><%=extend_order_goods[i].goods_price%></span>
+          
+        <%}%> 
+
+
+			</td>
+          </tr>
+	<%}%>
+<%}%>
+    </tbody>
+      </table>
+      <div class="table-order-total ng-binding" ng-show="order.total">合计: ￥<%=original_order_amount%></div>
+      <div class="detail-info">
+
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">订单编号</div>
+          <div class="info-value ng-binding"><%=order_sn%></div>
+        </div>
+
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">门店名称</div>
+          <div class="info-value ng-binding"><%=store_name%></div>
+        </div>
+
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">下单来源</div>
+          <div class="info-value ng-binding">
+<% if(order_from == 3){%>
+		堂食
+<% } %>
+<% if(order_from == 4){%>
+		外卖
+<% } %><% if(order_from == 5){%>
+		买单
+<% } %><% if(order_from == 6){%>
+		预订
+<% } %><% if(order_from == 7){%>
+		快餐
+<% } %>
+</div>
+        </div>
+
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">下单时间</div>
+          <div class="info-value ng-binding"><%=add_time%></div>
+        </div>
+
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">订单状态</div>
+          <div class="info-value ng-binding"><%=order_state%></div>
+        </div>
+
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">订单类型</div>
+          <div class="info-value ng-binding">堂点</div>
+        </div>
+
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">支付方式</div>
+          <div class="info-value ng-binding"><%=wepos_pay_name%></div>
+        </div>
+
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">支付状态</div>
+          <div class="info-value ng-binding"><%=wepos_pay_state_desc%></div>
+        </div>
+
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">桌台信息</div>
+          <div class="info-value ng-binding"><%=parent_table_name%>-<%=table_name%></div>
+        </div>
+
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">备注</div>
+          <div class="info-value ng-binding"></div>
+        </div>
+
+<% if(wepos_privilege_type == 1){%>
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">权限打折</div>
+          <div class="info-value ng-binding">-<%=wepos_privilege_amount%></div>
+        </div>
+<% } %>
+<% if(wepos_privilege_type == 2){%>
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">权限减免</div>
+          <div class="info-value ng-binding">-<%=wepos_privilege_amount%></div>
+        </div>
+<% } %>
+<% if(wepos_privilege_type == 3){%>
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">权限免单</div>
+          <div class="info-value ng-binding">-<%=wepos_privilege_amount%></div>
+        </div>
+<% } %>
+
+<% if(wepos_moling != 0){%>
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">抹零</div>
+          <div class="info-value ng-binding"><% if(wepos_moling > 0){%>-<%=wepos_moling%><% } else {%> +<%=-wepos_moling%><% } %></div>
+        </div>
+<% } %>
+		<div class="detail-info-item ng-scope" ng-repeat="info_item in order.info_items">
+          <div class="info-name ng-binding">合计</div>
+          <div class="info-value ng-binding">￥<%=order_amount%></div>
+        </div>
+
+      </div>
+      <div class="space"></div>
+    </div>
+</script>
+
+
+
+<!-- 支付列表 -->
+<script type="text/html" id="pay_list">
+
+<% if(payDetailArray.length > 0){%>
+	<%for(i=0;i<payDetailArray.length;i++){%>
+
+	<div id="cash-pay-detail" class="wp-table-row ng-scope" ng-transclude="" ng-repeat="pay_item in pay_items" ng-hide="order.pay_items.length">
+          <div class="wp-table-col col-4 ng-binding ng-scope"><%=payDetailArray[i].method_name%>：</div>
+          <div id="cash-pay-detail-amount" class="wp-table-col col-4 ng-binding ng-scope"><%=payDetailArray[i].amount%></div>
+          <div class="wp-table-col col-4 ng-scope">
+            <div class="warning wp-btn-block wp-btn-sm" onselectstart="return false" onclick="removePayDetailArray(<%=i%>)"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">清除</span></div></div></div>
+          </div>
+        </div>
+
+	<%}%>
+<%}%>
+
+ <div id="cash-pay-all-detail" class="wp-table-row ng-hide" ng-transclude="" ng-hide="order.pay_items.length || pay_items.length == 0">
+          <div class="wp-table-col col-4 ng-scope">支付项目合计:</div>
+          <div id="cash-pay-all-detail-amount" class="wp-table-col col-4 ng-binding ng-scope">0</div>
+          <div class="wp-table-col col-4 ng-scope">&nbsp;</div>
+</div>
+
+
+</script>
+
+
+<!-- 支付列表 -->
+<script type="text/html" id="paid_list">
+
+<% if(paidArray.length > 0){%>
+	<%for(i=0;i<paidArray.length;i++){%>
+  	<% if(paidArray[i].pay_state == 20 ){%>
+  		<div class="wp-table-row ng-scope" ng-transclude="" ng-repeat="pay_item in order.pay_items" ng-show="order.pay_items.length">
+            <div class="wp-table-col col-3 ng-binding ng-scope"><%=paidArray[i].pay_name%>：</div>
+            <div class="wp-table-col col-4 ng-binding ng-scope"><%=paidArray[i].pay_amount%></div>
+            <div class="wp-table-col col-5 ng-scope">
+              <div class="green wp-btn-block wp-btn-sm" onselectstart="return false" ng-show="pay_item.state == 'paid'"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">已支付</span></div></div></div>
+              <% if(paidArray[i].pay_code == 'cash' ){%>
+  			<span >
+                <span ng-show="pay_item.paid_amount" class="ng-binding">收取: <%=paidArray[i].pay_receive%></span>
+                <span ng-show="pay_item.change" class="ng-binding">，找零: <%=paidArray[i].pay_exchange%></span>
+              </span>
+  			<%}%>
+              <div ng-show="pay_item.state == 'unpaid'" class="ng-hide">
+              <div class="wp-btn-block wp-btn-sm" onselectstart="return false" onclick="change_pay_item_to_paid(<%=paidArray[i].wepos_pay_id%>, '<%=paidArray[i].pay_code%>','<%=paidArray[i].pay_amount%>')" ng-hide="pay_item.pay_platform"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">确认</span></div></div></div>
+              <div class="wp-btn-block wp-btn-sm ng-hide" onselectstart="return false" ng-click="pay_item_get_pay_online(pay_item)" ng-show="pay_item.online"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">扫码</span></div></div></div>
+              <div class="wp-btn-block wp-btn-sm ng-hide" onselectstart="return false" ng-click="pay_item_pay_by_seller_scan(pay_item)" ng-show="pay_item.pay_platform &amp;&amp; !pay_item.online"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">扫码</span></div></div></div>
+              <div class="wp-btn-block wp-btn-sm ng-hide" onselectstart="return false" ng-click="refresh_pay_item_state(pay_item)" ng-show="pay_item.pay_platform"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">刷新</span></div></div></div>
+            </div>
+            </div>
+          </div>
+  	<%}else{%>
+  		<div class="wp-table-row ng-scope" ng-transclude="" ng-repeat="pay_item in order.pay_items" ng-show="order.pay_items.length">
+            <div class="wp-table-col col-3 ng-binding ng-scope"><%=paidArray[i].pay_name%>：</div>
+            <div class="wp-table-col col-4 ng-binding ng-scope"><%=paidArray[i].pay_amount%></div>
+            <div class="wp-table-col col-5 ng-scope">
+              <div class="green wp-btn-block wp-btn-sm ng-hide" onselectstart="return false" ng-show="pay_item.state == 'paid'"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">已支付</span></div></div></div>
+              <div ng-show="pay_item.state == 'unpaid'">
+              <div class="wp-btn-block wp-btn-sm" onselectstart="return false" onclick="change_pay_item_to_paid(<%=paidArray[i].wepos_pay_id%>, '<%=paidArray[i].pay_code%>','<%=paidArray[i].pay_amount%>')" ng-hide="pay_item.pay_platform"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">确认</span></div></div></div>
+            </div>
+            </div>
+          </div>
+  	<%}%>
+	<%}%>
+<%}else{%>
+  <div class="wp-table-row ng-scope" ng-transclude="">
+          <div class="wp-table-col col-3 ng-binding ng-scope"></div>
+            <div class="wp-table-col col-4 ng-binding ng-scope"></div>
+            <div class="wp-table-col col-5 ng-scope">
+               <div class="green wp-btn-block wp-btn-sm" onselectstart="return false" ng-show="pay_item.state == 'paid'"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">已支付</span></div></div></div>
+            </div>
+          </div>
+        </div>
+<%}%>
+
+
+</script>
+
+</body>
+
+<script src="./js/zepto.min.js"></script>
+<script src="./js/simple-plugin.js"></script>
+<script src="./js/common.js"></script>
+<script src="./js/template.js"></script>
+<script src="./js/checkout.js"></script>
+<script src="./js/wepos.js"></script>
+
+<script>
+getStoreTableOrderInfo();
+payDetailArray=[];
+</script>
+
+
+</html>

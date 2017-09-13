@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html ng-app="webpos" class="ng-scope"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}</style>
+<meta charset="utf-8">
+<meta content="" name="keywords">
+<meta content="" name="description">
+<meta content="" name="author">
+<meta content="production" name="env">
+<meta content="" name="mobile_device">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" name="viewport">
+<meta content="IE=EmulateIE9" http-equiv="X-UA-Compatible">
+
+<link href="./css/webpos.css" media="all" rel="stylesheet">
+
+<title>云餐厅收银系统</title>
+</head>
+<body>
+<!-- ngView:  -->
+<div ng-view="" style="height: 100%;" class="ng-scope">
+<!--#include file="header.html"-->
+<!--#include file="footer.html"-->
+<!--#include file="keyboard.html"-->
+
+
+<div class="branch-payment-page main-view ng-scope">
+  <div class="wp-subject">买单</div>
+  <div class="wp-hint">买单功能是指在顾客没有订单的情况下需要直接向顾客收取现金、微信支付、会员卡等情况，系统会将此收入纳入财务核算报表。</div>
+  <div class="wp-form-group">
+
+  	<input type="hidden" id="selected-table-id" name="selected-table-id" value="10000" />
+  
+    <div class="wp-form-label">买单金额</div>
+    <div input-model="amount" input-type="number" class="ng-isolate-scope">
+    <div class="wp-form-input-keypad  ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" 
+    data-ng-model="input_model" data-ng-keypad-input="number" ng-keypad-restrict="">
+    <span class="ng-binding"></span></div>
+    <div class="wp-form-input-keypad  ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span></div>
+    <div class="wp-form-input " ng-show="!enable_jvk">
+    <input id="buy-order-amount-input" 
+    onfocus="input_onfocus('buy-order-amount-input')" onblur="reset_keyboard()"
+    oninput="input_buyorder_amount();" type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+  </div>
+  <div class="wp-form-group">
+    <div class="wp-form-label">备注</div>
+    <div input-model="note" input-type="text" class="ng-isolate-scope">
+    <div class="wp-form-input-keypad  ng-hide" ng-show="enable_jvk &amp;&amp; !is_password()" 
+    data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict=""><span class="ng-binding"></span>
+    </div><div class="wp-form-input-keypad  ng-hide" ng-show="enable_jvk &amp;&amp; is_password()" 
+    data-ng-model="input_model" data-ng-keypad-input="text" ng-keypad-restrict="">
+    <span class="ng-binding"></span></div><div class="wp-form-input " ng-show="!enable_jvk">
+    <input id="buy-order-amount-note" 
+    onfocus="input_onfocus('buy-order-amount-note')" onblur="reset_keyboard()"
+    type="text" ng-model="input_model" placeholder="" class="ng-pristine ng-untouched ng-valid"></div></div>
+  </div>
+  <div class="wp-form-group">
+    <div class="wp-form-label"></div>
+    <div id="buy-order-amount-submit" class="primary wp-btn-block wp-btn disabled" onselectstart="return false" 
+    ng-class="{disabled: !can_submit()}" onclick="submit_buyorder()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">创建</span></div></div></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ngInclude:  --><div ng-include="" src="partial(&#39;modals&#39;)" class="ng-scope"><div class="wp-modals ng-scope">
+  <div class="wp-modal wp-confirm-modal ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="confirm_modal.show" wp-lock-mask="confirm_modal.lock_mask" wp-confirm-info="" wp-ok-text="" wp-cancel-text="" wp-ok="confirm_modal.ok();" wp-cancel="confirm_modal.cancel();"><div class="wp-modal-mask" ng-click="click_mask()"></div><div class="wp-modal-body"><div class="wp-confirm-info ng-binding" ng-bind-html="wpConfirmInfo|unsafe"></div><div class="wp-confirm-actions"><div class="wp-btn-block wp-btn ng-hide" onselectstart="return false" ng-click="wpLockMask=false;wpOk();" ng-show="wpOkText"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-binding ng-scope"></span></div></div></div><div class="wp-btn-block wp-btn ng-hide" onselectstart="return false" ng-click="wpLockMask=false;wpCancel();" ng-show="wpCancelText"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-binding ng-scope"></span></div></div></div> </div></div></div>
+</div>
+</div>
+
+<div ng-include="" src="partial(&#39;qrcode&#39;)" class="ng-scope"><div class="wp-modal-sm wp-modal ng-scope ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="vip_scan_modal.show"><div class="wp-modal-mask" ng-click="click_mask()"></div><div class="wp-modal-body" ng-transclude="">
+  <div class="wp-modal-header ng-binding ng-scope"></div>
+  <div class="wp-modal-content ng-scope">
+    <div class="wp-form-label ng-binding"></div>
+    <div class="clearfix"></div>
+    <div class="qrcode">
+      <img ng-src="" width="250px" height="250px">
+    </div>
+    <div class="clearfix"></div>
+    <div class="wp-form-label ng-hide" ng-show="vip_scan_modal.scan_success">扫描成功，点击确认进行授权</div>
+    <div class="wp-modal-actions left">
+      <div class="wp-btn-block wp-btn ng-hide" onselectstart="return false" ng-click="vip_scan_modal.reload_qrcode()" ng-show="vip_scan_modal.enable_reload"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">刷新</span></div></div></div>
+      <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="vip_scan_modal.close()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">返回</span></div></div></div>
+    </div>
+  </div>
+</div></div></div>
+<!-- ngInclude:  --><div ng-include="" src="partial(&#39;scan&#39;)" class="ng-scope"><div class="wp-modal ng-scope ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="scan_modal.show"><div class="wp-modal-mask" ng-click="click_mask()"></div><div class="wp-modal-body" ng-transclude="">
+  <div class="wp-modal-header ng-binding ng-scope"></div>
+  <div class="wp-modal-content ng-scope">
+    <div class="wp-form-group">
+      <div class="wp-form-label ng-binding"></div>
+    </div>
+    <div class="wp-form-group">
+      <div class="wp-form-label ng-binding"></div>
+    </div>
+    <div class="wp-modal-actions">
+      <div class="wp-btn-block wp-btn ng-hide" onselectstart="return false" ng-click="scan_modal.action()" ng-show="scan_modal.action_name"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-binding ng-scope"></span></div></div></div>
+      <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="scan_modal.close()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">取消</span></div></div></div>
+    </div>
+  </div>
+</div></div></div>
+<!-- ngInclude:  --><div ng-include="" src="partial(&#39;item_notes&#39;)" class="ng-scope"><div class="wp-modal ng-scope ng-isolate-scope ng-hide" ng-show="wpShow" wp-show="item_notes_modal.show"><div class="wp-modal-mask" ng-click="click_mask()"></div><div class="wp-modal-body" ng-transclude="">
+  <div class="wp-modal-header ng-scope">品注</div>
+  <div class="wp-modal-content ng-scope">
+    <div class="wp-form-group">
+      <div class="wp-form-label">品注</div>
+      <!-- ngRepeat: item_note in item_notes_modal.item_notes -->
+    </div>
+    <div class="wp-form-group">
+      <div class="wp-form-label"></div>
+      <div class="wp-form-action">
+        <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="item_notes_modal.submit()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">确认</span></div></div></div>
+        <div class="wp-btn-block wp-btn" onselectstart="return false" ng-click="item_notes_modal.close()"><div class="text"><div class="overflow-hidden-text" ng-transclude=""><span class="ng-scope">取消</span></div></div></div>
+      </div>
+    </div>
+  </div>
+</div></div></div>
+<!-- / flash -->
+
+
+<script src="./js/zepto.min.js"></script>
+<script src="./js/simple-plugin.js"></script>
+<script src="./js/template.js"></script>
+<script src="./js/buyorder.js"></script>
+<script src="./js/wepos.js"></script>
+
+</body>
+</html>

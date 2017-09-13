@@ -1,0 +1,200 @@
+<!-- keyboard-sm  -->
+<div ng-include="" src="partial('_directives/wp-keypad-number')" class="ng-scope">
+<div data-ng-keypad="number" data-auto-close="true" data-ng-draggable="" class="wp-keypad wp-keypad-number ng-scope closed" style="position: fixed;">
+  <div>
+    <div class="button-wrapper">
+      <button onclick="jvb_input('7')">7</button>
+      <button onclick="jvb_input('8')">8</button>
+      <button onclick="jvb_input('9')">9</button>
+      <button onclick="jvb_input('4')">4</button>
+      <button onclick="jvb_input('5')">5</button>
+      <button onclick="jvb_input('6')">6</button>
+      <button onclick="jvb_input('1')">1</button>
+      <button onclick="jvb_input('2')">2</button>
+      <button onclick="jvb_input('3')">3</button>
+      <button onclick="jvb_input('[BACKSPACE]')" class="smaller"><i class="fa fa-long-arrow-left"></i></button>
+      <!-- <button onclick="jvb_input('[CLEAR]" class="smaller">清空</button> -->
+      <button onclick="jvb_input('0')">0</button>
+      <button onclick="jvb_input('.')">.</button>
+    </div>
+    <div class="drag-indicator">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <button class="close" onclick="close_keyboard()"></button>
+  </div>
+  </div>
+ </div>
+<!-- end keyboard-sm  -->
+<!-- wp－keypad－text -->
+
+<div ng-include="" src="partial('_directives/wp-keypad-text')" class="ng-scope">
+<div id="keyboard-panel" data-ng-keypad="text" data-auto-close="true" data-ng-draggable="" 
+class="wp-keypad wp-keypad-text ng-scope closed" style="position: fixed;">
+  <div>
+    <div class="button-wrapper">
+      <div id="model_lower" ng-show="_key_mode == 'lowercase' || !_key_mode">
+        <button  onclick="jvb_input('1')" class="ng-binding ng-scope">1</button>
+        <button  onclick="jvb_input('2')" class="ng-binding ng-scope">2</button>
+        <button  onclick="jvb_input('3')" class="ng-binding ng-scope">3</button>
+        <button  onclick="jvb_input('4')" class="ng-binding ng-scope">4</button>
+        <button  onclick="jvb_input('5')" class="ng-binding ng-scope">5</button>
+        <button  onclick="jvb_input('6')" class="ng-binding ng-scope">6</button>
+        <button  onclick="jvb_input('7')" class="ng-binding ng-scope">7</button>
+        <button  onclick="jvb_input('8')" class="ng-binding ng-scope">8</button>
+        <button  onclick="jvb_input('9')" class="ng-binding ng-scope">9</button>
+        <button  onclick="jvb_input('0')" class="ng-binding ng-scope">0</button>
+        <button onclick="jvb_input('[BACKSPACE]')" class="smaller"><i class="fa fa-long-arrow-left"></i></button>
+        <div class="clearfix"></div>
+        <div class="blank"></div>
+        
+        <button  onclick="jvb_input('q')" class="ng-binding ng-scope">q</button>
+        <button  onclick="jvb_input('w')" class="ng-binding ng-scope">w</button>
+        <button  onclick="jvb_input('e')" class="ng-binding ng-scope">e</button>
+        <button  onclick="jvb_input('r')" class="ng-binding ng-scope">r</button>
+        <button  onclick="jvb_input('t')" class="ng-binding ng-scope">t</button>
+        <button  onclick="jvb_input('y')" class="ng-binding ng-scope">y</button>
+        <button  onclick="jvb_input('u')" class="ng-binding ng-scope">u</button>
+        <button  onclick="jvb_input('i')" class="ng-binding ng-scope">i</button>
+        <button  onclick="jvb_input('o')" class="ng-binding ng-scope">o</button>
+        <button  onclick="jvb_input('p')" class="ng-binding ng-scope">p</button>
+        <div class="clearfix"></div>
+        <div class="blank"></div>
+        <div class="blank"></div>
+        
+        <button  onclick="jvb_input('a')" class="ng-binding ng-scope">a</button>
+        <button  onclick="jvb_input('s')" class="ng-binding ng-scope">s</button>
+        <button  onclick="jvb_input('d')" class="ng-binding ng-scope">d</button>
+        <button  onclick="jvb_input('f')" class="ng-binding ng-scope">f</button>
+        <button  onclick="jvb_input('g')" class="ng-binding ng-scope">g</button>
+        <button  onclick="jvb_input('h')" class="ng-binding ng-scope">h</button>
+        <button  onclick="jvb_input('j')" class="ng-binding ng-scope">j</button>
+        <button  onclick="jvb_input('k')" class="ng-binding ng-scope">k</button>
+        <button  onclick="jvb_input('l')" class="ng-binding ng-scope">l</button>
+        <div class="clearfix"></div>
+        <div class="blank"></div>
+        <button onclick="jvb_input('symbol')" class="smaller">符号</button>
+        
+        <button  onclick="jvb_input('z')" class="ng-binding ng-scope">z</button>
+        <button  onclick="jvb_input('x')" class="ng-binding ng-scope">x</button>
+        <button  onclick="jvb_input('c')" class="ng-binding ng-scope">c</button>
+        <button  onclick="jvb_input('v')" class="ng-binding ng-scope">v</button>
+        <button  onclick="jvb_input('b')" class="ng-binding ng-scope">b</button>
+        <button  onclick="jvb_input('n')" class="ng-binding ng-scope">n</button>
+        <button  onclick="jvb_input('m')" class="ng-binding ng-scope">m</button>
+        <button onclick="jvb_input('[CLEAR]')" class="smaller">清空</button>
+        <button onclick="jvb_input('upper')" class="smaller">大写</button>
+      </div>
+      <div id="model_upper" ng-show="_key_mode == 'uppercase'" class="ng-hide">
+        
+        <button  onclick="jvb_input('1')" class="ng-binding ng-scope">1</button>
+        <button  onclick="jvb_input('2')" class="ng-binding ng-scope">2</button>
+        <button  onclick="jvb_input('3')" class="ng-binding ng-scope">3</button>
+        <button  onclick="jvb_input('4')" class="ng-binding ng-scope">4</button>
+        <button  onclick="jvb_input('5')" class="ng-binding ng-scope">5</button>
+        <button  onclick="jvb_input('6')" class="ng-binding ng-scope">6</button>
+        <button  onclick="jvb_input('7')" class="ng-binding ng-scope">7</button>
+        <button  onclick="jvb_input('8')" class="ng-binding ng-scope">8</button>
+        <button  onclick="jvb_input('9')" class="ng-binding ng-scope">9</button>
+        <button  onclick="jvb_input('0')" class="ng-binding ng-scope">0</button>
+        <button onclick="jvb_input('[BACKSPACE]')" class="smaller"><i class="fa fa-long-arrow-left"></i></button>
+        <div class="clearfix"></div>
+        <div class="blank"></div>
+        <button  onclick="jvb_input('Q')" class="ng-binding ng-scope">Q</button>
+        <button  onclick="jvb_input('W')" class="ng-binding ng-scope">W</button>
+        <button  onclick="jvb_input('E')" class="ng-binding ng-scope">E</button>
+        <button  onclick="jvb_input('R')" class="ng-binding ng-scope">R</button>
+        <button  onclick="jvb_input('T')" class="ng-binding ng-scope">T</button>
+        <button  onclick="jvb_input('Y')" class="ng-binding ng-scope">Y</button>
+        <button  onclick="jvb_input('U')" class="ng-binding ng-scope">U</button>
+        <button  onclick="jvb_input('I')" class="ng-binding ng-scope">I</button>
+        <button  onclick="jvb_input('O')" class="ng-binding ng-scope">O</button>
+        <button  onclick="jvb_input('P')" class="ng-binding ng-scope">P</button>
+        <div class="clearfix"></div>
+        <div class="blank"></div>
+        <div class="blank"></div>
+        <button  onclick="jvb_input('A')" class="ng-binding ng-scope">A</button>
+        <button  onclick="jvb_input('S')" class="ng-binding ng-scope">S</button>
+        <button  onclick="jvb_input('D')" class="ng-binding ng-scope">D</button>
+        <button  onclick="jvb_input('F')" class="ng-binding ng-scope">F</button>
+        <button  onclick="jvb_input('G')" class="ng-binding ng-scope">G</button>
+        <button  onclick="jvb_input('H')" class="ng-binding ng-scope">H</button>
+        <button  onclick="jvb_input('J')" class="ng-binding ng-scope">J</button>
+        <button  onclick="jvb_input('K')" class="ng-binding ng-scope">K</button>
+        <button  onclick="jvb_input('L')" class="ng-binding ng-scope">L</button>
+        <div class="clearfix"></div>
+        <div class="blank"></div>
+        <button onclick="jvb_input('symbol_upper')" class="smaller">符号</button>
+        <button  onclick="jvb_input('Z')" class="ng-binding ng-scope">Z</button>
+        <button  onclick="jvb_input('X')" class="ng-binding ng-scope">X</button>
+        <button  onclick="jvb_input('C')" class="ng-binding ng-scope">C</button>
+        <button  onclick="jvb_input('V')" class="ng-binding ng-scope">V</button>
+        <button  onclick="jvb_input('B')" class="ng-binding ng-scope">B</button>
+        <button  onclick="jvb_input('N')" class="ng-binding ng-scope">N</button>
+        <button  onclick="jvb_input('M')" class="ng-binding ng-scope">M</button>
+        <button onclick="jvb_input('[CLEAR]')" class="smaller">清空</button>
+        <button onclick="jvb_input('lower')" class="smaller">小写</button>
+      </div>
+      <div id="mode_symbol" ng-show="_key_mode == 'symbol'" class="ng-hide">
+        <button  onclick="jvb_input('!')" class="ng-binding ng-scope">!</button>
+        <button  onclick="jvb_input('@')" class="ng-binding ng-scope">@</button>
+        <button  onclick="jvb_input('#')" class="ng-binding ng-scope">#</button>
+        <button  onclick="jvb_input('$')" class="ng-binding ng-scope">$</button>
+        <button  onclick="jvb_input('%')" class="ng-binding ng-scope">%</button>
+        <button  onclick="jvb_input('^')" class="ng-binding ng-scope">^</button>
+        <button  onclick="jvb_input('&amp;')" class="ng-binding ng-scope">&amp;</button>
+        <button  onclick="jvb_input('*')" class="ng-binding ng-scope">*</button>
+        <button  onclick="jvb_input('(')" class="ng-binding ng-scope">(</button>
+        <button  onclick="jvb_input(')')" class="ng-binding ng-scope">)</button>
+        <button onclick="jvb_input('[BACKSPACE]')" class="smaller"><i class="fa fa-long-arrow-left"></i></button>
+        <div class="clearfix"></div>
+        <div class="blank"></div>
+        <button  onclick="jvb_input('`')" class="ng-binding ng-scope">`</button>
+        <button  onclick="jvb_input('~')" class="ng-binding ng-scope">~</button>
+        <button  onclick="jvb_input('-')" class="ng-binding ng-scope">-</button>
+        <button  onclick="jvb_input('_')" class="ng-binding ng-scope">_</button>
+        <button  onclick="jvb_input('=')" class="ng-binding ng-scope">=</button>
+        <button  onclick="jvb_input('+')" class="ng-binding ng-scope">+</button>
+        <button  onclick="jvb_input('\')" class="ng-binding ng-scope">\</button>
+        <button  onclick="jvb_input('|')" class="ng-binding ng-scope">|</button>
+        <button  onclick="jvb_input('[')" class="ng-binding ng-scope">[</button>
+        <button  onclick="jvb_input(']')" class="ng-binding ng-scope">]</button>
+        <div class="clearfix"></div>
+        <div class="blank"></div>
+        <div class="blank"></div>
+        <div class="blank"></div>
+        <div class="blank"></div>
+        <div class="blank"></div>
+        <button  onclick="jvb_input('{')" class="ng-binding ng-scope">{</button>
+        <button  onclick="jvb_input('}')" class="ng-binding ng-scope">}</button>
+        <button  onclick="jvb_input(';')" class="ng-binding ng-scope">;</button>
+        <button  onclick="jvb_input(':')" class="ng-binding ng-scope">:</button>
+        <button  onclick="jvb_input('&apos;')" class="ng-binding ng-scope">'</button>
+        <div class="clearfix"></div>
+        <div class="blank"></div>
+        <button onclick="jvb_input('symbol_symbol')" class="smaller">符号</button>
+        <button  onclick="jvb_input(',')" class="ng-binding ng-scope">,</button>
+        <button  onclick="jvb_input('.')" class="ng-binding ng-scope">.</button>
+        <button  onclick="jvb_input('<')" class="ng-binding ng-scope">&lt;</button>
+        <button  onclick="jvb_input('>')" class="ng-binding ng-scope">&gt;</button>
+        <button  onclick="jvb_input('/')" class="ng-binding ng-scope">/</button>
+        <button  onclick="jvb_input('?')" class="ng-binding ng-scope">?</button>
+        <button  onclick="jvb_input('&quot;')" class="ng-binding ng-scope">"</button>
+        <button onclick="jvb_input('[CLEAR]')" class="smaller">清空</button>
+        <button onclick="jvb_input('symbol_lower')"  class="smaller">小写</button>
+      </div>
+
+    </div>
+    <div class="drag-indicator">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <button class="close" onclick="close_keyboard()"></button>
+  </div>
+  </div>
+</div>
+<!-- end wp－keypad－text -->
